@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">IconFunctionTest</string>
+    <string name="title_activity_first_test">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="description1">In the first version of this app, you can try to use the in-icon shortcuts</string>
+    <string name="startTestButton">Test</string>
+
 </resources>

@@ -2,6 +2,7 @@ package com.example.iconfunctiontest.Presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickBt_Start(View view){
+
         System.out.println("Test");
+        Intent i = new Intent(MainActivity.this, firstTest.class);
+        startActivity(i);
     }
 
 
