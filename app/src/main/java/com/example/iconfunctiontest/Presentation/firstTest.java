@@ -31,7 +31,7 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
      * user interaction before hiding the system UI.
      */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
+    private static final int AUTO_HIDE_DELAY_MILLIS = 1; //Original 3000
 
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -84,7 +84,9 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
+
             switch (motionEvent.getAction()) {
+
                 case MotionEvent.ACTION_DOWN:
                     if (AUTO_HIDE) {
                         delayedHide(AUTO_HIDE_DELAY_MILLIS);
@@ -96,6 +98,7 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
                 default:
                     break;
             }
+
             return false;
         }
     };
@@ -114,13 +117,16 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
-        // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
+                /*
+                // Set up the user interaction to manually show or hide the system UI.
+                mContentView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //toggle();
+                    }
+                });
+
+                 */
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
@@ -146,6 +152,7 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         delayedHide(100);
     }
 
+    /*
     private void toggle() {
         if (mVisible) {
             hide();
@@ -154,8 +161,22 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         }
     }
 
+    private void show() {
+        System.out.println("SHOW IS EXECUTED");
+        // Show the system bar
+        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        mVisible = true;
+
+        // Schedule a runnable to display UI elements after a delay
+        mHideHandler.removeCallbacks(mHidePart2Runnable);
+        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
+    }
+     */
+
     private void hide() {
         // Hide UI first
+        System.out.println("HIDE IS EXECUTED");
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -166,17 +187,6 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    private void show() {
-        // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
     }
 
     /**
@@ -191,9 +201,7 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
 
     //------------------My Code-----------------------//
     public void onClickBt_Icon(View view){
-
-        System.out.println("Icon clicked!");
-
+        //System.out.println("Icon clicked!");
     }
 
     //On Touch Listener:
@@ -213,41 +221,40 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
     //Gesture Detector:
     @Override
     public boolean onDown(MotionEvent motionEvent) {
-        System.out.println("OnDown!");
-        Log.d("TAG", "onDown: called.");
+      //  Log.d("TAG", "onDown: called.");
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent motionEvent) {
-        Log.d("TAG", "onShowPress: called.");
-        System.out.println("onShowPress!");
+      //  Log.d("TAG", "onShowPress: called.");
+
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
-        Log.d("TAG", "onSingleTapUp: called.");
-        System.out.println("onSingleTapUp!");
+        // Log.d("TAG", "onSingleTapUp: called.");
+
         return false;
     }
 
     @Override
     public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         Log.d("TAG", "onScroll: called.");
-        System.out.println("onScroll!");
+
         return false;
     }
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-        Log.d("TAG", "onLongPress: called.");
-        System.out.println("onLongPress!");
+       // Log.d("TAG", "onLongPress: called.");
+
     }
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         Log.d("TAG", "onFling: called.");
-        System.out.println("onFling!");
+
         return false;
     }
 }
