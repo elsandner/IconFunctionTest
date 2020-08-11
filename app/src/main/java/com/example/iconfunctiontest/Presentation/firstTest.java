@@ -21,6 +21,8 @@ import com.example.iconfunctiontest.R;
  * status bar and navigation/system bar) with user interaction.
  */
 public class firstTest extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+
+    private static final String TAG = "firstTest";
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -207,27 +209,53 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
     //On Touch Listener:
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        myGestureDetector.onTouchEvent(motionEvent);
 
-        if(view.getId()==R.id.bt_Icon){
-            Log.d("TAG", "Touch on Icon! ");
-            return true;
+        int action = motionEvent.getAction();
+        switch(action) {
+            case (MotionEvent.ACTION_DOWN) :
+                Log.d(TAG,"Action was DOWN");
+                return true;
+            case (MotionEvent.ACTION_MOVE) :
+                Log.d(TAG,"Action was MOVE");
+                Log.d(TAG, "onTouch: (x,y): ("+motionEvent.getX()+", "+motionEvent.getY()+")");
+                return true;
+            case (MotionEvent.ACTION_UP) :
+                Log.d(TAG,"Action was UP");
+                return true;
+            case (MotionEvent.ACTION_CANCEL) :
+                Log.d(TAG,"Action was CANCEL");
+                return true;
+            case (MotionEvent.ACTION_OUTSIDE) :
+                Log.d(TAG,"Movement occurred outside bounds " +
+                        "of current screen element");
+                return true;
+            default :
+                return super.onTouchEvent(motionEvent);
         }
 
+        /*
+        myGestureDetector.onTouchEvent(motionEvent);
+        if(view.getId()==R.id.bt_Icon){
+            Log.d(TAG, "Touch on Icon! ");
+            return true;
+        }
         return false;
+         */
+
+
     }
 
 
     //Gesture Detector:
     @Override
     public boolean onDown(MotionEvent motionEvent) {
-      //  Log.d("TAG", "onDown: called.");
+      //  Log.d(TAG, "onDown: called.");
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent motionEvent) {
-      //  Log.d("TAG", "onShowPress: called.");
+      //  Log.d(TAG, "onShowPress: called.");
 
     }
 
@@ -240,20 +268,20 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
 
     @Override
     public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Log.d("TAG", "onScroll: called.");
+        Log.d(TAG, "onScroll: called.");
 
         return false;
     }
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-       // Log.d("TAG", "onLongPress: called.");
+       // Log.d(TAG, "onLongPress: called.");
 
     }
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Log.d("TAG", "onFling: called.");
+        Log.d(TAG, "onFling: called.");
 
         return false;
     }
