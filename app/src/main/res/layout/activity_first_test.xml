@@ -56,6 +56,18 @@
             android:background="@drawable/custom_rounded_corners"
             android:onClick="onClickBt_Icon"
             android:text="Button" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_primary_variant"
+            android:text="Direction"
+            android:textColor="#33b5e5"
+            android:textSize="50sp"
+            android:gravity="center"
+            />
     </FrameLayout>
 
 </FrameLayout>
