@@ -8,8 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.iconfunctiontest.R;
 
@@ -17,7 +20,7 @@ import com.example.iconfunctiontest.R;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class firstTest extends AppCompatActivity {
+public class firstTest extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -97,6 +100,10 @@ public class firstTest extends AppCompatActivity {
         }
     };
 
+    //MyVariables
+    private GestureDetector myGestureDetector;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +126,14 @@ public class firstTest extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+
+        //My Code:
+        Button bt_Icon = findViewById(R.id.bt_Icon);
+        bt_Icon.setOnTouchListener(this);
+
+        myGestureDetector = new GestureDetector(this, this);
+
     }
 
     @Override
@@ -179,5 +194,60 @@ public class firstTest extends AppCompatActivity {
 
         System.out.println("Icon clicked!");
 
+    }
+
+    //On Touch Listener:
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        myGestureDetector.onTouchEvent(motionEvent);
+
+        if(view.getId()==R.id.bt_Icon){
+            Log.d("TAG", "Touch on Icon! ");
+            return true;
+        }
+
+        return false;
+    }
+
+
+    //Gesture Detector:
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        System.out.println("OnDown!");
+        Log.d("TAG", "onDown: called.");
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+        Log.d("TAG", "onShowPress: called.");
+        System.out.println("onShowPress!");
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        Log.d("TAG", "onSingleTapUp: called.");
+        System.out.println("onSingleTapUp!");
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        Log.d("TAG", "onScroll: called.");
+        System.out.println("onScroll!");
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+        Log.d("TAG", "onLongPress: called.");
+        System.out.println("onLongPress!");
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        Log.d("TAG", "onFling: called.");
+        System.out.println("onFling!");
+        return false;
     }
 }
