@@ -25,6 +25,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:fitsSystemWindows="true">
 
         <LinearLayout
@@ -46,6 +47,15 @@
                 android:text="@string/dummy_button" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center|center"
+            android:background="@drawable/custom_rounded_corners"
+            android:onClick="onClickBt_Icon"
+            android:text="Button" />
     </FrameLayout>
 
 </FrameLayout>
