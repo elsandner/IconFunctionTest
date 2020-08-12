@@ -172,35 +172,7 @@ public class firstTest extends AppCompatActivity {
                 super.swipeSE();
                 tv_Description.setText("South-West");
             }
-            /*
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-                tv_Description.setText("Left");
-                //Toast.makeText(firstTest.this, "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                tv_Description.setText("Right");
-                //Toast.makeText(firstTest.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onSwipeUp() {
-                super.onSwipeUp();
-                tv_Description.setText("Up");
-                //Toast.makeText(firstTest.this, "Swipe Up gesture detected", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSwipeDown() {
-                super.onSwipeDown();
-                tv_Description.setText("Down");
-                //Toast.makeText(firstTest.this, "Swipe Down gesture detected", Toast.LENGTH_SHORT).show();
-            }
-
-             */
         });
 
 
@@ -246,8 +218,6 @@ public class firstTest extends AppCompatActivity {
 
 
     //------------------My Methods-----------------------//
-
-
     public void onClickBt_Icon(View view){
         tv_Description.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");

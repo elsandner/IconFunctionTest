@@ -85,29 +85,6 @@ public class GestureService implements View.OnTouchListener {
                     swipeSE();
                 }
 
-
-            /* Old way to calculate direction of swipe
-                if (Math.abs(diffX) > Math.abs(diffY)) {    //abs returns the absolute value
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            onSwipeRight();
-                        } else {
-                            onSwipeLeft();
-                        }
-                    }
-                }
-                else {
-                    if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY > 0) {
-                            onSwipeDown();
-                        } else {
-                            onSwipeUp();
-                        }
-                    }
-                }
-
-             */
-
                 Log.d(TAG, "diffY: "+diffY);
                 Log.d(TAG, "diffX: "+diffX);
                 Log.d(TAG, "velocityY: "+velocityY);
@@ -158,30 +135,6 @@ public class GestureService implements View.OnTouchListener {
     public void swipeSE(){
         Log.d(TAG, "\nSwipe South-East");
     }
-
-
-    /*
-
-    public void onSwipeRight() {
-        Log.d(TAG, "\nRight");
-    }
-    public void onSwipeLeft() {
-        Log.d(TAG, "\nLeft");
-
-    }
-
-    public void onSwipeUp() {
-        Log.d(TAG, "\nUp");
-
-    }
-
-    public void onSwipeDown() {
-        Log.d(TAG, "\nDown");
-
-    }
-
-
-     */
 
     private void onClick() {
         Log.d(TAG, "\nClick");
