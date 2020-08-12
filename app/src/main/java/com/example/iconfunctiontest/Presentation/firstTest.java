@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,6 +12,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
 
@@ -142,6 +142,24 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
 
         myGestureDetector = new GestureDetector(this, this);
 
+
+
+
+        bt_Icon.setOnTouchListener(new Services.OnSwipeTouchListener(firstTest.this) {
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                Toast.makeText(firstTest.this, "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                Toast.makeText(firstTest.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
 
     @Override
@@ -241,8 +259,6 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         }
         return false;
          */
-
-
     }
 
 
