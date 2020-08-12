@@ -8,19 +8,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
+import com.example.iconfunctiontest.Services.OnSwipeTouchListener;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class firstTest extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class firstTest extends AppCompatActivity {
 
     private static final String TAG = "firstTest";
     /**
@@ -105,10 +105,7 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         }
     };
 
-    //MyVariables
-    private GestureDetector myGestureDetector;
-
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,17 +116,6 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
-                /*
-                // Set up the user interaction to manually show or hide the system UI.
-                mContentView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //toggle();
-                    }
-                });
-
-                 */
-
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
@@ -138,14 +124,8 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
 
         //My Code:
         Button bt_Icon = findViewById(R.id.bt_Icon);
-        bt_Icon.setOnTouchListener(this);
 
-        myGestureDetector = new GestureDetector(this, this);
-
-
-
-
-        bt_Icon.setOnTouchListener(new Services.OnSwipeTouchListener(firstTest.this) {
+        bt_Icon.setOnTouchListener(new OnSwipeTouchListener(firstTest.this) {
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
@@ -156,7 +136,24 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
                 super.onSwipeRight();
                 Toast.makeText(firstTest.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onSwipeUp() {
+                super.onSwipeUp();
+                Toast.makeText(firstTest.this, "Swipe Up gesture detected", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onSwipeDown() {
+                super.onSwipeDown();
+                Toast.makeText(firstTest.this, "Swipe Down gesture detected", Toast.LENGTH_SHORT).show();
+
+            }
         });
+
+
+
 
 
 
@@ -171,28 +168,6 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
         // are available.
         delayedHide(100);
     }
-
-    /*
-    private void toggle() {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
-        }
-    }
-
-    private void show() {
-        System.out.println("SHOW IS EXECUTED");
-        // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-    }
-     */
 
     private void hide() {
         // Hide UI first
@@ -219,86 +194,12 @@ public class firstTest extends AppCompatActivity implements View.OnTouchListener
     }
 
 
-    //------------------My Code-----------------------//
+    //------------------My Methods-----------------------//
+
+
     public void onClickBt_Icon(View view){
         //System.out.println("Icon clicked!");
     }
 
-    //On Touch Listener:
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-
-        int action = motionEvent.getAction();
-        switch(action) {
-            case (MotionEvent.ACTION_DOWN) :
-                Log.d(TAG,"Action was DOWN");
-                return true;
-            case (MotionEvent.ACTION_MOVE) :
-                Log.d(TAG,"Action was MOVE");
-                Log.d(TAG, "onTouch: (x,y): ("+motionEvent.getX()+", "+motionEvent.getY()+")");
-                return true;
-            case (MotionEvent.ACTION_UP) :
-                Log.d(TAG,"Action was UP");
-                return true;
-            case (MotionEvent.ACTION_CANCEL) :
-                Log.d(TAG,"Action was CANCEL");
-                return true;
-            case (MotionEvent.ACTION_OUTSIDE) :
-                Log.d(TAG,"Movement occurred outside bounds " +
-                        "of current screen element");
-                return true;
-            default :
-                return super.onTouchEvent(motionEvent);
-        }
-
-        /*
-        myGestureDetector.onTouchEvent(motionEvent);
-        if(view.getId()==R.id.bt_Icon){
-            Log.d(TAG, "Touch on Icon! ");
-            return true;
-        }
-        return false;
-         */
-    }
-
-
-    //Gesture Detector:
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-      //  Log.d(TAG, "onDown: called.");
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-      //  Log.d(TAG, "onShowPress: called.");
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        // Log.d("TAG", "onSingleTapUp: called.");
-
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Log.d(TAG, "onScroll: called.");
-
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-       // Log.d(TAG, "onLongPress: called.");
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Log.d(TAG, "onFling: called.");
-
-        return false;
-    }
 }
+
