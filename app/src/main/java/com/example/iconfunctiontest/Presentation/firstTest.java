@@ -11,10 +11,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.iconfunctiontest.R;
-import com.example.iconfunctiontest.Services.OnSwipeTouchListener;
+import com.example.iconfunctiontest.Services.GestureService;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -22,7 +22,7 @@ import com.example.iconfunctiontest.Services.OnSwipeTouchListener;
  */
 public class firstTest extends AppCompatActivity {
 
-    private static final String TAG = "firstTest";
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -83,6 +83,10 @@ public class firstTest extends AppCompatActivity {
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
+    private static final String TAG = "firstTest";
+    private TextView tv_Description;
+    private Button bt_Icon;
+
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -123,33 +127,80 @@ public class firstTest extends AppCompatActivity {
 
 
         //My Code:
-        Button bt_Icon = findViewById(R.id.bt_Icon);
+        bt_Icon = findViewById(R.id.bt_Icon);
+        tv_Description = findViewById(R.id.tv_Direction);
 
-        bt_Icon.setOnTouchListener(new OnSwipeTouchListener(firstTest.this) {
+        bt_Icon.setOnTouchListener(new GestureService(firstTest.this) {
+
+            @Override
+            public void swipeE(){
+                super.swipeE();
+                tv_Description.setText("East");
+            }
+            @Override
+            public void swipeNE(){
+                super.swipeNE();
+                tv_Description.setText("North-East");
+            }
+            @Override
+            public void swipeN(){
+                super.swipeN();
+                tv_Description.setText("North");
+            }
+            @Override
+            public void swipeNW(){
+                super.swipeNW();
+                tv_Description.setText("North-West");
+            }
+            @Override
+            public void swipeW(){
+                super.swipeW();
+                tv_Description.setText("West");
+            }
+            @Override
+            public void swipeSW(){
+                super.swipeSW();
+                tv_Description.setText("South-West");
+            }
+            @Override
+            public void swipeS(){
+                super.swipeS();
+                tv_Description.setText("South");
+            }
+            @Override
+            public void swipeSE() {
+                super.swipeSE();
+                tv_Description.setText("South-West");
+            }
+            /*
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
-                Toast.makeText(firstTest.this, "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
+                tv_Description.setText("Left");
+                //Toast.makeText(firstTest.this, "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                Toast.makeText(firstTest.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
+                tv_Description.setText("Right");
+                //Toast.makeText(firstTest.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSwipeUp() {
                 super.onSwipeUp();
-                Toast.makeText(firstTest.this, "Swipe Up gesture detected", Toast.LENGTH_SHORT).show();
-
+                tv_Description.setText("Up");
+                //Toast.makeText(firstTest.this, "Swipe Up gesture detected", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSwipeDown() {
                 super.onSwipeDown();
-                Toast.makeText(firstTest.this, "Swipe Down gesture detected", Toast.LENGTH_SHORT).show();
-
+                tv_Description.setText("Down");
+                //Toast.makeText(firstTest.this, "Swipe Down gesture detected", Toast.LENGTH_SHORT).show();
             }
+
+             */
         });
 
 
@@ -198,7 +249,8 @@ public class firstTest extends AppCompatActivity {
 
 
     public void onClickBt_Icon(View view){
-        //System.out.println("Icon clicked!");
+        tv_Description.setText("Click");
+        Log.d(TAG, "onClickBt_Icon clicked");
     }
 
 }
