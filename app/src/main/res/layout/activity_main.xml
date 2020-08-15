@@ -32,12 +32,26 @@
         android:id="@+id/bt_Start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickBt_Start"
-        android:text="Start"
+        android:onClick="onClickBt_BlindMode"
+        android:text="Blind Mode"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_Name"
-        app:layout_constraintVertical_bias="0.49" />
+        app:layout_constraintVertical_bias="0.25" />
+
+    <Button
+        android:id="@+id/bt_VisualMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickBt_VisualMode"
+        android:text="Visual Mode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_Name"
+        app:layout_constraintVertical_bias="0.25" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,10 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Presentation.firstTest"
+            android:name=".Presentation.VisualMode"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_visual_mode"
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity
+            android:name=".Presentation.BlindMode"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_first_test"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
         <activity android:name=".Presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -20,9 +20,7 @@ import com.example.iconfunctiontest.Services.GestureService;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class firstTest extends AppCompatActivity {
-
-
+public class BlindMode extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -83,16 +81,15 @@ public class firstTest extends AppCompatActivity {
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private static final String TAG = "firstTest";
+
+    private static final String TAG = "BlindMode";
     private TextView tv_Description;
     private Button bt_Icon;
 
     private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-
             switch (motionEvent.getAction()) {
-
                 case MotionEvent.ACTION_DOWN:
                     if (AUTO_HIDE) {
                         delayedHide(AUTO_HIDE_DELAY_MILLIS);
@@ -104,7 +101,6 @@ public class firstTest extends AppCompatActivity {
                 default:
                     break;
             }
-
             return false;
         }
     };
@@ -114,7 +110,7 @@ public class firstTest extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_first_test);
+        setContentView(R.layout.activity_blind_mode);
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
@@ -123,14 +119,15 @@ public class firstTest extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
 
 
         //My Code:
+
         bt_Icon = findViewById(R.id.bt_Icon);
         tv_Description = findViewById(R.id.tv_Direction);
 
-        bt_Icon.setOnTouchListener(new GestureService(firstTest.this) {
+        bt_Icon.setOnTouchListener(new GestureService(BlindMode.this) {
 
             @Override
             public void swipeE(){

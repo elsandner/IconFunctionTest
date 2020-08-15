@@ -11,14 +11,18 @@ public class GestureService implements View.OnTouchListener {
 
     private static final String TAG = "Gesture Service";
     private GestureDetector gestureDetector;
+    private double touch_downX=0;
+    private double touch_downY=0;
 
     //Constructor
     public GestureService(Context c) {
         gestureDetector = new GestureDetector(c, new GestureListener());
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
+
         return gestureDetector.onTouchEvent(motionEvent);
     }
 
@@ -26,8 +30,12 @@ public class GestureService implements View.OnTouchListener {
         private static final int SWIPE_THRESHOLD = 50;     //"Distanz-Grenzwert
         private static final int SWIPE_VELOCITY_THRESHOLD = 100; //Geschwindigkeits-Grenzwert
 
+
+
         @Override
         public boolean onDown(MotionEvent e) {
+            touch_downX=e.getX();
+            touch_downY=e.getY();
             return true;
         }
 
@@ -56,9 +64,7 @@ public class GestureService implements View.OnTouchListener {
                 float diffY = mE_lift_off.getY() - mE_touch_down.getY();
                 float diffX = mE_lift_off.getX() - mE_touch_down.getX();
 
-                double alpha = Math.atan2(diffY,diffX);
-                alpha=alpha*180/Math.PI; //convert from "Bogenmaß" to Degree
-                System.out.println("Alpha: "+alpha);
+                double alpha = calcAngle(diffX, diffY);
 
                 if(isBetween(alpha,22.5,-22.5)){
                     swipeE();
@@ -151,5 +157,28 @@ public class GestureService implements View.OnTouchListener {
 
     private boolean isBetween(double value, double higherValue, double lowerValue){
         return value < higherValue && value >= lowerValue;
+    }
+
+    public double calcAngle(double diffX, double diffY){
+        double alpha = Math.atan2(diffY,diffX);
+        alpha=alpha*180/Math.PI; //convert from "Bogenmaß" to Degree
+
+        return alpha;
+    }
+
+    public double getTouch_downX() {
+        return touch_downX;
+    }
+
+    public void setTouch_downX(double touch_downX) {
+        this.touch_downX = touch_downX;
+    }
+
+    public double getTouch_downY() {
+        return touch_downY;
+    }
+
+    public void setTouch_downY(double touch_downY) {
+        this.touch_downY = touch_downY;
     }
 }

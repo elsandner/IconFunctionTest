@@ -22,13 +22,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClickBt_Start(View view){
-
-        System.out.println("Test");
-        Intent i = new Intent(MainActivity.this, firstTest.class);
+    public void onClickBt_BlindMode(View view){
+        Intent i = new Intent(MainActivity.this, BlindMode.class);
         startActivity(i);
     }
 
+    public void onClickBt_VisualMode(View view){
+        Intent i = new Intent(MainActivity.this, VisualMode.class);
+        startActivity(i);
+    }
 
 
 }
