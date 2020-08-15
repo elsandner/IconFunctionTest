@@ -14,6 +14,7 @@ public class GestureService implements View.OnTouchListener {
     private double touch_downX=0;
     private double touch_downY=0;
 
+
     //Constructor
     public GestureService(Context c) {
         gestureDetector = new GestureDetector(c, new GestureListener());
@@ -66,30 +67,7 @@ public class GestureService implements View.OnTouchListener {
 
                 double alpha = calcAngle(diffX, diffY);
 
-                if(isBetween(alpha,22.5,-22.5)){
-                    swipeE();
-                }
-                else if(isBetween(alpha,-22.5,-67.5)){
-                    swipeNE();
-                }
-                else if(isBetween(alpha,-67.5,-112.5)){
-                    swipeN();
-                }
-                else if(isBetween(alpha,-112.5,-157.5)){
-                    swipeNW();
-                }
-                else if(isBetween(alpha,-157.5,157.5)){
-                    swipeW();
-                }
-                else if(isBetween(alpha,157.5,112.5)){
-                    swipeSW();
-                }
-                else if(isBetween(alpha,112.5,67.5)){
-                    swipeS();
-                }
-                else if(isBetween(alpha,67.5,22.5)){
-                    swipeSE();
-                }
+                AngleToDirection(alpha);
 
                 Log.d(TAG, "diffY: "+diffY);
                 Log.d(TAG, "diffX: "+diffX);
@@ -166,6 +144,42 @@ public class GestureService implements View.OnTouchListener {
         return alpha;
     }
 
+    public Direction AngleToDirection(double alpha){
+        if(isBetween(alpha,22.5,-22.5)){
+            swipeE();
+            return Direction.East;
+        }
+        else if(isBetween(alpha,-22.5,-67.5)){
+            swipeNE();
+            return Direction.NorthEast;
+        }
+        else if(isBetween(alpha,-67.5,-112.5)){
+            swipeE();
+            return Direction.North;
+        }
+        else if(isBetween(alpha,-112.5,-157.5)){
+            swipeNW();
+            return Direction.NorthWest;
+        }
+        else if(isBetween(alpha,-157.5,157.5)){
+            swipeW();
+            return Direction.West;
+        }
+        else if(isBetween(alpha,157.5,112.5)){
+            swipeSW();
+            return Direction.SouthWest;
+        }
+        else if(isBetween(alpha,112.5,67.5)){
+            swipeS();
+            return Direction.South;
+        }
+        else if(isBetween(alpha,67.5,22.5)){
+            swipeSE();
+            return Direction.SouthEast;
+        }
+        return Direction.Invalid;
+    }
+
     public double getTouch_downX() {
         return touch_downX;
     }
@@ -181,4 +195,5 @@ public class GestureService implements View.OnTouchListener {
     public void setTouch_downY(double touch_downY) {
         this.touch_downY = touch_downY;
     }
+
 }

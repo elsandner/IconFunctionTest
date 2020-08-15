@@ -180,8 +180,8 @@ public class VisualMode extends AppCompatActivity {
 
                 double currentAlpha = calcAngle(motionEvent.getX(),motionEvent.getY());
                 System.out.println(currentAlpha);
-                tv_Description.setText(Double.toString(currentAlpha));
-
+                //tv_Description.setText(Double.toString(currentAlpha));
+                tv_Description.setText(AngleToDirection(currentAlpha).toString());
                 return super.onTouch( view, motionEvent);
             }
 
