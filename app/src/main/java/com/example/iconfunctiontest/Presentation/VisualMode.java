@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 
+import java.text.DecimalFormat;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -170,7 +172,7 @@ public class VisualMode extends AppCompatActivity {
                 tv_Description.setText("South-West");
             }
 
-            @SuppressLint("SetTextI18n")
+            @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 
@@ -180,8 +182,10 @@ public class VisualMode extends AppCompatActivity {
 
                 double currentAlpha = calcAngle(motionEvent.getX(),motionEvent.getY());
                 System.out.println(currentAlpha);
-                //tv_Description.setText(Double.toString(currentAlpha));
-                tv_Description.setText(AngleToDirection(currentAlpha).toString());
+
+                DecimalFormat df = new DecimalFormat("#.##");
+
+                tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
                 return super.onTouch( view, motionEvent);
             }
 

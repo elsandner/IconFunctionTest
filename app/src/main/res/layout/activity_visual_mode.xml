@@ -58,7 +58,7 @@
             android:layout_gravity="center|center"
             android:background="@drawable/custom_rounded_corners"
             android:onClick="onClickBt_Icon"
-            android:text="Button" />
+            android:text="ICON" />
 
         <TextView
             android:id="@+id/tv_Direction"
