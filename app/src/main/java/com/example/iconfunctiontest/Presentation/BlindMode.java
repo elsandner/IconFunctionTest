@@ -1,17 +1,15 @@
 package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
@@ -21,6 +19,9 @@ import com.example.iconfunctiontest.Services.GestureService;
  * status bar and navigation/system bar) with user interaction.
  */
 public class BlindMode extends AppCompatActivity {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -40,6 +41,7 @@ public class BlindMode extends AppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
+
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -57,7 +59,9 @@ public class BlindMode extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
+
     private View mControlsView;
+
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
@@ -69,6 +73,7 @@ public class BlindMode extends AppCompatActivity {
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
+
     private boolean mVisible;
     private final Runnable mHideRunnable = new Runnable() {
         @Override
@@ -81,29 +86,11 @@ public class BlindMode extends AppCompatActivity {
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private static final String TAG = "BlindMode";
     private TextView tv_Description;
     private Button bt_Icon;
-
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (AUTO_HIDE) {
-                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    view.performClick();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        }
-    };
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -116,24 +103,18 @@ public class BlindMode extends AppCompatActivity {
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-
-
-
-        //My Code:
 
         bt_Icon = findViewById(R.id.bt_Icon);
         tv_Description = findViewById(R.id.tv_Direction);
 
-        bt_Icon.setOnTouchListener(new GestureService(BlindMode.this) {
+        bt_Icon.setOnTouchListener(new GestureService(BlindMode.this){
 
             @Override
             public void swipeE(){
                 super.swipeE();
                 tv_Description.setText("East");
             }
+
             @Override
             public void swipeNE(){
                 super.swipeNE();
@@ -170,12 +151,9 @@ public class BlindMode extends AppCompatActivity {
                 tv_Description.setText("South-West");
             }
 
-        });
+        }
 
-
-
-
-
+        );
 
     }
 

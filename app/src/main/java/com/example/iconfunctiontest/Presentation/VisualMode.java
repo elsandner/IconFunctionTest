@@ -70,7 +70,7 @@ public class VisualMode extends AppCompatActivity {
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
-    private boolean mVisible;
+
     private final Runnable mHideRunnable = new Runnable() {
         @Override
         public void run() {
@@ -87,24 +87,6 @@ public class VisualMode extends AppCompatActivity {
     private TextView tv_Description;
     private Button bt_Icon;
 
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (AUTO_HIDE) {
-                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    view.performClick();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        }
-    };
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -113,19 +95,12 @@ public class VisualMode extends AppCompatActivity {
 
         setContentView(R.layout.activity_visual_mode);
 
-        mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
-        // Set up the user interaction to manually show or hide the system UI.
-
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-
         bt_Icon = findViewById(R.id.bt_Icon);
         tv_Description = findViewById(R.id.tv_Direction);
+
 
         bt_Icon.setOnTouchListener(new GestureService(VisualMode.this) {
 
@@ -136,15 +111,11 @@ public class VisualMode extends AppCompatActivity {
 
                 int action = motionEvent.getAction();
 
-                //Just for debug-purpose
-
-
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
                         tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
-                        //System.out.println("downX aus Action.down="+downX);
                         Log.d(TAG,"Action was DOWN");
                         return true;
 
@@ -154,51 +125,39 @@ public class VisualMode extends AppCompatActivity {
 
                         double currentAlpha = calcAngle(diffX, diffY);
 
-
                       //  System.out.println("X(0)="+downX+"\tY(0)="+downY+"\t\t\tDiffX:"+diffX+" DiffY:"+diffY+"\t\t\tAlpha:"+currentAlpha);
 
                         DecimalFormat df = new DecimalFormat("#.##");
                         tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
-                        //tv_Description.setText(df.format(currentAlpha));
-
-                        //Log.d(TAG,"Action was MOVE");
+                        Log.d(TAG,"Action was MOVE");
                         return true;
 
                     case (MotionEvent.ACTION_UP) :
                         tv_Description.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
-
-                        Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
+                        //Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
                         return true;
+
                     case (MotionEvent.ACTION_CANCEL) :
                         Log.d(TAG,"Action was CANCEL");
                         return true;
+
                     case (MotionEvent.ACTION_OUTSIDE) :
                         Log.d(TAG,"Movement occurred outside bounds " +
                                 "of current screen element");
                         return true;
+
                     default :
                         return super.onTouch( view, motionEvent);
                 }
-
-
-
             }
-
-
-
-
-
-
         });
-
-
-
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
+    protected void onPostCreate(Bundle savedInstanceState) {        //Part of Fullscreen
         super.onPostCreate(savedInstanceState);
 
         // Trigger the initial hide() shortly after the activity has been
@@ -207,7 +166,7 @@ public class VisualMode extends AppCompatActivity {
         delayedHide(100);
     }
 
-    private void hide() {
+    private void hide() {   //Part of Fullscreen
         // Hide UI first
         System.out.println("HIDE IS EXECUTED");
         ActionBar actionBar = getSupportActionBar();
@@ -215,23 +174,18 @@ public class VisualMode extends AppCompatActivity {
             actionBar.hide();
         }
         mControlsView.setVisibility(View.GONE);
-        mVisible = false;
 
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
 
-    /**
-     * Schedules a call to hide() in delay milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis) {
+    private void delayedHide(int delayMillis) {         //Part of Fullscreen
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
-    //------------------My Methods-----------------------//
     public void onClickBt_Icon(View view){
         tv_Description.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");

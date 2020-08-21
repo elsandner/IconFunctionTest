@@ -23,15 +23,13 @@ public class GestureService implements View.OnTouchListener {
 
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
-
-        return gestureDetector.onTouchEvent(motionEvent);
+          return gestureDetector.onTouchEvent(motionEvent);
     }
+
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_THRESHOLD = 50;     //"Distanz-Grenzwert
         private static final int SWIPE_VELOCITY_THRESHOLD = 100; //Geschwindigkeits-Grenzwert
-
-
 
         @Override
         public boolean onDown(MotionEvent e) {
@@ -39,8 +37,6 @@ public class GestureService implements View.OnTouchListener {
             touch_downY=e.getY();
             return true;
         }
-
-
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
@@ -60,6 +56,7 @@ public class GestureService implements View.OnTouchListener {
             super.onLongPress(e);
         }
 
+        //OLD VERSION
         @Override
         public boolean onFling(MotionEvent mE_touch_down, MotionEvent mE_lift_off, float velocityX, float velocityY) {
             
@@ -83,39 +80,6 @@ public class GestureService implements View.OnTouchListener {
             }
             return false;
         }
-    }
-
-    //What should happen on each event
-    public void swipeE(){
-        Log.d(TAG, "\nSwipe East");
-    }
-
-    public void swipeNE(){
-        Log.d(TAG, "\nSwipe North-East");
-    }
-
-    public void swipeN(){
-        Log.d(TAG, "\nSwipe North");
-    }
-
-    public void swipeNW(){
-        Log.d(TAG, "\nSwipe North-West");
-    }
-
-    public void swipeW(){
-        Log.d(TAG, "\nSwipe West");
-    }
-
-    public void swipeSW(){
-        Log.d(TAG, "\nSwipe South-West");
-    }
-
-    public void swipeS(){
-        Log.d(TAG, "\nSwipe South");
-    }
-
-    public void swipeSE(){
-        Log.d(TAG, "\nSwipe South-East");
     }
 
 
@@ -168,7 +132,7 @@ public class GestureService implements View.OnTouchListener {
             return Direction.NorthEast;
         }
         else if(isBetween(alpha,112.5,67.5 )){
-            swipeE();
+            swipeN();
             return Direction.North;
         }
         else if(isBetween(alpha,157.5,112.5)){
@@ -193,6 +157,34 @@ public class GestureService implements View.OnTouchListener {
         }
         return Direction.Invalid;
     }
+
+
+    //What should happen on each event //implementeds as Methodes to use overwrite
+    public void swipeE(){
+        Log.d(TAG, "\nSwipe East");
+    }
+    public void swipeNE(){
+        Log.d(TAG, "\nSwipe North-East");
+    }
+    public void swipeN(){
+        Log.d(TAG, "\nSwipe North");
+    }
+    public void swipeNW(){
+        Log.d(TAG, "\nSwipe North-West");
+    }
+    public void swipeW(){
+        Log.d(TAG, "\nSwipe West");
+    }
+    public void swipeSW(){
+        Log.d(TAG, "\nSwipe South-West");
+    }
+    public void swipeS(){
+        Log.d(TAG, "\nSwipe South");
+    }
+    public void swipeSE(){
+        Log.d(TAG, "\nSwipe South-East");
+    }
+
 
     private boolean isBetween(double value, double higherValue, double lowerValue){
         return value <= higherValue && value >= lowerValue;
