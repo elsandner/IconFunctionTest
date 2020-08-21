@@ -1,10 +1,6 @@
 package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +8,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
@@ -130,64 +129,64 @@ public class VisualMode extends AppCompatActivity {
 
         bt_Icon.setOnTouchListener(new GestureService(VisualMode.this) {
 
-            @Override
-            public void swipeE(){
-                super.swipeE();
-                tv_Description.setText("East");
-            }
-            @Override
-            public void swipeNE(){
-                super.swipeNE();
-                tv_Description.setText("North-East");
-            }
-            @Override
-            public void swipeN(){
-                super.swipeN();
-                tv_Description.setText("North");
-                System.out.println("Test");
-            }
-            @Override
-            public void swipeNW(){
-                super.swipeNW();
-                tv_Description.setText("North-West");
-            }
-            @Override
-            public void swipeW(){
-                super.swipeW();
-                tv_Description.setText("West");
-            }
-            @Override
-            public void swipeSW(){
-                super.swipeSW();
-                tv_Description.setText("South-West");
-            }
-            @Override
-            public void swipeS(){
-                super.swipeS();
-                tv_Description.setText("South");
-            }
-            @Override
-            public void swipeSE() {
-                super.swipeSE();
-                tv_Description.setText("South-West");
-            }
-
+            double downX = 0, downY=0;
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 
-                System.out.println("X:"+motionEvent.getX());
-                System.out.println("Y:"+motionEvent.getY());
-                tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
+                int action = motionEvent.getAction();
 
-                double currentAlpha = calcAngle(motionEvent.getX(),motionEvent.getY());
-                System.out.println(currentAlpha);
+                //Just for debug-purpose
 
-                DecimalFormat df = new DecimalFormat("#.##");
 
-                tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
-                return super.onTouch( view, motionEvent);
+                switch(action) {
+                    case (MotionEvent.ACTION_DOWN) :
+                        tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
+                        downX=motionEvent.getX();
+                        downY=motionEvent.getY();
+                        //System.out.println("downX aus Action.down="+downX);
+                        Log.d(TAG,"Action was DOWN");
+                        return true;
+
+                    case (MotionEvent.ACTION_MOVE) :
+                        double diffX=motionEvent.getX()-downX;
+                        double diffY=motionEvent.getY()-downY;
+
+                        double currentAlpha = calcAngle(diffX, diffY);
+
+
+                      //  System.out.println("X(0)="+downX+"\tY(0)="+downY+"\t\t\tDiffX:"+diffX+" DiffY:"+diffY+"\t\t\tAlpha:"+currentAlpha);
+
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+                        //tv_Description.setText(df.format(currentAlpha));
+
+                        //Log.d(TAG,"Action was MOVE");
+                        return true;
+
+                    case (MotionEvent.ACTION_UP) :
+                        tv_Description.setBackgroundResource(R.color.design_default_color_primary_variant);
+                        Log.d(TAG,"Action was UP");
+
+                        Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
+                        return true;
+                    case (MotionEvent.ACTION_CANCEL) :
+                        Log.d(TAG,"Action was CANCEL");
+                        return true;
+                    case (MotionEvent.ACTION_OUTSIDE) :
+                        Log.d(TAG,"Movement occurred outside bounds " +
+                                "of current screen element");
+                        return true;
+                    default :
+                        return super.onTouch( view, motionEvent);
+                }
+
+
+
             }
+
+
+
 
 
 

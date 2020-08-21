@@ -40,6 +40,8 @@ public class GestureService implements View.OnTouchListener {
             return true;
         }
 
+
+
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             onClick();
@@ -79,13 +81,9 @@ public class GestureService implements View.OnTouchListener {
             catch (Exception exception) {
                 exception.printStackTrace();
             }
-
-
             return false;
         }
     }
-
-
 
     //What should happen on each event
     public void swipeE(){
@@ -120,6 +118,7 @@ public class GestureService implements View.OnTouchListener {
         Log.d(TAG, "\nSwipe South-East");
     }
 
+
     private void onClick() {
         Log.d(TAG, "\nClick");
     }
@@ -133,51 +132,70 @@ public class GestureService implements View.OnTouchListener {
     }
 
 
-    private boolean isBetween(double value, double higherValue, double lowerValue){
-        return value < higherValue && value >= lowerValue;
-    }
+
 
     public double calcAngle(double diffX, double diffY){
-        double alpha = Math.atan2(diffY,diffX);
-        alpha=alpha*180/Math.PI; //convert from "Bogenmaß" to Degree
+
+        double alpha = Math.atan2(diffX,diffY);
+        alpha=alpha*(180/Math.PI); //convert from "Bogenmaß" to Degree
+
+        if(alpha>=0&&alpha<90){
+            alpha+=270;
+        }
+        else if(alpha>=90&&alpha<180){
+            alpha-=90;
+        }
+        else if(alpha<0&&alpha>-90){
+            alpha+=270;
+        }
+        else if(alpha<=-90&&alpha>-180){
+            alpha+=270;
+        }
+        else{
+            alpha=-1;
+        }
 
         return alpha;
     }
 
     public Direction AngleToDirection(double alpha){
-        if(isBetween(alpha,22.5,-22.5)){
+        if(isBetween(alpha,22.5,0)||isBetween(alpha, 360,337.5)){
             swipeE();
             return Direction.East;
         }
-        else if(isBetween(alpha,-22.5,-67.5)){
+        else if(isBetween(alpha,67.5,22.5)){
             swipeNE();
             return Direction.NorthEast;
         }
-        else if(isBetween(alpha,-67.5,-112.5)){
+        else if(isBetween(alpha,112.5,67.5 )){
             swipeE();
             return Direction.North;
         }
-        else if(isBetween(alpha,-112.5,-157.5)){
+        else if(isBetween(alpha,157.5,112.5)){
             swipeNW();
             return Direction.NorthWest;
         }
-        else if(isBetween(alpha,-157.5,157.5)){
+        else if(isBetween(alpha,202.5 ,157.5)){
             swipeW();
             return Direction.West;
         }
-        else if(isBetween(alpha,157.5,112.5)){
+        else if(isBetween(alpha,247.5,202.5)){
             swipeSW();
             return Direction.SouthWest;
         }
-        else if(isBetween(alpha,112.5,67.5)){
+        else if(isBetween(alpha,292.5, 247.5)){
             swipeS();
             return Direction.South;
         }
-        else if(isBetween(alpha,67.5,22.5)){
+        else if(isBetween(alpha,337.5, 292.5)){
             swipeSE();
             return Direction.SouthEast;
         }
         return Direction.Invalid;
+    }
+
+    private boolean isBetween(double value, double higherValue, double lowerValue){
+        return value <= higherValue && value >= lowerValue;
     }
 
     public double getTouch_downX() {
