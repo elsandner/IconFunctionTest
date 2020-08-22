@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 
 import java.text.DecimalFormat;
+
+import static java.lang.Math.abs;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -102,9 +105,13 @@ public class VisualMode extends AppCompatActivity {
         tv_Description = findViewById(R.id.tv_Direction);
 
 
+
         bt_Icon.setOnTouchListener(new GestureService(VisualMode.this) {
 
-            double downX = 0, downY=0;
+            double downX = 0;
+            double downY=0;
+            String oldValue="";
+
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
 
             @Override
@@ -115,6 +122,7 @@ public class VisualMode extends AppCompatActivity {
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
                         tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
+                        oldValue= (String) tv_Description.getText();
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
                         Log.d(TAG,"Action was DOWN");
@@ -126,10 +134,21 @@ public class VisualMode extends AppCompatActivity {
 
                         double currentAlpha = calcAngle(diffX, diffY);
 
+                        DecimalFormat df = new DecimalFormat("#.##");
                       //  System.out.println("X(0)="+downX+"\tY(0)="+downY+"\t\t\tDiffX:"+diffX+" DiffY:"+diffY+"\t\t\tAlpha:"+currentAlpha);
 
-                        DecimalFormat df = new DecimalFormat("#.##");
-                        tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+                        if(abs(diffX)>cancel_threshold||abs(diffY)>cancel_threshold){
+                            Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
+                            toast.show();
+                            tv_Description.setText(oldValue);
+                        }
+                        else if(currentAlpha==-2){
+                            tv_Description.setText("Click");
+                        }
+                        else{
+                            tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+                        }
+
                         Log.d(TAG,"Action was MOVE");
                         return true;
 

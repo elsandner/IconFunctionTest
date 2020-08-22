@@ -9,7 +9,10 @@ import android.view.View;
 
 public class GestureService implements View.OnTouchListener {
 
+    public final double cancel_threshold=200; //Swipe more than this value to cancel selection
+
     private static final String TAG = "Gesture Service";
+
     private GestureDetector gestureDetector;
     private double touch_downX=0;
     private double touch_downY=0;
@@ -17,7 +20,7 @@ public class GestureService implements View.OnTouchListener {
 
     //Constructor
     public GestureService(Context c) {
-        gestureDetector = new GestureDetector(c, new GestureListener());
+        //gestureDetector = new GestureDetector(c, new GestureListener());
     }
 
 
@@ -26,62 +29,6 @@ public class GestureService implements View.OnTouchListener {
           return gestureDetector.onTouchEvent(motionEvent);
     }
 
-
-    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        private static final int SWIPE_THRESHOLD = 50;     //"Distanz-Grenzwert
-        private static final int SWIPE_VELOCITY_THRESHOLD = 100; //Geschwindigkeits-Grenzwert
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            touch_downX=e.getX();
-            touch_downY=e.getY();
-            return true;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            onClick();
-            return super.onSingleTapUp(e);
-        }
-
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            onDoubleClick();
-            return super.onDoubleTap(e);
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            onLongClick();
-            super.onLongPress(e);
-        }
-
-        //OLD VERSION
-        @Override
-        public boolean onFling(MotionEvent mE_touch_down, MotionEvent mE_lift_off, float velocityX, float velocityY) {
-            
-            try {
-                float diffY = mE_lift_off.getY() - mE_touch_down.getY();
-                float diffX = mE_lift_off.getX() - mE_touch_down.getX();
-
-                double alpha = calcAngle(diffX, diffY);
-
-                AngleToDirection(alpha);
-
-                Log.d(TAG, "diffY: "+diffY);
-                Log.d(TAG, "diffX: "+diffX);
-                Log.d(TAG, "velocityY: "+velocityY);
-                Log.d(TAG, "velocityX: "+velocityX);
-                System.out.println();
-
-            }
-
-            catch (Exception exception) {
-                exception.printStackTrace();
-            }
-            return false;
-        }
-    }
 
 
     private void onClick() {
@@ -101,6 +48,10 @@ public class GestureService implements View.OnTouchListener {
 
     public double calcAngle(double diffX, double diffY){
 
+        if(diffX==0&&diffY==0){
+            return -2; //Click
+        }
+
         double alpha = Math.atan2(diffX,diffY);
         alpha=alpha*(180/Math.PI); //convert from "Bogenmaß" to Degree
 
@@ -117,7 +68,7 @@ public class GestureService implements View.OnTouchListener {
             alpha+=270;
         }
         else{
-            alpha=-1;
+            alpha=-1; //Error
         }
 
         return alpha;

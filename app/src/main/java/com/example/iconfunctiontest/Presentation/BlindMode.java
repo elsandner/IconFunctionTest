@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 
 import java.text.DecimalFormat;
+
+import static java.lang.Math.abs;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -127,17 +130,33 @@ public class BlindMode extends AppCompatActivity {
                         return true;
 
                     case (MotionEvent.ACTION_MOVE) :
+                        //Implement Canceling a Selection with a Zig-Zag Movement
+
                         Log.d(TAG,"Action was MOVE");
                         return true;
 
                     case (MotionEvent.ACTION_UP) :
+
                         double diffX=motionEvent.getX()-downX;
                         double diffY=motionEvent.getY()-downY;
 
                         double currentAlpha = calcAngle(diffX, diffY);
 
                         DecimalFormat df = new DecimalFormat("#.##");
-                        tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+
+                        //LOG diffX, diffY --> adjust threshold
+                        Log.d(TAG, "diffX: "+diffX+" diffY: "+diffY);
+
+                        if(abs(diffX)>cancel_threshold||abs(diffY)>cancel_threshold){
+                            Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                        else if(currentAlpha==-2){
+                            tv_Description.setText("Click");
+                        }
+                        else{
+                            tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+                        }
 
                         Log.d(TAG,"Action was UP");
                         //Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
