@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
+
+import java.text.DecimalFormat;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -109,47 +112,50 @@ public class BlindMode extends AppCompatActivity {
 
         bt_Icon.setOnTouchListener(new GestureService(BlindMode.this){
 
-            @Override
-            public void swipeE(){
-                super.swipeE();
-                tv_Description.setText("East");
-            }
+            double downX = 0, downY=0;
 
             @Override
-            public void swipeNE(){
-                super.swipeNE();
-                tv_Description.setText("North-East");
-            }
-            @Override
-            public void swipeN(){
-                super.swipeN();
-                tv_Description.setText("North");
-            }
-            @Override
-            public void swipeNW(){
-                super.swipeNW();
-                tv_Description.setText("North-West");
-            }
-            @Override
-            public void swipeW(){
-                super.swipeW();
-                tv_Description.setText("West");
-            }
-            @Override
-            public void swipeSW(){
-                super.swipeSW();
-                tv_Description.setText("South-West");
-            }
-            @Override
-            public void swipeS(){
-                super.swipeS();
-                tv_Description.setText("South");
-            }
-            @Override
-            public void swipeSE() {
-                super.swipeSE();
-                tv_Description.setText("South-West");
-            }
+            public boolean onTouch(final View view, final MotionEvent motionEvent) {
+
+                int action = motionEvent.getAction();
+
+                switch(action) {
+                    case (MotionEvent.ACTION_DOWN) :
+                        downX=motionEvent.getX();
+                        downY=motionEvent.getY();
+                        Log.d(TAG,"Action was DOWN");
+                        return true;
+
+                    case (MotionEvent.ACTION_MOVE) :
+                        Log.d(TAG,"Action was MOVE");
+                        return true;
+
+                    case (MotionEvent.ACTION_UP) :
+                        double diffX=motionEvent.getX()-downX;
+                        double diffY=motionEvent.getY()-downY;
+
+                        double currentAlpha = calcAngle(diffX, diffY);
+
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+
+                        Log.d(TAG,"Action was UP");
+                        //Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
+                        return true;
+
+                    case (MotionEvent.ACTION_CANCEL) :
+                        Log.d(TAG,"Action was CANCEL");
+                        return true;
+
+                    case (MotionEvent.ACTION_OUTSIDE) :
+                        Log.d(TAG,"Movement occurred outside bounds " +
+                               "of current screen element");
+                        return true;
+
+                    default :
+                        return super.onTouch( view, motionEvent);
+               }
+           }
 
         }
 
@@ -157,6 +163,8 @@ public class BlindMode extends AppCompatActivity {
 
     }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -190,9 +198,8 @@ public class BlindMode extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+///////////////////////////////////////////////////////////////////////////////////////////7
 
-
-    //------------------My Methods-----------------------//
     public void onClickBt_Icon(View view){
         tv_Description.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");

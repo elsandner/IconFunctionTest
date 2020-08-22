@@ -106,6 +106,7 @@ public class VisualMode extends AppCompatActivity {
 
             double downX = 0, downY=0;
             @SuppressLint({"SetTextI18n", "DefaultLocale"})
+
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 

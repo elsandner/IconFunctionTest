@@ -75,6 +75,7 @@ public class GestureService implements View.OnTouchListener {
                 System.out.println();
 
             }
+
             catch (Exception exception) {
                 exception.printStackTrace();
             }
