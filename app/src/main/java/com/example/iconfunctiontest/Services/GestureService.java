@@ -7,7 +7,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class GestureService implements View.OnTouchListener {
+public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
 
     public final double cancel_threshold=200; //Swipe more than this value to cancel selection
 
@@ -29,8 +29,15 @@ public class GestureService implements View.OnTouchListener {
           return gestureDetector.onTouchEvent(motionEvent);
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        System.out.println("LONG CLICK !!!!!!!!!!!");
+        return true;
+    }
 
 
+
+    /* TRASH ??!!
     private void onClick() {
         Log.d(TAG, "\nClick");
     }
@@ -42,7 +49,7 @@ public class GestureService implements View.OnTouchListener {
     private void onLongClick() {
         Log.d(TAG, "\nLongClick");
     }
-
+     */
 
 
 

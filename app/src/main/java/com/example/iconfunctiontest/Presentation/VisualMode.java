@@ -61,6 +61,8 @@ public class VisualMode extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
+
+
     private View mControlsView;
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
@@ -86,9 +88,14 @@ public class VisualMode extends AppCompatActivity {
      * while interacting with activity UI.
      */
 
+
+
+
     private static final String TAG = "BlindMode";
     private TextView tv_Description;
     private Button bt_Icon;
+
+    private GestureService gs;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -104,15 +111,52 @@ public class VisualMode extends AppCompatActivity {
         bt_Icon = findViewById(R.id.bt_Icon);
         tv_Description = findViewById(R.id.tv_Direction);
 
+        setGestureService();
 
+        bt_Icon.setOnLongClickListener(gs);
 
-        bt_Icon.setOnTouchListener(new GestureService(VisualMode.this) {
+        bt_Icon.setOnTouchListener(gs);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {        //Part of Fullscreen
+        super.onPostCreate(savedInstanceState);
+
+        // Trigger the initial hide() shortly after the activity has been
+        // created, to briefly hint to the user that UI controls
+        // are available.
+        delayedHide(100);
+    }
+
+    private void hide() {   //Part of Fullscreen
+        // Hide UI first
+        System.out.println("HIDE IS EXECUTED");
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
+        mControlsView.setVisibility(View.GONE);
+
+        // Schedule a runnable to remove the status and navigation bar after a delay
+        mHideHandler.removeCallbacks(mShowPart2Runnable);
+        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+    }
+
+    private void delayedHide(int delayMillis) {         //Part of Fullscreen
+        mHideHandler.removeCallbacks(mHideRunnable);
+        mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void setGestureService(){
+        gs= new GestureService(VisualMode.this) {
 
             double downX = 0;
             double downY=0;
             String oldValue="";
 
-            @SuppressLint({"SetTextI18n", "DefaultLocale"})
+            @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
 
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
@@ -135,7 +179,6 @@ public class VisualMode extends AppCompatActivity {
                         double currentAlpha = calcAngle(diffX, diffY);
 
                         DecimalFormat df = new DecimalFormat("#.##");
-                      //  System.out.println("X(0)="+downX+"\tY(0)="+downY+"\t\t\tDiffX:"+diffX+" DiffY:"+diffY+"\t\t\tAlpha:"+currentAlpha);
 
                         if(abs(diffX)>cancel_threshold||abs(diffY)>cancel_threshold){
                             Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
@@ -171,43 +214,23 @@ public class VisualMode extends AppCompatActivity {
                         return super.onTouch( view, motionEvent);
                 }
             }
-        });
+
+            public void onLongPress(MotionEvent e){
+                Log.e(TAG, "Longpress detected!!!!!!!!");
+            }
+        };
+
 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {        //Part of Fullscreen
-        super.onPostCreate(savedInstanceState);
 
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100);
-    }
 
-    private void hide() {   //Part of Fullscreen
-        // Hide UI first
-        System.out.println("HIDE IS EXECUTED");
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        mControlsView.setVisibility(View.GONE);
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    private void delayedHide(int delayMillis) {         //Part of Fullscreen
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////
 
     public void onClickBt_Icon(View view){
         tv_Description.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");
     }
+
+
+
 }
