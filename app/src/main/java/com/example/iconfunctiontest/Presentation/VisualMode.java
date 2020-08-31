@@ -17,6 +17,7 @@ import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
 
@@ -98,6 +99,8 @@ public class VisualMode extends AppCompatActivity {
     private GestureService gs;
 
 
+
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +115,6 @@ public class VisualMode extends AppCompatActivity {
         tv_Description = findViewById(R.id.tv_Direction);
 
         setGestureService();
-
-        bt_Icon.setOnLongClickListener(gs);
 
         bt_Icon.setOnTouchListener(gs);
     }
@@ -149,11 +150,15 @@ public class VisualMode extends AppCompatActivity {
     }
     ////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
     private void setGestureService(){
         gs= new GestureService(VisualMode.this) {
 
             double downX = 0;
             double downY=0;
+            boolean longClick=false;
+            boolean dragMode=false;
             String oldValue="";
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
@@ -162,7 +167,6 @@ public class VisualMode extends AppCompatActivity {
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 
                 int action = motionEvent.getAction();
-
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
                         tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
@@ -170,32 +174,45 @@ public class VisualMode extends AppCompatActivity {
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
                         Log.d(TAG,"Action was DOWN");
+
+                        //detect long click
+                        longClick=true;
+                        dragMode=false;
+                        startCountDown(3); //changes longClick to true
+
                         return true;
 
-                    case (MotionEvent.ACTION_MOVE) :
-                        double diffX=motionEvent.getX()-downX;
-                        double diffY=motionEvent.getY()-downY;
+                    case (MotionEvent.ACTION_MOVE):
+                        longClick=false;
 
-                        double currentAlpha = calcAngle(diffX, diffY);
-
-                        DecimalFormat df = new DecimalFormat("#.##");
-
-                        if(abs(diffX)>cancel_threshold||abs(diffY)>cancel_threshold){
-                            Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
-                            toast.show();
-                            tv_Description.setText(oldValue);
+                        if(dragMode){
+                            Log.d(TAG, "In Drag Mode!");
                         }
-                        else if(currentAlpha==-2){
-                            tv_Description.setText("Click");
-                        }
-                        else{
-                            tv_Description.setText(AngleToDirection(currentAlpha).toString() +"\n"+ df.format(currentAlpha));
+                        else {
+                            double diffX = motionEvent.getX() - downX;
+                            double diffY = motionEvent.getY() - downY;
+
+                            double currentAlpha = calcAngle(diffX, diffY);
+
+                            DecimalFormat df = new DecimalFormat("#.##");
+
+                            if (abs(diffX) > cancel_threshold || abs(diffY) > cancel_threshold) {
+                                Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
+                                toast.show();
+                                tv_Description.setText(oldValue);
+                            } else if (currentAlpha == -2) {
+                                tv_Description.setText("Click");
+                            } else {
+                                tv_Description.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
+                            }
+
                         }
 
-                        Log.d(TAG,"Action was MOVE");
+                        Log.d(TAG, "Action was MOVE");
                         return true;
 
                     case (MotionEvent.ACTION_UP) :
+                        longClick=false;
                         tv_Description.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
                         //Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
@@ -215,14 +232,35 @@ public class VisualMode extends AppCompatActivity {
                 }
             }
 
-            public void onLongPress(MotionEvent e){
-                Log.e(TAG, "Longpress detected!!!!!!!!");
+
+            public void startCountDown(final int seconds){  //detect long click
+                new Thread(){
+                    public void run(){
+                        for(int i= seconds;i>0;i--){
+                            try {
+                                TimeUnit.SECONDS.sleep(1);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if(longClick){
+                            Log.d(TAG, "LongClick Detected!!");
+
+
+                            dragMode=true;
+                        }
+
+                    }
+                }.start();
             }
+
+
         };
 
 
-    }
 
+
+    }
 
 
 
@@ -230,6 +268,8 @@ public class VisualMode extends AppCompatActivity {
         tv_Description.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");
     }
+
+
 
 
 

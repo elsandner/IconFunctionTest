@@ -149,6 +149,9 @@ public class GestureService implements View.OnTouchListener, View.OnLongClickLis
         return value <= higherValue && value >= lowerValue;
     }
 
+
+
+
     public double getTouch_downX() {
         return touch_downX;
     }
