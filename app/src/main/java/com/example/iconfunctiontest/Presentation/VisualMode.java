@@ -1,8 +1,10 @@
 package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.example.iconfunctiontest.Services.GestureService;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
+import static androidx.core.content.ContextCompat.getSystemService;
 import static java.lang.Math.abs;
 
 /**
@@ -178,7 +181,7 @@ public class VisualMode extends AppCompatActivity {
                         //detect long click
                         longClick=true;
                         dragMode=false;
-                        startCountDown(3); //changes longClick to true
+                        startCountDown(2); //changes longClick to true
 
                         return true;
 
@@ -187,6 +190,9 @@ public class VisualMode extends AppCompatActivity {
 
                         if(dragMode){
                             Log.d(TAG, "In Drag Mode!");
+
+
+
                         }
                         else {
                             double diffX = motionEvent.getX() - downX;
@@ -245,7 +251,7 @@ public class VisualMode extends AppCompatActivity {
                         }
                         if(longClick){
                             Log.d(TAG, "LongClick Detected!!");
-
+                            vibrate();
 
                             dragMode=true;
                         }
@@ -267,6 +273,11 @@ public class VisualMode extends AppCompatActivity {
     public void onClickBt_Icon(View view){
         tv_Description.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");
+    }
+
+    public void vibrate(){
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(200);
     }
 
 

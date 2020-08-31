@@ -7,6 +7,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
 
     public final double cancel_threshold=200; //Swipe more than this value to cancel selection
@@ -145,12 +147,10 @@ public class GestureService implements View.OnTouchListener, View.OnLongClickLis
     }
 
 
+
     private boolean isBetween(double value, double higherValue, double lowerValue){
         return value <= higherValue && value >= lowerValue;
     }
-
-
-
 
     public double getTouch_downX() {
         return touch_downX;
