@@ -159,12 +159,14 @@ public class VisualMode extends AppCompatActivity {
         gs= new GestureService(VisualMode.this) {
 
             float dX, dY; //used for moving icon
-
+            float originalX=0.0f;
+            float originalY=0.0f;
 
             double downX = 0;
             double downY=0;
             boolean longClick=false;
             boolean dragMode=false;
+            boolean touched=false;
             String oldValue="";
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
@@ -172,13 +174,20 @@ public class VisualMode extends AppCompatActivity {
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 
+
+
                 int action = motionEvent.getAction();
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
+                        touched=true;
 
-                        dX = view.getX() - motionEvent.getRawX();//used for moving icon
-                        dY = view.getY() - motionEvent.getRawY();//used for moving icon
+                        if(originalX==0.0f&&originalY==0.0f){ //set reference for moving back to origin position
+                            originalX=view.getX();
+                            originalY=view.getY();
+                        }
 
+                        dX = originalX - motionEvent.getRawX();//used for moving icon
+                        dY = originalY - motionEvent.getRawY();//used for moving icon
 
                         tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
                         oldValue= (String) tv_Description.getText();
@@ -204,6 +213,8 @@ public class VisualMode extends AppCompatActivity {
                                     .y(motionEvent.getRawY() + dY)
                                     .setDuration(0)
                                     .start();
+
+
                         }
                         else {
                             double diffX = motionEvent.getX() - downX;
@@ -230,9 +241,27 @@ public class VisualMode extends AppCompatActivity {
 
                     case (MotionEvent.ACTION_UP) :
                         longClick=false;
+                        touched=false;
+
+                        new Thread() {
+                            public void run() {
+
+                                if (dragMode) {
+                                    try {
+                                        TimeUnit.SECONDS.sleep(1);  //time delay
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                if(!touched) {
+                                    moveIconToOriginalPosition(view);
+                                }
+                            }
+                        }.start();
+
                         tv_Description.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
-                        //Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
                         return true;
 
                     case (MotionEvent.ACTION_CANCEL) :
@@ -250,7 +279,7 @@ public class VisualMode extends AppCompatActivity {
             }
 
 
-            public void startCountDown(final int seconds){  //detect long click
+            private void startCountDown(final int seconds){  //detect long click
                 new Thread(){
                     public void run(){
                         for(int i= seconds;i>0;i--){
@@ -270,6 +299,22 @@ public class VisualMode extends AppCompatActivity {
                     }
                 }.start();
             }
+
+            private void moveIconToOriginalPosition(final View view){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "Move back to original position!");
+                        view.animate()  //used for moving icon
+                                .x(originalX)
+                                .y(originalY)
+                                .setDuration(1000)
+                                .start();
+                    }
+                });
+            }
+
+
 
 
         };
