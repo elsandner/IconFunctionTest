@@ -158,6 +158,9 @@ public class VisualMode extends AppCompatActivity {
     private void setGestureService(){
         gs= new GestureService(VisualMode.this) {
 
+            float dX, dY; //used for moving icon
+
+
             double downX = 0;
             double downY=0;
             boolean longClick=false;
@@ -172,6 +175,11 @@ public class VisualMode extends AppCompatActivity {
                 int action = motionEvent.getAction();
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
+
+                        dX = view.getX() - motionEvent.getRawX();//used for moving icon
+                        dY = view.getY() - motionEvent.getRawY();//used for moving icon
+
+
                         tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
                         oldValue= (String) tv_Description.getText();
                         downX=motionEvent.getX();
@@ -191,8 +199,11 @@ public class VisualMode extends AppCompatActivity {
                         if(dragMode){
                             Log.d(TAG, "In Drag Mode!");
 
-
-
+                            view.animate()  //used for moving icon
+                                    .x(motionEvent.getRawX() + dX)
+                                    .y(motionEvent.getRawY() + dY)
+                                    .setDuration(0)
+                                    .start();
                         }
                         else {
                             double diffX = motionEvent.getX() - downX;
