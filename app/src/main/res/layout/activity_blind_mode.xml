@@ -52,15 +52,14 @@
 
         <TextView
             android:id="@+id/tv_Direction"
-            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:background="@color/design_default_color_primary_variant"
+            android:gravity="center"
             android:text="Direction"
             android:textColor="#33b5e5"
-            android:textSize="50sp"
-            android:gravity="center"
-            />
+            android:textSize="50sp" />
     </FrameLayout>
 
 </FrameLayout>
