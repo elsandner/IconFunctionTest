@@ -9,7 +9,8 @@ import android.view.View;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
-public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
+//public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
+public class GestureService implements View.OnTouchListener {
 
     public final double cancel_threshold=200; //Swipe more than this value to cancel selection
 
@@ -20,9 +21,10 @@ public class GestureService implements View.OnTouchListener, View.OnLongClickLis
     private double touch_downY=0;
 
 
+
     //Constructor
     public GestureService(Context c) {
-        //gestureDetector = new GestureDetector(c, new GestureListener());
+
     }
 
 
@@ -31,29 +33,14 @@ public class GestureService implements View.OnTouchListener, View.OnLongClickLis
           return gestureDetector.onTouchEvent(motionEvent);
     }
 
+    /*
     @Override
     public boolean onLongClick(View v) {
         System.out.println("LONG CLICK !!!!!!!!!!!");
         return true;
     }
 
-
-
-    /* TRASH ??!!
-    private void onClick() {
-        Log.d(TAG, "\nClick");
-    }
-
-    private void onDoubleClick() {
-        Log.d(TAG, "\nDoubleClick");
-    }
-
-    private void onLongClick() {
-        Log.d(TAG, "\nLongClick");
-    }
      */
-
-
 
     public double calcAngle(double diffX, double diffY){
 
@@ -167,5 +154,8 @@ public class GestureService implements View.OnTouchListener, View.OnLongClickLis
     public void setTouch_downY(double touch_downY) {
         this.touch_downY = touch_downY;
     }
+
+
+
 
 }

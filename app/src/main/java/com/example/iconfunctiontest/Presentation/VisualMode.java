@@ -2,6 +2,7 @@ package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
+import com.example.iconfunctiontest.Services.TestMode;
 import com.example.iconfunctiontest.Services.TestService;
 
 import java.text.DecimalFormat;
@@ -194,9 +196,12 @@ public class VisualMode extends AppCompatActivity {
 
 
                 int action = motionEvent.getAction();
+                double currentAlpha=0;
+
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
                         touched=true;
+
 
                         if(originalX==0.0f&&originalY==0.0f){ //set reference for moving back to origin position
                             originalX=view.getX();
@@ -210,13 +215,14 @@ public class VisualMode extends AppCompatActivity {
                         oldValue= (String) tv_Direction.getText();
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
-                        Log.d(TAG,"Action was DOWN");
+
 
                         //detect long click
                         longClick=true;
                         dragMode=false;
                         startCountDown(2); //changes longClick to true
 
+                        Log.d(TAG,"Action was DOWN");
                         return true;
 
                     case (MotionEvent.ACTION_MOVE):
@@ -237,7 +243,7 @@ public class VisualMode extends AppCompatActivity {
                             double diffX = motionEvent.getX() - downX;
                             double diffY = motionEvent.getY() - downY;
 
-                            double currentAlpha = calcAngle(diffX, diffY);
+                            currentAlpha = calcAngle(diffX, diffY);
 
                             DecimalFormat df = new DecimalFormat("#.##");
 
@@ -276,6 +282,25 @@ public class VisualMode extends AppCompatActivity {
                                 }
                             }
                         }.start();
+
+
+                        //TEST EVALUATION
+                        if(testService.onSelection(AngleToDirection(currentAlpha) ,trial)){
+                            tv_Heading.setText("Well Done!");
+                            try {
+                                TimeUnit.SECONDS.sleep(3);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Intent i = new Intent(VisualMode.this, InfoActivity.class);
+                            i.putExtra("trial",testService.nextTrial(trial));
+                            startActivity(i);
+
+
+
+                        }else{
+                            tv_Heading.setText("Try again!");
+                        }
 
                         tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
@@ -321,7 +346,6 @@ public class VisualMode extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "Move back to original position!");
                         view.animate()  //used for moving icon
                                 .x(originalX)
                                 .y(originalY)

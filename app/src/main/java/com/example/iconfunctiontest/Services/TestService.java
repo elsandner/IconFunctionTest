@@ -178,6 +178,22 @@ public class TestService {
         return explanation;
     }
 
+    public boolean onSelection(Direction direction, String trial){
+        System.out.println("onSelection executed!");
 
+        System.out.println("trial: "+trial);
+        System.out.println("direction: "+direction);
+
+        switch(trial){
+            case "Test1":
+                return direction == Direction.SouthWest;
+
+            //TODO: Add other Test-Cases
+
+            default:
+                return false;
+        }
+
+    }
 
 }
