@@ -17,11 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
+import com.example.iconfunctiontest.Services.TestService;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 import static java.lang.Math.abs;
 
 /**
@@ -96,11 +96,15 @@ public class VisualMode extends AppCompatActivity {
 
 
     private static final String TAG = "BlindMode";
-    private TextView tv_Description;
+    private TextView tv_Direction;
+    private TextView tv_Heading;
     private Button bt_Icon;
 
     private GestureService gs;
 
+    private Bundle bundle;
+    private TestService testService;
+    private String trial;
 
 
 
@@ -115,11 +119,24 @@ public class VisualMode extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
 
         bt_Icon = findViewById(R.id.bt_Icon);
-        tv_Description = findViewById(R.id.tv_Direction);
+        tv_Direction = findViewById(R.id.tv_Direction);
+        tv_Heading = findViewById(R.id.tv_HeadingVM);
 
         setGestureService();
-
         bt_Icon.setOnTouchListener(gs);
+
+
+        //Adopt Text for each Test
+        testService=new TestService();
+        bundle = getIntent().getExtras();
+
+        if(bundle!=null)
+            trial = bundle.getString("trial");
+
+
+        tv_Heading.setText(testService.getTestHeading(trial));
+
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,8 +206,8 @@ public class VisualMode extends AppCompatActivity {
                         dX = originalX - motionEvent.getRawX();//used for moving icon
                         dY = originalY - motionEvent.getRawY();//used for moving icon
 
-                        tv_Description.setBackgroundResource(R.color.design_default_color_on_primary);
-                        oldValue= (String) tv_Description.getText();
+                        tv_Direction.setBackgroundResource(R.color.design_default_color_on_primary);
+                        oldValue= (String) tv_Direction.getText();
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
                         Log.d(TAG,"Action was DOWN");
@@ -227,11 +244,11 @@ public class VisualMode extends AppCompatActivity {
                             if (abs(diffX) > cancel_threshold || abs(diffY) > cancel_threshold) {
                                 Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
                                 toast.show();
-                                tv_Description.setText(oldValue);
+                                tv_Direction.setText(oldValue);
                             } else if (currentAlpha == -2) {
-                                tv_Description.setText("Click");
+                                tv_Direction.setText("Click");
                             } else {
-                                tv_Description.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
+                                tv_Direction.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
                             }
 
                         }
@@ -260,7 +277,7 @@ public class VisualMode extends AppCompatActivity {
                             }
                         }.start();
 
-                        tv_Description.setBackgroundResource(R.color.design_default_color_primary_variant);
+                        tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
                         return true;
 
@@ -327,7 +344,7 @@ public class VisualMode extends AppCompatActivity {
 
 
     public void onClickBt_Icon(View view){
-        tv_Description.setText("Click");
+        tv_Direction.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");
     }
 

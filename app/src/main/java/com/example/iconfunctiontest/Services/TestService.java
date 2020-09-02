@@ -8,6 +8,7 @@ public class TestService {
     public TestService(){
         //Empty Constructor
     }
+
     public String nextTrial(String trial){
         if(trial.equals("Welcome")){
             return "Test1";
@@ -18,10 +19,30 @@ public class TestService {
             return "End";
         }
 
-        if(trial.substring(0,trial.length()-2).equals("Test")) {
-            return "Test" + trial.substring(trial.length() - 1);
+        if(trial.substring(0,4).equals("Test")) {
+            int num = Integer.parseInt(trial.substring(trial.length() - 1));
+            num++;
+            return "Test" + num;
         }
         return "Error";
+    }
+
+    public String getTestHeading(String trial) {
+
+        switch (trial) {
+            case "Test1": return "Visual Selection #1";
+            case "Test2": return "Blind Selection #1";
+            case "Test3": return "Visual Selection #2";
+            case "Test4": return "Blind Selection #2";
+            case "Test5": return "Visual Selection #3";
+            case "Test6": return "Blind Selection #3";
+            case "Test7": return "Visual Selection #4";
+            case "Test8": return "Blind Selection #4";
+
+            default:
+                return "Error";
+
+        }
     }
 
     public String getInfoHeading(String trial){
@@ -156,7 +177,6 @@ public class TestService {
 
         return explanation;
     }
-
 
 
 
