@@ -1,11 +1,27 @@
 package com.example.iconfunctiontest.Services;
 
 import android.os.Bundle;
+import android.util.Log;
 
 public class TestService {
 
     public TestService(){
         //Empty Constructor
+    }
+    public String nextTrial(String trial){
+        if(trial.equals("Welcome")){
+            return "Test1";
+        }
+
+        //Last Test
+        if(trial.equals("Test8")){
+            return "End";
+        }
+
+        if(trial.substring(0,trial.length()-2).equals("Test")) {
+            return "Test" + trial.substring(trial.length() - 1);
+        }
+        return "Error";
     }
 
     public String getInfoHeading(String trial){
