@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickBt_Start(View view){
         Intent i = new Intent(MainActivity.this, InfoActivity.class);
+
+
+        i.putExtra("trial","Welcome");
+
         startActivity(i);
     }
 
