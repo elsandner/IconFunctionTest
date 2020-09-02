@@ -43,6 +43,14 @@ public class TestService {
                 heading = "Blind Selection #3";
                 break;
 
+            case "Test7":
+                heading = "Visual Selection #4";
+                break;
+
+            case "Test8":
+                heading = "Blind Selection #4";
+                break;
+
             case "Ending":
                 heading = "Thank You!";
                 break;
@@ -67,6 +75,8 @@ public class TestService {
                         "Before each Test, you will see a description of your task. ";
                 break;
 
+
+            /////// Icon in Screens Center ///////////
             case "Test1":
                 explanation = "Click on the Icon an keep your finger on the screen. " +
                         "Depending on the direction you move your finger, " +
@@ -79,19 +89,34 @@ public class TestService {
                         "by swiping north on the alive-icon as exactly as possible. ";
                 break;
 
+            ////// Cancel Selection ///////////
             case "Test3":
+                explanation = "Click on the Icon an keep your finger on the screen. " +
+                        "Depending on the direction you move your finger, " +
+                        "the Text-View shows you your current choice. " +
+                        "Try to cancel your selection by swiping a longer distance to any direction. ";
+                break;
+
+            case "Test4":
+                explanation = "Start swiping to any direction. Instead of releasing your finger, " +
+                        "keep swiping till your selection gets canceled.";
+                break;
+
+            /////// Icon in corner ///////////
+            case "Test5":
                 explanation = "Click on the Icon an keep your finger on the screen. " +
                         "Depending on the direction you move your finger, " +
                         "the Text-View shows you your current choice. " +
                         "Try to select “North-West”. ";
                 break;
 
-            case "Test4":
+            case "Test6":
                 explanation = "Try to call a shortcut-function " +
                         "by swiping South-East on the alive-icon as exactly as possible. ";
                 break;
 
-            case "Test5":
+            ////// Displacing the Alive-Icon///////
+            case "Test7":
                 explanation = "It is pretty hard to use the alive icon when it is located close to the edge, isn’t it? " +
                         "In the following test, you are asked to do a LongClick on the icon. " +
                         "As soon as you feel a vibration, you can move the icon to any position " +
@@ -100,7 +125,8 @@ public class TestService {
                         "Find the Option “West” and select it. ";
                 break;
 
-            case "Test6":
+
+            case "Test8":
                 explanation = "In the following test, you are asked to do a LongClick on the icon." +
                         " As soon as you feel a vibration, you can move the icon to any position " +
                         "on the screen where it is easier to use. " +
