@@ -5,10 +5,15 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
 
@@ -39,6 +44,7 @@ public class OriginalMode extends AppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
+
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -48,12 +54,15 @@ public class OriginalMode extends AppCompatActivity {
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
+
             mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+
         }
     };
     private View mControlsView;
@@ -83,6 +92,9 @@ public class OriginalMode extends AppCompatActivity {
      */
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    Button bt_TestIcon, bt_Icon1, bt_Icon2, bt_Icon3 ;
+    LinearLayout L_PopUp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +104,22 @@ public class OriginalMode extends AppCompatActivity {
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+
+        bt_TestIcon = findViewById(R.id.bt_TestIcon);
+        bt_Icon1=findViewById(R.id.bt_Icon1);
+        bt_Icon2=findViewById(R.id.bt_Icon2);
+        bt_Icon3=findViewById(R.id.bt_Icon3);
+        L_PopUp = findViewById(R.id.L_PopUp);
+
+        bt_TestIcon.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        longClickTestIcon();
+                        return false;
+                    }
+                }
+        );
 
     }
 
@@ -127,8 +155,43 @@ public class OriginalMode extends AppCompatActivity {
 
     ///////////////////////////////////////////////////////////////////////////////////
 
+
+    private void longClickTestIcon(){
+        vibrate(200);
+
+        L_PopUp.setVisibility(View.VISIBLE);
+        bt_Icon1.setVisibility(View.INVISIBLE);
+        bt_Icon2.setVisibility(View.INVISIBLE);
+        bt_Icon3.setVisibility(View.INVISIBLE);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Long Click", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+
+    private void vibrate(int miliseconds){
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(miliseconds);
+    }
+
     public void onClickBt_Icon(View view) {
 
-        System.out.println("Bt_Icon clicked");
+        System.out.println("Wrong Icon clicked");
+    }
+
+    public void onClickBt_TestIcon(View view) {
+        System.out.println("Test Icon clicked");
+
+    }
+
+    public void onClickScreen(View view) {
+        //Make L_PopUp invisible and icons visible
+
+        L_PopUp.setVisibility(View.INVISIBLE);
+        bt_Icon1.setVisibility(View.VISIBLE);
+        bt_Icon2.setVisibility(View.VISIBLE);
+        bt_Icon3.setVisibility(View.VISIBLE);
+
+
     }
 }

@@ -1,64 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:layout_gravity="right"
+    android:background="#f6f6f6"
+    android:onClick="onClickScreen"
     tools:context=".Presentation.OriginalMode">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
+
+    <LinearLayout
+        android:id="@+id/fullscreen_content_controls"
+        style="?metaButtonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@color/black_overlay"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/tv_Direction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UselessParent">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_Icon2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center|center"
+        android:background="@drawable/custom_rounded_corners"
+        android:onClick="onClickBt_Icon"
+        android:text="other icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+
+    <Button
+        android:id="@+id/bt_Icon1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center|center"
+        android:background="@drawable/custom_rounded_corners"
+        android:onClick="onClickBt_Icon"
+        android:text="other icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+
+    <Button
+        android:id="@+id/bt_Icon3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center|center"
+        android:background="@drawable/custom_rounded_corners"
+        android:onClick="onClickBt_Icon"
+        android:text="other icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+
+    <Button
+        android:id="@+id/bt_TestIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="left|center_vertical"
+        android:background="@drawable/custom_rounded_corners"
+        android:onClick="onClickBt_TestIcon"
+        android:text="Test Icon "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.65"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+
+    <TextView
+        android:id="@+id/tv_Direction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/cardview_shadow_end_color"
+        android:gravity="center"
+        android:text="Origninal Mode"
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/L_PopUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/custom_rounded_corners_grey"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/bt_TestIcon"
+        app:layout_constraintEnd_toEndOf="@+id/bt_TestIcon"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_Option1"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="#ececec"
+            android:gravity="center_vertical"
+            android:text="Option 1"
+            android:textColor="@android:color/black"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/tV_Option2"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="#ececec"
+            android:gravity="center_vertical"
+            android:text="Option 2"
+            android:textColor="@android:color/black"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/tV_Option3"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="#ececec"
+            android:gravity="center_vertical"
+            android:text="Option 3"
+            android:textColor="@android:color/black"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/tV_Option4"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="#ececec"
+            android:gravity="center_vertical"
+            android:text="Option 4"
+            android:textColor="@android:color/black"
+            android:textSize="30dp" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="@string/dummy_content"
+        android:onClick="onClickScreen"
         android:textColor="#33b5e5"
         android:textSize="50sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:layout_editor_absoluteY="101dp" />
 
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:fitsSystemWindows="true">
 
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            style="?metaButtonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/bt_Icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center|center"
-            android:background="@drawable/custom_rounded_corners"
-            android:onClick="onClickBt_Icon"
-            android:text="Icon" />
-
-        <TextView
-            android:id="@+id/tv_Direction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:background="@color/design_default_color_primary_variant"
-            android:gravity="center"
-            android:text="Direction"
-            android:textColor="#33b5e5"
-            android:textSize="50sp" />
-    </FrameLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
