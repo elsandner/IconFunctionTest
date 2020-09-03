@@ -23,7 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UselessParent">
-
     </LinearLayout>
 
     <TextView
@@ -33,9 +32,7 @@
         android:gravity="center"
         android:keepScreenOn="true"
         android:onClick="onClickScreen"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold"
+
         tools:layout_editor_absoluteY="101dp" />
 
     <Button
