@@ -85,10 +85,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_HeadingVM" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tV_PopUp"
         android:layout_width="86dp"
         android:layout_height="37dp"
+        android:elevation="100dp"
         android:text="Selection"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/bt_Icon"
         app:layout_constraintEnd_toEndOf="@+id/bt_Icon" />
 

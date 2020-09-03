@@ -102,6 +102,7 @@ public class VisualMode extends AppCompatActivity {
     private static final String TAG = "BlindMode";
     private TextView tv_Direction;
     private TextView tv_Heading;
+    private TextView tV_PopUp;
     private Button bt_Icon;
 
     private GestureService gs;
@@ -125,6 +126,7 @@ public class VisualMode extends AppCompatActivity {
         bt_Icon = findViewById(R.id.bt_Icon);
         tv_Direction = findViewById(R.id.tv_Direction);
         tv_Heading = findViewById(R.id.tv_HeadingVM);
+        tV_PopUp = findViewById(R.id.tV_PopUp);
 
         setGestureService();
         bt_Icon.setOnTouchListener(gs);
@@ -226,6 +228,7 @@ public class VisualMode extends AppCompatActivity {
 
                     case (MotionEvent.ACTION_MOVE):
                         longClick=false;
+                        tV_PopUp.setVisibility(View.VISIBLE);
 
                         if(dragMode){
                             Log.d(TAG, "In Drag Mode!");
@@ -245,19 +248,23 @@ public class VisualMode extends AppCompatActivity {
                             DecimalFormat df = new DecimalFormat("#.##");
 
                             if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
-                                Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT).show(); //TODO: Move to ACTION_UP
                                 tv_Direction.setText(oldValue);
+                                tV_PopUp.setText("Cancel");
                             } else if (currentAlpha == -2) {
                                 tv_Direction.setText("Click");
                             } else {
                                 tv_Direction.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
-
-
-
-
+                                tV_PopUp.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
 
 
                             }
+
+                            tV_PopUp.animate()  //used for moving PopUp
+                                    .x(motionEvent.getRawX() + dX-30)
+                                    .y(motionEvent.getRawY() + dY-30)
+                                    .setDuration(0)
+                                    .start();
 
                         }
 
@@ -265,6 +272,7 @@ public class VisualMode extends AppCompatActivity {
                         return true;
 
                     case (MotionEvent.ACTION_UP) :
+                        tV_PopUp.setVisibility(View.INVISIBLE);
                         longClick=false;
                         touched=false;
 
@@ -287,13 +295,14 @@ public class VisualMode extends AppCompatActivity {
 
 
                         //TEST EVALUATION
-
                         if(!trial.equals("Visual Mode"))
                             testEvaluation(AngleToDirection(currentAlpha), trial); //Not shure if still needed - was used to change heading after switching tests
 
                         tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
                         return true;
+
+
 
                     case (MotionEvent.ACTION_CANCEL) :
                         Log.d(TAG,"Action was CANCEL");
