@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Direction;
 import com.example.iconfunctiontest.Services.GestureService;
+import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestMode;
 import com.example.iconfunctiontest.Services.TestService;
 
@@ -150,7 +151,7 @@ public class VisualMode extends AppCompatActivity {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(100);
+        delayedHide(1);
     }
 
     private void hide() {   //Part of Fullscreen
@@ -194,15 +195,12 @@ public class VisualMode extends AppCompatActivity {
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 
-
-
                 int action = motionEvent.getAction();
                 double currentAlpha=0;
 
                 switch(action) {
                     case (MotionEvent.ACTION_DOWN) :
                         touched=true;
-
 
                         if(originalX==0.0f&&originalY==0.0f){ //set reference for moving back to origin position
                             originalX=view.getX();
@@ -221,7 +219,7 @@ public class VisualMode extends AppCompatActivity {
                         //detect long click
                         longClick=true;
                         dragMode=false;
-                        startCountDown(2); //changes longClick to true
+                        startCountDown(Parameter.VisualMode_LongClick_duration); //changes longClick to true
 
                         Log.d(TAG,"Action was DOWN");
                         return true;
@@ -237,8 +235,6 @@ public class VisualMode extends AppCompatActivity {
                                     .y(motionEvent.getRawY() + dY)
                                     .setDuration(0)
                                     .start();
-
-
                         }
                         else {
                             double diffX = motionEvent.getX() - downX;
@@ -248,14 +244,19 @@ public class VisualMode extends AppCompatActivity {
 
                             DecimalFormat df = new DecimalFormat("#.##");
 
-                            if (abs(diffX) > cancel_threshold || abs(diffY) > cancel_threshold) {
-                                Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
-                                toast.show();
+                            if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
+                                Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT).show();
                                 tv_Direction.setText(oldValue);
                             } else if (currentAlpha == -2) {
                                 tv_Direction.setText("Click");
                             } else {
                                 tv_Direction.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
+
+
+
+
+
+
                             }
 
                         }
@@ -272,7 +273,7 @@ public class VisualMode extends AppCompatActivity {
 
                                 if (dragMode) {
                                     try {
-                                        TimeUnit.SECONDS.sleep(1);  //time delay
+                                        TimeUnit.SECONDS.sleep(Parameter.VisualMode_MoveIconBack_Delay);  //time delay
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -289,7 +290,6 @@ public class VisualMode extends AppCompatActivity {
 
                         if(!trial.equals("Visual Mode"))
                             testEvaluation(AngleToDirection(currentAlpha), trial); //Not shure if still needed - was used to change heading after switching tests
-
 
                         tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
@@ -322,7 +322,7 @@ public class VisualMode extends AppCompatActivity {
                         }
                         if(longClick){
                             Log.d(TAG, "LongClick Detected!!");
-                            vibrate();
+                            vibrate(Parameter.LongClick_Vibration_time);
 
                             dragMode=true;
                         }
@@ -338,7 +338,7 @@ public class VisualMode extends AppCompatActivity {
                         view.animate()  //used for moving icon
                                 .x(originalX)
                                 .y(originalY)
-                                .setDuration(1000)
+                                .setDuration(Parameter.MoveIconBack_Duration)
                                 .start();
                     }
                 });
@@ -379,13 +379,10 @@ public class VisualMode extends AppCompatActivity {
         Log.d(TAG, "onClickBt_Icon clicked");
     }
 
-    public void vibrate(){
+    public void vibrate(int time){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(200);
+        v.vibrate(time);
     }
-
-
-
 
 
 }

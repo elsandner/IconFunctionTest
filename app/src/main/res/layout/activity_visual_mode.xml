@@ -81,6 +81,12 @@
             android:gravity="center"
             />
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="86dp"
+            android:layout_height="37dp"
+            android:text="TextView" />
+
     </FrameLayout>
 
 </FrameLayout>

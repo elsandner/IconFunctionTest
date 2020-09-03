@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
+import com.example.iconfunctiontest.Services.Parameter;
 
 import java.text.DecimalFormat;
 
@@ -145,9 +146,8 @@ public class BlindMode extends AppCompatActivity {
                         //LOG diffX, diffY --> adjust threshold
                         Log.d(TAG, "diffX: "+diffX+" diffY: "+diffY);
 
-                        if(abs(diffX)>cancel_threshold||abs(diffY)>cancel_threshold){
-                            Toast toast = Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT);
-                            toast.show();
+                        if(abs(diffX)> Parameter.cancel_threshold||abs(diffY)>Parameter.cancel_threshold){
+                            Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT).show();
                         }
                         else if(currentAlpha==-2){
                             tv_Description.setText("Click");
@@ -157,7 +157,6 @@ public class BlindMode extends AppCompatActivity {
                         }
 
                         Log.d(TAG,"Action was UP");
-                        //Log.d(TAG,"diffX="+(motionEvent.getX()-downX)+"diffY="+(motionEvent.getY()-downY));
                         return true;
 
                     case (MotionEvent.ACTION_CANCEL) :

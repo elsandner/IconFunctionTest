@@ -12,35 +12,20 @@ import static androidx.core.content.ContextCompat.getSystemService;
 //public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
 public class GestureService implements View.OnTouchListener {
 
-    public final double cancel_threshold=200; //Swipe more than this value to cancel selection
-
     private static final String TAG = "Gesture Service";
 
     private GestureDetector gestureDetector;
     private double touch_downX=0;
     private double touch_downY=0;
 
-
-
     //Constructor
     public GestureService(Context c) {
-
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
           return gestureDetector.onTouchEvent(motionEvent);
     }
-
-    /*
-    @Override
-    public boolean onLongClick(View v) {
-        System.out.println("LONG CLICK !!!!!!!!!!!");
-        return true;
-    }
-
-     */
 
     public double calcAngle(double diffX, double diffY){
 

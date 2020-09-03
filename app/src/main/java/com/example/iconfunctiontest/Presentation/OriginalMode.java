@@ -9,13 +9,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
+import com.example.iconfunctiontest.Services.Parameter;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -157,15 +157,14 @@ public class OriginalMode extends AppCompatActivity {
 
 
     private void longClickTestIcon(){
-        vibrate(200);
+        vibrate(Parameter.LongClick_Vibration_time);
 
         L_PopUp.setVisibility(View.VISIBLE);
         bt_Icon1.setVisibility(View.INVISIBLE);
         bt_Icon2.setVisibility(View.INVISIBLE);
         bt_Icon3.setVisibility(View.INVISIBLE);
 
-        Toast toast = Toast.makeText(getApplicationContext(), "Long Click", Toast.LENGTH_SHORT);
-        toast.show();
+        Toast.makeText(getApplicationContext(), "Long Click", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -185,6 +184,7 @@ public class OriginalMode extends AppCompatActivity {
     }
 
     public void onClickScreen(View view) {
+        System.out.println("onClickScreen executed");
         //Make L_PopUp invisible and icons visible
 
         L_PopUp.setVisibility(View.INVISIBLE);
@@ -193,5 +193,27 @@ public class OriginalMode extends AppCompatActivity {
         bt_Icon3.setVisibility(View.VISIBLE);
 
 
+    }
+
+    public void onClickOption1(View view) {
+        Toast.makeText(getApplicationContext(), "option 1 selected", Toast.LENGTH_SHORT).show();
+        onClickScreen(view);
+
+
+    }
+
+    public void onClickOption2(View view) {
+        Toast.makeText(getApplicationContext(), "option 2 selected", Toast.LENGTH_SHORT).show();
+        onClickScreen(view);
+    }
+
+    public void onClickOption3(View view) {
+        Toast.makeText(getApplicationContext(), "option 3 selected", Toast.LENGTH_SHORT).show();
+        onClickScreen(view);
+    }
+
+    public void onClickOption4(View view) {
+        Toast.makeText(getApplicationContext(), "option 4 selected", Toast.LENGTH_SHORT).show();
+        onClickScreen(view);
     }
 }

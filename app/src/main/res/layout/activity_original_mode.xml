@@ -26,6 +26,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:onClick="onClickScreen"
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteY="101dp" />
+
     <Button
         android:id="@+id/bt_Icon2"
         android:layout_width="80dp"
@@ -96,6 +108,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <LinearLayout
         android:id="@+id/L_PopUp"
         android:layout_width="wrap_content"
@@ -119,6 +133,7 @@
             android:layout_margin="2dp"
             android:background="#ececec"
             android:gravity="center_vertical"
+            android:onClick="onClickOption1"
             android:text="Option 1"
             android:textColor="@android:color/black"
             android:textSize="30dp" />
@@ -130,6 +145,7 @@
             android:layout_margin="2dp"
             android:background="#ececec"
             android:gravity="center_vertical"
+            android:onClick="onClickOption2"
             android:text="Option 2"
             android:textColor="@android:color/black"
             android:textSize="30dp" />
@@ -141,6 +157,7 @@
             android:layout_margin="2dp"
             android:background="#ececec"
             android:gravity="center_vertical"
+            android:onClick="onClickOption3"
             android:text="Option 3"
             android:textColor="@android:color/black"
             android:textSize="30dp" />
@@ -152,23 +169,12 @@
             android:layout_margin="2dp"
             android:background="#ececec"
             android:gravity="center_vertical"
+            android:onClick="onClickOption4"
             android:text="Option 4"
             android:textColor="@android:color/black"
             android:textSize="30dp" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:onClick="onClickScreen"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteY="101dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
