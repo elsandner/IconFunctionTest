@@ -61,8 +61,8 @@ public class InfoActivity extends AppCompatActivity {
                 i = new Intent(InfoActivity.this, InfoActivity.class);
                 break;
         }
-        System.out.println(testService.nextTrial(trial));
-        i.putExtra("trial",testService.nextTrial(trial));
+        System.out.println(testService.nextTrial(trial,true));
+        i.putExtra("trial",testService.nextTrial(trial,true));
         startActivity(i);
     }
 }

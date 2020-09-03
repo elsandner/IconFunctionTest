@@ -32,47 +32,60 @@
         android:id="@+id/bt_Start"
         android:layout_width="200dp"
         android:layout_height="60dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/custom_rounded_corners_blue"
         android:onClick="onClickBt_BlindMode"
         android:text="Blind Mode"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_Name" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_VisualMode" />
 
     <Button
         android:id="@+id/bt_VisualMode"
         android:layout_width="200dp"
         android:layout_height="60dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/custom_rounded_corners_blue"
         android:onClick="onClickBt_VisualMode"
         android:text="Visual Mode"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toTopOf="@+id/bt_Start"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_Name"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_original" />
+
+    <Button
+        android:id="@+id/bt_original"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/custom_rounded_corners_blue"
+        android:onClick="onClickBt_OriginalMode"
+        android:text="Original Mode"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_Name" />
 
     <Button
         android:id="@+id/bt_Test"
         android:layout_width="200dp"
         android:layout_height="60dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/custom_rounded_corners_blue"
         android:onClick="onClickBt_Start"
         android:text="Test"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bt_Start"
-        app:layout_constraintVertical_bias="0.25"
         tools:ignore="OnClick" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

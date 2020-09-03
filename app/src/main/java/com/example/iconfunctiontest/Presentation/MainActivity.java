@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickBt_VisualMode(View view){
         Intent i = new Intent(MainActivity.this, VisualMode.class);
+        i.putExtra("trial","Visual Mode");
         startActivity(i);
     }
 
@@ -41,4 +42,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onClickBt_OriginalMode(View view) {
+        Intent i = new Intent(MainActivity.this, OriginalMode.class);
+        startActivity(i);
+    }
 }

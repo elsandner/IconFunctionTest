@@ -17,6 +17,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
+import com.example.iconfunctiontest.Services.Direction;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.TestMode;
 import com.example.iconfunctiontest.Services.TestService;
@@ -285,22 +286,10 @@ public class VisualMode extends AppCompatActivity {
 
 
                         //TEST EVALUATION
-                        if(testService.onSelection(AngleToDirection(currentAlpha) ,trial)){
-                            tv_Heading.setText("Well Done!");
-                            try {
-                                TimeUnit.SECONDS.sleep(3);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Intent i = new Intent(VisualMode.this, InfoActivity.class);
-                            i.putExtra("trial",testService.nextTrial(trial));
-                            startActivity(i);
 
+                        if(!trial.equals("Visual Mode"))
+                            testEvaluation(AngleToDirection(currentAlpha), trial); //Not shure if still needed - was used to change heading after switching tests
 
-
-                        }else{
-                            tv_Heading.setText("Try again!");
-                        }
 
                         tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
@@ -363,6 +352,24 @@ public class VisualMode extends AppCompatActivity {
 
 
 
+    }
+
+    //TODO: testEvaluation does not work yet, it always changes heading to "Try again"
+    private void testEvaluation(Direction direction, String trial){
+        if(testService.onSelection(direction ,trial)){
+            tv_Heading.setText("Well Done!");
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Intent i = new Intent(VisualMode.this, InfoActivity.class);
+            i.putExtra("trial",testService.nextTrial(trial,false));
+            startActivity(i);
+
+        }else{
+            tv_Heading.setText("Try again!");
+        }
     }
 
 

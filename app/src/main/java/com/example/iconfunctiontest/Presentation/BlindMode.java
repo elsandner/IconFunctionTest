@@ -65,9 +65,7 @@ public class BlindMode extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
-
     private View mControlsView;
-
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
@@ -209,10 +207,6 @@ public class BlindMode extends AppCompatActivity {
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
 
-    /**
-     * Schedules a call to hide() in delay milliseconds, canceling any
-     * previously scheduled calls.
-     */
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
@@ -221,7 +215,7 @@ public class BlindMode extends AppCompatActivity {
 
     public void onClickBt_Icon(View view){
         tv_Description.setText("Click");
-        Log.d(TAG, "onClickBt_Icon clicked");
+        Log.d(TAG, "Bt_Icon clicked");
     }
 
 }

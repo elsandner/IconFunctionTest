@@ -9,18 +9,25 @@ public class TestService {
         //Empty Constructor
     }
 
-    public String nextTrial(String trial){
-        if(trial.equals("Welcome")){
+    public String nextTrial(String currentTrial, boolean info_OR_test){
+        //info_OR_test ... 0=Test, 1=Info
+
+        if(currentTrial.equals("Welcome")){
             return "Test1";
         }
 
         //Last Test
-        if(trial.equals("Test8")){
+        if(currentTrial.equals("Test8")){
+            if(info_OR_test)
+                return "Test8";
             return "End";
         }
 
-        if(trial.substring(0,4).equals("Test")) {
-            int num = Integer.parseInt(trial.substring(trial.length() - 1));
+        if(currentTrial.substring(0,4).equals("Test")) {
+            if(info_OR_test)
+                return currentTrial;
+
+            int num = Integer.parseInt(currentTrial.substring(currentTrial.length() - 1));
             num++;
             return "Test" + num;
         }
@@ -30,6 +37,7 @@ public class TestService {
     public String getTestHeading(String trial) {
 
         switch (trial) {
+            case "Visual Mode": return "Visual Mode";
             case "Test1": return "Visual Selection #1";
             case "Test2": return "Blind Selection #1";
             case "Test3": return "Visual Selection #2";

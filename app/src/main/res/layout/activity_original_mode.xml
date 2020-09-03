@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context=".Presentation.BlindMode">
+    tools:context=".Presentation.OriginalMode">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -47,7 +47,7 @@
             android:layout_gravity="center|center"
             android:background="@drawable/custom_rounded_corners"
             android:onClick="onClickBt_Icon"
-            android:text="Button" />
+            android:text="Icon" />
 
         <TextView
             android:id="@+id/tv_Direction"

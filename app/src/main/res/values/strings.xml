@@ -6,5 +6,6 @@
     <string name="description1">In the first version of this app, you can try to use the in-icon shortcuts</string>
     <string name="startTestButton">Test</string>
     <string name="title_activity_visual_mode">FullscreenActivity</string>
+    <string name="title_activity_original_mode">FullscreenActivity</string>
 
 </resources>
