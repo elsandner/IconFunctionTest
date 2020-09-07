@@ -12,10 +12,13 @@ import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
+
+import org.w3c.dom.Text;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -95,6 +98,7 @@ public class StandardActivity extends AppCompatActivity {
     Button bt_TestIcon, bt_Icon1, bt_Icon2, bt_Icon3 ;
     LinearLayout L_PopUp;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +114,26 @@ public class StandardActivity extends AppCompatActivity {
         bt_Icon2=findViewById(R.id.bt_Icon2);
         bt_Icon3=findViewById(R.id.bt_Icon3);
         L_PopUp = findViewById(R.id.L_PopUp);
+
+        for(int i=0;i<Parameter.number_of_Items_Standard;i++){
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(2,5,2,5);
+
+            TextView tv = (TextView)getLayoutInflater().inflate(R.layout.text_view_item, null);
+            tv.setLayoutParams(params);
+            tv.setText(Parameter.Items[i]);
+
+
+            final int finalI = i;
+            tv.setOnClickListener(new TextView.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickItem(finalI, view);
+                }
+            });
+            L_PopUp.addView(tv);
+        }
 
         bt_TestIcon.setOnLongClickListener(
                 new View.OnLongClickListener() {
@@ -166,6 +190,11 @@ public class StandardActivity extends AppCompatActivity {
 
     }
 
+    private void clickItem(int i, View view){
+        Toast.makeText(getApplicationContext(), "option "+Parameter.Items[i]+" selected", Toast.LENGTH_SHORT).show();
+        onClickScreen(view);
+    }
+
 
     private void vibrate(int miliseconds){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -191,28 +220,11 @@ public class StandardActivity extends AppCompatActivity {
         bt_Icon2.setVisibility(View.VISIBLE);
         bt_Icon3.setVisibility(View.VISIBLE);
 
-
     }
 
     public void onClickOption1(View view) {
         Toast.makeText(getApplicationContext(), "option 1 selected", Toast.LENGTH_SHORT).show();
         onClickScreen(view);
 
-
-    }
-
-    public void onClickOption2(View view) {
-        Toast.makeText(getApplicationContext(), "option 2 selected", Toast.LENGTH_SHORT).show();
-        onClickScreen(view);
-    }
-
-    public void onClickOption3(View view) {
-        Toast.makeText(getApplicationContext(), "option 3 selected", Toast.LENGTH_SHORT).show();
-        onClickScreen(view);
-    }
-
-    public void onClickOption4(View view) {
-        Toast.makeText(getApplicationContext(), "option 4 selected", Toast.LENGTH_SHORT).show();
-        onClickScreen(view);
     }
 }

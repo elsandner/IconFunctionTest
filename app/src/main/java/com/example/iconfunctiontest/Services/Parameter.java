@@ -4,23 +4,23 @@ public class Parameter {
 //General
     public static int LongClick_Vibration_time = 200; //in miliseconds
 
-    public static String[] directions = {
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P"
+    public static String[] Items = {
+            "Item A",
+            "Item B",
+            "Item C",
+            "Item D",
+            "Item E",
+            "Item F",
+            "Item G",
+            "Item H",
+            "Item I",
+            "Item J",
+            "Item K",
+            "Item L",
+            "Item M",
+            "Item N",
+            "Item O",
+            "Item P"
     };
 
 //Alive Icon

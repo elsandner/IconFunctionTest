@@ -10,8 +10,6 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 //public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
 public class GestureService implements View.OnTouchListener {
 
@@ -24,7 +22,7 @@ public class GestureService implements View.OnTouchListener {
 
     //Constructor
     public GestureService(Context c) {
-        directions.addAll(Arrays.asList(Parameter.directions));
+        directions.addAll(Arrays.asList(Parameter.Items));
     }
 
     @SuppressLint("ClickableViewAccessibility")
