@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -49,7 +48,7 @@ public class InfoActivity extends AppCompatActivity {
                 i = new Intent(InfoActivity.this, InfoActivity.class);
                 break;
             case VisualMode:
-                i = new Intent(InfoActivity.this, VisualMode.class);
+                i = new Intent(InfoActivity.this, AliveActivity.class);
                 break;
             case BlindMode:
                 i = new Intent(InfoActivity.this, BlindMode.class);

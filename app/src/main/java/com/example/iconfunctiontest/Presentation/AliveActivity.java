@@ -29,7 +29,7 @@ import static java.lang.Math.abs;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class VisualMode extends AppCompatActivity {
+public class AliveActivity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -97,8 +97,7 @@ public class VisualMode extends AppCompatActivity {
 
 
     private static final String TAG = "BlindMode";
-    private TextView tv_Direction;
-    private TextView tv_Heading;
+    private TextView tv_Target;
     private TextView tV_PopUp;
     private Button bt_Icon;
 
@@ -121,8 +120,7 @@ public class VisualMode extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
 
         bt_Icon = findViewById(R.id.bt_Icon);
-        tv_Direction = findViewById(R.id.tv_Target);
-        tv_Heading = findViewById(R.id.tv_Target);
+        tv_Target = findViewById(R.id.tv_Target);
         tV_PopUp = findViewById(R.id.tV_PopUp);
 
         setGestureService();
@@ -137,7 +135,7 @@ public class VisualMode extends AppCompatActivity {
             trial = bundle.getString("trial");
 
 
-        tv_Heading.setText(testService.getTestHeading(trial));
+        tv_Target.setText(testService.getTestHeading(trial));
 
 
     }
@@ -176,7 +174,7 @@ public class VisualMode extends AppCompatActivity {
 
 
     private void setGestureService(){
-        gs= new GestureService(VisualMode.this) {
+        gs= new GestureService(AliveActivity.this) {
 
             float dX, dY; //used for moving icon
             float originalX=0.0f;
@@ -198,7 +196,7 @@ public class VisualMode extends AppCompatActivity {
                 double currentAlpha=0;
 
                 switch(action) {
-                    case (MotionEvent.ACTION_DOWN) :
+                    case (MotionEvent.ACTION_DOWN):
                         touched=true;
 
                         if(originalX==0.0f&&originalY==0.0f){ //set reference for moving back to origin position
@@ -209,10 +207,8 @@ public class VisualMode extends AppCompatActivity {
                         dX = originalX - motionEvent.getRawX();//used for moving icon
                         dY = originalY - motionEvent.getRawY();//used for moving icon
 
-                        // tv_Direction.setBackgroundResource(R.color.design_default_color_on_primary);
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
-
 
                         //detect long click
                         longClick=true;
@@ -293,7 +289,6 @@ public class VisualMode extends AppCompatActivity {
                             }
                         }.start();
 
-                       // tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
                         return true;
 
@@ -364,7 +359,6 @@ public class VisualMode extends AppCompatActivity {
 
 
     public void onClickBt_Icon(View view){
-        tv_Direction.setText("Click");
         Log.d(TAG, "onClickBt_Icon clicked");
     }
 

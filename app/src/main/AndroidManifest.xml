@@ -12,13 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Presentation.OriginalMode"
+            android:name=".Presentation.StandardActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_original_mode"
             android:theme="@style/FullscreenTheme"></activity>
         <activity android:name=".Presentation.InfoActivity" />
         <activity
-            android:name=".Presentation.VisualMode"
+            android:name=".Presentation.AliveActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_visual_mode"
             android:theme="@style/FullscreenTheme" />

@@ -7,7 +7,7 @@
     android:layout_gravity="right"
     android:background="#f6f6f6"
     android:onClick="onClickScreen"
-    tools:context=".Presentation.OriginalMode">
+    tools:context=".Presentation.StandardActivity">
 
 
     <LinearLayout

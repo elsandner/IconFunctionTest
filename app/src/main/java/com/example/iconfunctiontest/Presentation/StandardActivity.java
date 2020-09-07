@@ -21,7 +21,7 @@ import com.example.iconfunctiontest.Services.Parameter;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class OriginalMode extends AppCompatActivity {
+public class StandardActivity extends AppCompatActivity {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 

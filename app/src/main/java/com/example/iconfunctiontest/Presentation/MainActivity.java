@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickBt_VisualMode(View view){
-        Intent i = new Intent(MainActivity.this, VisualMode.class);
+        Intent i = new Intent(MainActivity.this, AliveActivity.class);
         i.putExtra("trial","Alive Icon");
         startActivity(i);
     }
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClickBt_OriginalMode(View view) {
-        Intent i = new Intent(MainActivity.this, OriginalMode.class);
+        Intent i = new Intent(MainActivity.this, StandardActivity.class);
         startActivity(i);
     }
 }
