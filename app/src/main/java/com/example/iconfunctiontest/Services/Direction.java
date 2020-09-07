@@ -1,5 +1,8 @@
 package com.example.iconfunctiontest.Services;
 
+//THIS CLASS IS NOT NEEDED ANYMORE !!!
+
+
 public enum Direction {
     East,
     NorthEast,

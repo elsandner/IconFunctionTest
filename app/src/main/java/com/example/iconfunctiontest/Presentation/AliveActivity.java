@@ -248,8 +248,8 @@ public class AliveActivity extends AppCompatActivity {
                                     tV_PopUp.setText("Cancel");
                                     selectedOption = "Cancel";
                                 } else {
-                                    selectedOption = AngleToDirection(currentAlpha).toString() + " (" + df.format(currentAlpha) + "°)";
-                                    tV_PopUp.setText(AngleToDirection(currentAlpha).toString());
+                                    selectedOption = AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive) + " (" + df.format(currentAlpha) + "°)";
+                                    tV_PopUp.setText(AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive) + " (" + df.format(currentAlpha) + "°)");
                                 }
                             }
 
