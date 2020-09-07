@@ -8,23 +8,23 @@ public class Parameter {
             "Item A",
             "Item B",
             "Item C",
-            "Item D",
+            "Item D",   //Nr 4
             "Item E",
-            "Item F",
+            "Item F",   //Nr 6
             "Item G",
-            "Item H",
+            "Item H",   //Nr 8
             "Item I",
             "Item J",
             "Item K",
-            "Item L",
+            "Item L",   //Nr 12
             "Item M",
             "Item N",
             "Item O",
-            "Item P"
+            "Item P"    //Nr 16
     };
 
 //Alive Icon
-    public static int number_of_Items_Alive = 4;
+    public static int number_of_Items_Alive = 8; //Default=4
 
 
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
@@ -39,11 +39,11 @@ public class Parameter {
     public static double cancel_threshold = 200; //swipe more than this value to cancel selection
 
 //Standard Icon
-    public static int number_of_Items_Standard = 4;
+    public static int number_of_Items_Standard = 8; //Default=4
 
 
 
 // Test 2 Expert Users - Alive Icon vs Standard Icon
-
+    public static int number_of_Trials;
 
 }

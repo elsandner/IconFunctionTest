@@ -194,20 +194,12 @@ public class TestService {
         switch (trial) {
             case "Alive Icon": return "Alive Icon";
             case "Standard Icon": return "Standard Icon";
-            case "Test1": return "Visual Selection #1";
-            case "Test2": return "Blind Selection #1";
-            case "Test3": return "Visual Selection #2";
-            case "Test4": return "Blind Selection #2";
-            case "Test5": return "Visual Selection #3";
-            case "Test6": return "Blind Selection #3";
-            case "Test7": return "Visual Selection #4";
-            case "Test8": return "Blind Selection #4";
-
             default:
                 return "Error";
 
         }
     }
+
 
 
 
