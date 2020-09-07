@@ -18,7 +18,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:background="@color/black_overlay"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/tv_Direction"
+        app:layout_constraintBottom_toTopOf="@+id/tv_Target"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,6 +35,17 @@
 
         tools:layout_editor_absoluteY="101dp" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Trial 1/25"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/bt_Icon2"
         android:layout_width="80dp"
@@ -47,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_Target" />
 
     <Button
         android:id="@+id/bt_Icon1"
@@ -61,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_Target" />
 
     <Button
         android:id="@+id/bt_Icon3"
@@ -75,7 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_Target" />
 
     <Button
         android:id="@+id/bt_TestIcon"
@@ -89,16 +100,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Direction" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_Target" />
 
     <TextView
-        android:id="@+id/tv_Direction"
+        android:id="@+id/tv_Target"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/cardview_shadow_end_color"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:text="Origninal Mode"
+        android:text="Standard Icon"
         android:textColor="#33b5e5"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"

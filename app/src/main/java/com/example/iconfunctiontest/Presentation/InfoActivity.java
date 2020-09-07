@@ -34,10 +34,10 @@ public class InfoActivity extends AppCompatActivity {
         testMode=TestMode.getTestMode(trial);
 
         tV_heading = (TextView) findViewById(R.id.tV_heading);
-        tV_heading.setText(testService.getInfoHeading(trial));
+        tV_heading.setText("Break Screen");
 
         tV_explanation =(TextView) findViewById(R.id.tV_explanation);
-        tV_explanation.setText(testService.getInfoExplanation(trial));
+        tV_explanation.setText("Now do a break as long as you want. Press  the button to continue");
 
     }
 
@@ -61,8 +61,7 @@ public class InfoActivity extends AppCompatActivity {
                 i = new Intent(InfoActivity.this, InfoActivity.class);
                 break;
         }
-        System.out.println(testService.nextTrial(trial,true));
-        i.putExtra("trial",testService.nextTrial(trial,true));
+        i.putExtra("trial","Test 1");
         startActivity(i);
     }
 }

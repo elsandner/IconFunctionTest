@@ -164,7 +164,6 @@ public class OriginalMode extends AppCompatActivity {
         bt_Icon2.setVisibility(View.INVISIBLE);
         bt_Icon3.setVisibility(View.INVISIBLE);
 
-        Toast.makeText(getApplicationContext(), "Long Click", Toast.LENGTH_SHORT).show();
     }
 
 

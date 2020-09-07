@@ -29,28 +29,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bt_Start"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/custom_rounded_corners_blue"
-        android:onClick="onClickBt_BlindMode"
-        android:text="Blind Mode"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/cardview_light_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_VisualMode" />
-
-    <Button
         android:id="@+id/bt_VisualMode"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/custom_rounded_corners_blue"
         android:onClick="onClickBt_VisualMode"
-        android:text="Visual Mode"
+        android:text="Alive Icon"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +50,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/custom_rounded_corners_blue"
         android:onClick="onClickBt_OriginalMode"
-        android:text="Original Mode"
+        android:text="Standard Icon"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,8 +69,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_Start"
+        app:layout_constraintTop_toBottomOf="@+id/bt_VisualMode"
         tools:ignore="OnClick" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,8 @@ public class TestService {
         //Empty Constructor
     }
 
+    //Methodes used in old test-concept (my own idea)
+    /*
     public String nextTrial(String currentTrial, boolean info_OR_test){
         //info_OR_test ... 0=Test, 1=Info
 
@@ -32,25 +34,6 @@ public class TestService {
             return "Test" + num;
         }
         return "Error";
-    }
-
-    public String getTestHeading(String trial) {
-
-        switch (trial) {
-            case "Visual Mode": return "Visual Mode";
-            case "Test1": return "Visual Selection #1";
-            case "Test2": return "Blind Selection #1";
-            case "Test3": return "Visual Selection #2";
-            case "Test4": return "Blind Selection #2";
-            case "Test5": return "Visual Selection #3";
-            case "Test6": return "Blind Selection #3";
-            case "Test7": return "Visual Selection #4";
-            case "Test8": return "Blind Selection #4";
-
-            default:
-                return "Error";
-
-        }
     }
 
     public String getInfoHeading(String trial){
@@ -203,5 +186,28 @@ public class TestService {
         }
 
     }
+
+     */
+
+    public String getTestHeading(String trial) {
+
+        switch (trial) {
+            case "Alive Icon": return "Alive Icon";
+            case "Standard Icon": return "Standard Icon";
+            case "Test1": return "Visual Selection #1";
+            case "Test2": return "Blind Selection #1";
+            case "Test3": return "Visual Selection #2";
+            case "Test4": return "Blind Selection #2";
+            case "Test5": return "Visual Selection #3";
+            case "Test6": return "Blind Selection #3";
+            case "Test7": return "Visual Selection #4";
+            case "Test8": return "Blind Selection #4";
+
+            default:
+                return "Error";
+
+        }
+    }
+
 
 }

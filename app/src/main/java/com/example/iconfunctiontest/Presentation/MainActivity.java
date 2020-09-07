@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickBt_VisualMode(View view){
         Intent i = new Intent(MainActivity.this, VisualMode.class);
-        i.putExtra("trial","Visual Mode");
+        i.putExtra("trial","Alive Icon");
         startActivity(i);
     }
 

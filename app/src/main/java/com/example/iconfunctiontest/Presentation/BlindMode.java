@@ -110,7 +110,7 @@ public class BlindMode extends AppCompatActivity {
 
 
         bt_Icon = findViewById(R.id.bt_Icon);
-        tv_Description = findViewById(R.id.tv_Direction);
+        tv_Description = findViewById(R.id.tv_Target);
 
         bt_Icon.setOnTouchListener(new GestureService(BlindMode.this){
 

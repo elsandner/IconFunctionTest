@@ -2,7 +2,6 @@ package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -17,10 +16,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.R;
-import com.example.iconfunctiontest.Services.Direction;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
-import com.example.iconfunctiontest.Services.TestMode;
 import com.example.iconfunctiontest.Services.TestService;
 
 import java.text.DecimalFormat;
@@ -124,8 +121,8 @@ public class VisualMode extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
 
         bt_Icon = findViewById(R.id.bt_Icon);
-        tv_Direction = findViewById(R.id.tv_Direction);
-        tv_Heading = findViewById(R.id.tv_HeadingVM);
+        tv_Direction = findViewById(R.id.tv_Target);
+        tv_Heading = findViewById(R.id.tv_Target);
         tV_PopUp = findViewById(R.id.tV_PopUp);
 
         setGestureService();
@@ -190,7 +187,7 @@ public class VisualMode extends AppCompatActivity {
             boolean longClick=false;
             boolean dragMode=false;
             boolean touched=false;
-            String oldValue="";
+            String selectedOption="Direction";
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
 
@@ -212,8 +209,7 @@ public class VisualMode extends AppCompatActivity {
                         dX = originalX - motionEvent.getRawX();//used for moving icon
                         dY = originalY - motionEvent.getRawY();//used for moving icon
 
-                        tv_Direction.setBackgroundResource(R.color.design_default_color_on_primary);
-                        oldValue= (String) tv_Direction.getText();
+                        // tv_Direction.setBackgroundResource(R.color.design_default_color_on_primary);
                         downX=motionEvent.getX();
                         downY=motionEvent.getY();
 
@@ -228,44 +224,44 @@ public class VisualMode extends AppCompatActivity {
 
                     case (MotionEvent.ACTION_MOVE):
                         longClick=false;
-                        tV_PopUp.setVisibility(View.VISIBLE);
+
 
                         if(dragMode){
                             Log.d(TAG, "In Drag Mode!");
-
                             view.animate()  //used for moving icon
                                     .x(motionEvent.getRawX() + dX)
                                     .y(motionEvent.getRawY() + dY)
                                     .setDuration(0)
                                     .start();
                         }
+
                         else {
                             double diffX = motionEvent.getX() - downX;
                             double diffY = motionEvent.getY() - downY;
 
                             currentAlpha = calcAngle(diffX, diffY);
 
-                            DecimalFormat df = new DecimalFormat("#.##");
+                            DecimalFormat df = new DecimalFormat("#");
 
-                            if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
-                                //Toast.makeText(getApplicationContext(), "Selection Canceled", Toast.LENGTH_SHORT).show(); //TODO: Move to ACTION_UP
-                                tv_Direction.setText(oldValue);
-                                tV_PopUp.setText("Cancel");
-                            } else if (currentAlpha == -2) {
-                                tv_Direction.setText("Click");
-                            } else {
-                                tv_Direction.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
-                                tV_PopUp.setText(AngleToDirection(currentAlpha).toString() + "\n" + df.format(currentAlpha));
+                            if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
+                                tV_PopUp.setVisibility(View.VISIBLE);
+                            }
 
-
+                            if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold)||Parameter.enableBlindMode) {
+                                if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
+                                    tV_PopUp.setText("Cancel");
+                                    selectedOption = "Cancel";
+                                } else {
+                                    selectedOption = AngleToDirection(currentAlpha).toString() + " (" + df.format(currentAlpha) + "°)";
+                                    tV_PopUp.setText(AngleToDirection(currentAlpha).toString());
+                                }
                             }
 
                             tV_PopUp.animate()  //used for moving PopUp
-                                    .x(motionEvent.getRawX() + dX-30)
-                                    .y(motionEvent.getRawY() + dY-30)
+                                    .x(motionEvent.getRawX() + dX - 30)
+                                    .y(motionEvent.getRawY() + dY - 30)
                                     .setDuration(0)
                                     .start();
-
                         }
 
                         Log.d(TAG, "Action was MOVE");
@@ -276,6 +272,10 @@ public class VisualMode extends AppCompatActivity {
                         longClick=false;
                         touched=false;
 
+
+                        Toast.makeText(getApplicationContext(), selectedOption, Toast.LENGTH_SHORT).show();
+
+                        //Move Icon back to original position
                         new Thread() {
                             public void run() {
 
@@ -293,12 +293,7 @@ public class VisualMode extends AppCompatActivity {
                             }
                         }.start();
 
-
-                        //TEST EVALUATION
-                        if(!trial.equals("Visual Mode"))
-                            testEvaluation(AngleToDirection(currentAlpha), trial); //Not shure if still needed - was used to change heading after switching tests
-
-                        tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
+                       // tv_Direction.setBackgroundResource(R.color.design_default_color_primary_variant);
                         Log.d(TAG,"Action was UP");
                         return true;
 
@@ -316,6 +311,7 @@ public class VisualMode extends AppCompatActivity {
                     default :
                         return super.onTouch( view, motionEvent);
                 }
+
             }
 
 
@@ -363,23 +359,7 @@ public class VisualMode extends AppCompatActivity {
 
     }
 
-    //TODO: testEvaluation does not work yet, it always changes heading to "Try again"
-    private void testEvaluation(Direction direction, String trial){
-        if(testService.onSelection(direction ,trial)){
-            tv_Heading.setText("Well Done!");
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Intent i = new Intent(VisualMode.this, InfoActivity.class);
-            i.putExtra("trial",testService.nextTrial(trial,false));
-            startActivity(i);
 
-        }else{
-            tv_Heading.setText("Try again!");
-        }
-    }
 
 
 
