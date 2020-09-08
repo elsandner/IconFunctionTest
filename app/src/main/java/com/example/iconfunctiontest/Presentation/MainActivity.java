@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
@@ -38,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickBt_Test(View view){
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, MainActivity.this);
+        Intent i = new Intent(MainActivity.this, TestMenuActivity.class);
+        startActivity(i);
+        Animatoo.animateSwipeLeft(MainActivity.this);
     }
 
 }
