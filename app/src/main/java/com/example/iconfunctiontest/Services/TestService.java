@@ -12,7 +12,7 @@ import java.util.Random;
 public class TestService {
 
     private int numberOfTrials;
-    int currentTrial;
+    private int currentTrial;
     ArrayList<Trial> trials;
 
     // static variable single_instance of type Singleton
@@ -73,23 +73,21 @@ public class TestService {
         //TODO: Add delay, that toast is seen on original trial
         //TODO: Add trial again if answered wrong
 
-
+        System.out.println("Executed onAnswer!\tcurrentTrial="+currentTrial);
 
         if(trials.get(currentTrial).setAnswer(selectedOption)){
             //answer was correct
             System.out.println("CORRECT");
-
         }
         else{
             //answer was wrong
-            //TODO: add functionality to repeat this task
             System.out.println("WRONG");
         }
 
         currentTrial++;
         Intent i = new Intent(callingActivity, AliveActivity.class);
-        i.putExtra("TRIAL", currentTrial+"/"+ numberOfTrials);
-        i.putExtra("TARGET",trials.get(currentTrial++).getTarget());
+        i.putExtra("TRIAL", (currentTrial+1)+"/"+ numberOfTrials);
+        i.putExtra("TARGET",trials.get(currentTrial).getTarget());
 
         callingActivity.startActivity(i);
     }
