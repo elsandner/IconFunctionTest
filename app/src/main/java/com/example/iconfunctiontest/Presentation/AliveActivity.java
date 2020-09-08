@@ -97,15 +97,15 @@ public class AliveActivity extends AppCompatActivity {
 
 
     private static final String TAG = "BlindMode";
-    private TextView tv_Target;
+    private TextView tV_Target;
     private TextView tV_PopUp;
     private Button bt_Icon;
+    private TextView tV_Trial;
 
     private GestureService gs;
+    private TestService testService;
 
     private Bundle bundle;
-    private TestService testService;
-    private String trial;
 
 
 
@@ -120,23 +120,26 @@ public class AliveActivity extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
 
         bt_Icon = findViewById(R.id.bt_Icon);
-        tv_Target = findViewById(R.id.tv_Target);
+        tV_Target = findViewById(R.id.tv_Target);
         tV_PopUp = findViewById(R.id.tV_PopUp);
+        tV_Trial = findViewById(R.id.tv_Trial);
+
 
         setGestureService();
+        testService=TestService.getInstance();
         bt_Icon.setOnTouchListener(gs);
 
 
         //Adopt Text for each Test
-        testService=new TestService();
         bundle = getIntent().getExtras();
 
-        if(bundle!=null)
-            trial = bundle.getString("trial");
-
-
-        tv_Target.setText(testService.getTestHeading(trial));
-
+        if(bundle!=null) {
+            tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
+            if(bundle.getInt("TARGET")==-1)
+                tV_Target.setText("Alive Icon");
+            else
+                tV_Target.setText("Target: "+Parameter.Items[bundle.getInt("TARGET")]);
+        }
 
     }
 
@@ -185,7 +188,8 @@ public class AliveActivity extends AppCompatActivity {
             boolean longClick=false;
             boolean dragMode=false;
             boolean touched=false;
-            String selectedOption="Direction";
+            int selectedOption=-1;
+            double selectedAngle =0.0;
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
 
@@ -246,10 +250,12 @@ public class AliveActivity extends AppCompatActivity {
                             if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold)||Parameter.enableBlindMode) {
                                 if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
                                     tV_PopUp.setText("Cancel");
-                                    selectedOption = "Cancel";
+                                    selectedOption = -1; //Cancel
                                 } else {
-                                    selectedOption = AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive) + " (" + df.format(currentAlpha) + "°)";
-                                    tV_PopUp.setText(AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive) + " (" + df.format(currentAlpha) + "°)");
+                                    selectedAngle=currentAlpha; //TODO: Try to remove variable currentAlpha
+                                    selectedOption=AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive);
+                                    String item = Parameter.Items[selectedOption];
+                                    tV_PopUp.setText(item + " (" + df.format(currentAlpha) + "°)");
                                 }
                             }
 
@@ -268,8 +274,15 @@ public class AliveActivity extends AppCompatActivity {
                         longClick=false;
                         touched=false;
 
+                        //TODO: What if not during a test?
+                        testService.onAnswer(selectedOption, AliveActivity.this);
 
-                        Toast.makeText(getApplicationContext(), selectedOption, Toast.LENGTH_SHORT).show();
+                        String message;
+                        if(selectedOption==-1)
+                            message="Cancel";
+                        else
+                            message=Parameter.Items[selectedOption];
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                         //Move Icon back to original position
                         new Thread() {

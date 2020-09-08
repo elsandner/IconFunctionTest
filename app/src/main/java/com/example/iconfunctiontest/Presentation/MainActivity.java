@@ -8,42 +8,35 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.iconfunctiontest.R;
+import com.example.iconfunctiontest.Services.Parameter;
+import com.example.iconfunctiontest.Services.TestService;
 
 public class MainActivity extends AppCompatActivity {
+    TestService testService;
 
-    private Button bt_Start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        bt_Start = (Button) findViewById(R.id.bt_Start);
-
+        testService=TestService.getInstance();
     }
 
-    public void onClickBt_BlindMode(View view){
-        Intent i = new Intent(MainActivity.this, BlindMode.class);
-        startActivity(i);
-    }
-
-    public void onClickBt_VisualMode(View view){
-        Intent i = new Intent(MainActivity.this, AliveActivity.class);
-        i.putExtra("trial","Alive Icon");
-        startActivity(i);
-    }
-
-    public void onClickBt_Start(View view){
-        Intent i = new Intent(MainActivity.this, InfoActivity.class);
-
-        i.putExtra("trial","Welcome");
-
-        startActivity(i);
-    }
-
-
-    public void onClickBt_OriginalMode(View view) {
+    public void onClickBt_Standard(View view) {
         Intent i = new Intent(MainActivity.this, StandardActivity.class);
         startActivity(i);
     }
+
+    public void onClickBt_Alive(View view){
+        Intent i = new Intent(MainActivity.this, AliveActivity.class);
+        i.putExtra("TRIAL", "");
+        i.putExtra("TARGET",-1);
+        startActivity(i);
+    }
+
+    public void onClickBt_Test(View view){
+        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, MainActivity.this);
+        Intent i = new Intent(MainActivity.this, InfoActivity.class);
+    }
+
 }

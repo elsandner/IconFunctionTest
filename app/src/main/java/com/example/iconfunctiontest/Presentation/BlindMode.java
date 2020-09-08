@@ -158,7 +158,7 @@ public class BlindMode extends AppCompatActivity {
                             tv_Description.setText("Click");
                         }
                         else{
-                            tv_Description.setText(AngleToDirection(currentAlpha, Parameter.number_of_Items_Alive).toString() +"\n"+ df.format(currentAlpha));
+                        //    tv_Description.setText(AngleToDirection(currentAlpha, Parameter.number_of_Items_Alive).toString() +"\n"+ df.format(currentAlpha));
                         }
 
                         Log.d(TAG,"Action was UP");

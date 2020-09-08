@@ -2,6 +2,7 @@ package com.example.iconfunctiontest.Services;
 
 public class Parameter {
 //General
+    private static int DEFAULT=4;
     public static int LongClick_Vibration_time = 200; //in miliseconds
 
     public static String[] Items = {
@@ -24,7 +25,7 @@ public class Parameter {
     };
 
 //Alive Icon
-    public static int number_of_Items_Alive = 8; //Default=4
+    public static int number_of_Items_Alive = DEFAULT; //Default=4
 
 
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
@@ -39,11 +40,13 @@ public class Parameter {
     public static double cancel_threshold = 200; //swipe more than this value to cancel selection
 
 //Standard Icon
-    public static int number_of_Items_Standard = 8; //Default=4
+    public static int number_of_Items_Standard = DEFAULT; //Default=4
 
 
 
 // Test 2 Expert Users - Alive Icon vs Standard Icon
-    public static int number_of_Trials;
-
+    //2A...Subtest using alive-icon
+    //2B...Subtest using standard-icon
+    public static int number_of_trials_2=DEFAULT; //Default: same number as Icons
+    public static int number_of_blocks_2=3;
 }

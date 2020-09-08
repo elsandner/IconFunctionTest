@@ -15,7 +15,6 @@ public class InfoActivity extends AppCompatActivity {
 
     private Bundle bundle;
     private TextView tV_heading, tV_explanation;
-    private TestService testService;
     private String trial;
 
 
@@ -24,7 +23,6 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        testService=new TestService();
         bundle = getIntent().getExtras();
 
         if(bundle!=null)
