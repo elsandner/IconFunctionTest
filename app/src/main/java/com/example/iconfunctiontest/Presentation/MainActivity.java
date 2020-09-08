@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, AliveActivity.class);
         i.putExtra("TRIAL", "");
         i.putExtra("TARGET",-1);
+        i.putExtra("testID",0);
         startActivity(i);
     }
 
     public void onClickBt_Test(View view){
         testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, MainActivity.this);
-        Intent i = new Intent(MainActivity.this, InfoActivity.class);
     }
 
 }

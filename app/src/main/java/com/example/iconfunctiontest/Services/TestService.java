@@ -1,10 +1,13 @@
 package com.example.iconfunctiontest.Services;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iconfunctiontest.Presentation.AliveActivity;
+import com.example.iconfunctiontest.Presentation.InfoActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,7 +35,7 @@ public class TestService {
 
 
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity){
-        numberOfTrials=number_of_trials*number_of_blocks;
+        numberOfTrials=(number_of_trials*number_of_blocks)-1;
         //The following two loops create an array list filled with all trials of the total subtest
         for(int i=0; i<number_of_blocks;i++){
             //Each Target is a number between 0 and number_of_trials, each number needs to appear once
@@ -42,9 +45,11 @@ public class TestService {
             }
         }
 
+        //TODO: create method to call next activity
         Intent i = new Intent(callingActivity, AliveActivity.class);
-        i.putExtra("TRIAL", "1/"+ numberOfTrials);
+        i.putExtra("TRIAL", "1/"+ (numberOfTrials+1));    //+1 because index starts with 0
         i.putExtra("TARGET",trials.get(currentTrial).getTarget());
+        i.putExtra("testID", 2);
         callingActivity.startActivity(i);
     }
 
@@ -66,29 +71,58 @@ public class TestService {
         return array;
     }
 
-    public void onAnswer(int selectedOption, AppCompatActivity callingActivity){
+    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity){
         //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
         //TODO: Add messured time as parameter
         //TODO: Add positive/negative sound
         //TODO: Add delay, that toast is seen on original trial
         //TODO: Add trial again if answered wrong
+        //TODO: Add break after x blocks
 
         System.out.println("Executed onAnswer!\tcurrentTrial="+currentTrial);
 
-        if(trials.get(currentTrial).setAnswer(selectedOption)){
-            //answer was correct
-            System.out.println("CORRECT");
+        if(currentTrial<numberOfTrials) {
+            if(trials.get(currentTrial).setAnswer(selectedOption))//answer was correct
+                Toast.makeText(callingActivity, "correct", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(callingActivity, "wrong", Toast.LENGTH_SHORT).show();
+
+            currentTrial++;
+            nextActivity(callingActivity,false);
+
         }
         else{
-            //answer was wrong
-            System.out.println("WRONG");
+            nextActivity(callingActivity,true);
         }
+    }
 
-        currentTrial++;
-        Intent i = new Intent(callingActivity, AliveActivity.class);
-        i.putExtra("TRIAL", (currentTrial+1)+"/"+ numberOfTrials);
-        i.putExtra("TARGET",trials.get(currentTrial).getTarget());
+    private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 
-        callingActivity.startActivity(i);
+        final Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000); //to wait till toast finishes
+                    Intent i;
+                    if(!finish) {
+                        i = new Intent(callingActivity, AliveActivity.class);
+                        i.putExtra("TRIAL", (currentTrial + 1) + "/" + (numberOfTrials + 1));
+                        i.putExtra("TARGET", trials.get(currentTrial).getTarget());
+                        i.putExtra("testID", 2);
+                    }
+                    else{
+                        i = new Intent(callingActivity, InfoActivity.class);
+                        i.putExtra("HEADING", "Finish");
+                        i.putExtra("EXPLANATION", "Test 2A is done. Thank you very much!");
+                    }
+                    callingActivity.startActivity(i);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+
     }
 }

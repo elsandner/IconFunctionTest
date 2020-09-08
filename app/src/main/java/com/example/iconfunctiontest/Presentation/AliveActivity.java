@@ -107,6 +107,9 @@ public class AliveActivity extends AppCompatActivity {
 
     private Bundle bundle;
 
+    private int testID;   //depending on this variable, the code executes different logic according to the tests
+                        //0..Alive-Icon (no test), 1..Test1A, 2..Test2A
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -134,6 +137,7 @@ public class AliveActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         if(bundle!=null) {
+            testID=bundle.getInt("testID");
             tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
             if(bundle.getInt("TARGET")==-1)
                 tV_Target.setText("Alive Icon");
@@ -275,14 +279,25 @@ public class AliveActivity extends AppCompatActivity {
                         touched=false;
 
                         //TODO: What if not during a test?
-                        testService.onAnswer(selectedOption, AliveActivity.this);
+                        switch (testID){
+                            case 0:
+                                //Alive Icon ohne Test - Zeigt toast mit selection
+                                String message;
+                                if(selectedOption==-1)
+                                    message="Cancel";
+                                else
+                                    message=Parameter.Items[selectedOption];
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                        String message;
-                        if(selectedOption==-1)
-                            message="Cancel";
-                        else
-                            message=Parameter.Items[selectedOption];
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                break;
+                            case 1:
+                                //Test1A novice users
+                                break;
+                            case 2:
+                                //Test2A expert users
+                                testService.onAnswer(selectedOption, AliveActivity.this);
+
+                        }
 
                         //Move Icon back to original position
                         new Thread() {
