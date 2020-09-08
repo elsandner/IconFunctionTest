@@ -85,9 +85,10 @@ public class TestService {
 
     //TODO: Add messured time as parameter
     //TODO: Add positive/negative sound
-    //TODO: Add break after x blocks
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
-    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity){
+    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time){
+
+        trials.get(currentTrial).setTime(time);
 
         if(currentTrial<trials.size()-1) {
             if(trials.get(currentTrial).setAnswer(selectedOption))//answer was correct
@@ -103,6 +104,7 @@ public class TestService {
 
         }
         else{
+            trials.get(currentTrial).setAnswer(selectedOption);
             nextActivity(callingActivity,true);
         }
 

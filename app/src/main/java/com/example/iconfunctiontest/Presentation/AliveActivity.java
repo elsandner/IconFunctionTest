@@ -104,6 +104,8 @@ public class AliveActivity extends AppCompatActivity {
             int selectedOption=-1;
             double selectedAngle =0.0;
 
+            long timeStart;
+
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
 
             @Override
@@ -132,6 +134,7 @@ public class AliveActivity extends AppCompatActivity {
                         dragMode=false;
                         startCountDown(Parameter.VisualMode_LongClick_duration); //changes longClick to true
 
+                        timeStart = System.currentTimeMillis();
                         Log.d(TAG,"Action was DOWN");
                         return true;
 
@@ -204,7 +207,8 @@ public class AliveActivity extends AppCompatActivity {
                                 break;
                             case 2:
                                 //Test2A expert users
-                                testService.onAnswer(selectedOption, AliveActivity.this);
+                                long time=System.currentTimeMillis()-timeStart;
+                                testService.onAnswer(selectedOption, AliveActivity.this, time);
                         }
 
                         //Move Icon back to original position
@@ -224,7 +228,6 @@ public class AliveActivity extends AppCompatActivity {
                                 }
                             }
                         }.start();
-
                         Log.d(TAG,"Action was UP");
                         return true;
 

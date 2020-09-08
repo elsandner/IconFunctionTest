@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
 
-import com.example.iconfunctiontest.Services.TestService;
-
 public class InfoActivity extends AppCompatActivity {
 
     private Bundle bundle;
@@ -20,8 +18,6 @@ public class InfoActivity extends AppCompatActivity {
     //Values to pass to trial after break
     private String trial;
     private int target, testID;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
