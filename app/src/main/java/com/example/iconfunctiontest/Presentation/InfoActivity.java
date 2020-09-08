@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
 
 import com.example.iconfunctiontest.Services.TestService;
@@ -15,7 +16,11 @@ public class InfoActivity extends AppCompatActivity {
 
     private Bundle bundle;
     private TextView tV_heading, tV_explanation;
+
+    //Values to pass to trial after break
     private String trial;
+    private int target, testID;
+
 
 
     @Override
@@ -34,12 +39,37 @@ public class InfoActivity extends AppCompatActivity {
         if(bundle!=null){
             tV_heading.setText(bundle.getString("HEADING"));
             tV_explanation.setText(bundle.getString("EXPLANATION"));
+
+            trial=bundle.getString("TRIAL");
+            target=bundle.getInt("TARGET");
+            testID=bundle.getInt("testID");
+
+            System.out.println("Trial: "+trial);
+            System.out.println("Target: "+target);
+            System.out.println("testID: "+testID);
         }
 
     }
 
     public void onClickBt_Start(View view){
-        Intent i = new Intent(InfoActivity.this, MainActivity.class);
-        startActivity(i);
+        final Intent i;
+
+        if(trial==null) {   //Finish
+            i = new Intent(InfoActivity.this, MainActivity.class);
+        }else{
+            i = new Intent(InfoActivity.this, AliveActivity.class);
+            i.putExtra("TRIAL", trial);
+            i.putExtra("TARGET", target);
+            i.putExtra("testID", testID);
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(i);
+                Animatoo.animateZoom(InfoActivity.this);
+            }
+        });
+
     }
 }

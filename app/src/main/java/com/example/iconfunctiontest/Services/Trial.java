@@ -4,13 +4,13 @@ public class Trial {
     //Store: trialID, Target, Answer, ..
     int trialID, blockID;
     int target, answer; //Stored as Index of Parameter.Item Array
-    int counter; //increases if participant needs to repeat this trial
+    boolean doBreak; //is true if after this element a break should follow
 
     public Trial (int trialID, int blockID, int target){
         this.trialID=trialID;
         this.blockID=blockID;
         this.target=target;
-        this.counter=0;
+        doBreak=false;
     }
 
 
@@ -47,11 +47,11 @@ public class Trial {
         return answer == target;
     }
 
-    public int getCounter() {
-        return counter;
+    public boolean isDoBreak() {
+        return doBreak;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setDoBreak(boolean doBreak) {
+        this.doBreak = doBreak;
     }
 }
