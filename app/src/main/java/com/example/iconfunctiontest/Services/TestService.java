@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 
@@ -75,7 +76,6 @@ public class TestService {
         //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
         //TODO: Add messured time as parameter
         //TODO: Add positive/negative sound
-        //TODO: Add delay, that toast is seen on original trial
         //TODO: Add trial again if answered wrong
         //TODO: Add break after x blocks
 
@@ -116,6 +116,9 @@ public class TestService {
                         i.putExtra("EXPLANATION", "Test 2A is done. Thank you very much!");
                     }
                     callingActivity.startActivity(i);
+                    Animatoo.animateInAndOut(callingActivity.getApplicationContext());
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

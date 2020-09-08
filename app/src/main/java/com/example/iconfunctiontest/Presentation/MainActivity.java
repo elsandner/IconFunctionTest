@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("TARGET",-1);
         i.putExtra("testID",0);
         startActivity(i);
+
     }
 
     public void onClickBt_Test(View view){

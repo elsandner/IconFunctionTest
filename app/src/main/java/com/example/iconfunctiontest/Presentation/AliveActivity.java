@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
@@ -296,7 +297,6 @@ public class AliveActivity extends AppCompatActivity {
                             case 2:
                                 //Test2A expert users
                                 testService.onAnswer(selectedOption, AliveActivity.this);
-
                         }
 
                         //Move Icon back to original position
