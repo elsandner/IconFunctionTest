@@ -1,7 +1,6 @@
 package com.example.iconfunctiontest.Services;
 
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +24,6 @@ public class TestService {
     private static TestService testService = null;
 
     private TestService(){
-        currentTrial=0;
-        trials=new ArrayList<>();
     }
 
     public static TestService getInstance() {
@@ -40,6 +37,8 @@ public class TestService {
         numberOfTrials=(number_of_trials*number_of_blocks)-1;
         highestTrialID=number_of_trials-1;
         highestBlockID=number_of_blocks-1;
+        currentTrial=0;
+        trials=new ArrayList<>();
 
         //The following two loops create an array list filled with all trials of the total subtest
         int blockCounter=1;
@@ -52,19 +51,11 @@ public class TestService {
                    if(j==highestTrialID&&blockCounter==Parameter.blocksBetweenBreak) {
                        trials.get(trials.size()-1).setDoBreak(true);
                        blockCounter=0;
-                       System.out.println("Break for: trial: "+trials.get(trials.size()-1).getTrialID()+" block:"+trials.get(trials.size()-1).getBlockID());
                    }
             }
             blockCounter++;
-
-
-        }
-/*
-        for(int i=0;i<trials.size();i++){
-            Log.d("BREAKS: ",trials.get(i).doBreak+" - ");
         }
 
- */
 
         Intent i = new Intent(callingActivity, AliveActivity.class);
         i.putExtra("TRIAL", "1/"+ trials.size());    //+1 because index starts with 0
@@ -98,13 +89,14 @@ public class TestService {
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
     public void onAnswer(int selectedOption, final AppCompatActivity callingActivity){
 
-        if(currentTrial<trials.size()) {
+        if(currentTrial<trials.size()-1) {
             if(trials.get(currentTrial).setAnswer(selectedOption))//answer was correct
                 Toast.makeText(callingActivity, "correct", Toast.LENGTH_SHORT).show();
             else {
                 Toast.makeText(callingActivity, "wrong", Toast.LENGTH_SHORT).show();
                 addTrialAgain(currentTrial);
             }
+
 
             currentTrial++;
             nextActivity(callingActivity,false);
@@ -131,7 +123,7 @@ public class TestService {
                         i.putExtra("EXPLANATION", "Test 2A is done. Thank you very much!");
                     }
 
-                    else if(trials.get(currentTrial-1).doBreak){
+                    else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
                         //doBreak
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Break");
@@ -178,15 +170,21 @@ public class TestService {
             int i=currentTrial;
             boolean x = true;
             while(x) {
-                if (trials.get(i).blockID != blockID) {
+                if (trials.get(i).getBlockID() != blockID) {
                     //Adds Trial to position of first element of following block and shift all following elements to the "right"
-                    trials.add(i, trials.get(currentTrial));
-                    Log.d("BREAK: ",""+trials.get(i-1).doBreak);
+                    Trial newTrial = Trial.clone(trials.get(currentTrial)); //copy by value not reference!!
+                    trials.add(i, newTrial);
+                    trials.get(i-1).setDoBreak(false);
+                    trials.get(i).setDoBreak(true);
                     x = false;
                 }
                 i++;
             }
 
+
         }
+
+
     }
+
 }

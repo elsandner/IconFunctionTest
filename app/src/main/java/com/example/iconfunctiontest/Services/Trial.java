@@ -2,15 +2,25 @@ package com.example.iconfunctiontest.Services;
 
 public class Trial {
     //Store: trialID, Target, Answer, ..
-    int trialID, blockID;
-    int target, answer; //Stored as Index of Parameter.Item Array
-    boolean doBreak; //is true if after this element a break should follow
+    private int trialID, blockID;
+    private int target, answer; //Stored as Index of Parameter.Item Array
+    private boolean doBreak; //is true if after this element a break should follow
 
     public Trial (int trialID, int blockID, int target){
         this.trialID=trialID;
         this.blockID=blockID;
         this.target=target;
         doBreak=false;
+    }
+
+
+
+    public static Trial clone(Trial refTrial){
+        Trial newTrial=new Trial(refTrial.getTrialID(), refTrial.getBlockID(),refTrial.getTarget());
+        newTrial.setAnswer(refTrial.getAnswer());
+        newTrial.setDoBreak(refTrial.isDoBreak());
+
+        return newTrial;
     }
 
 
