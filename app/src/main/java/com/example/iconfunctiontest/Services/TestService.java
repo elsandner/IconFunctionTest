@@ -103,7 +103,7 @@ public class TestService {
             public void run() {
                 try {
                     Thread.sleep(2000); //to wait till toast finishes
-                    Intent i;
+                    final Intent i;
                     if(!finish) {
                         i = new Intent(callingActivity, AliveActivity.class);
                         i.putExtra("TRIAL", (currentTrial + 1) + "/" + (numberOfTrials + 1));
@@ -115,10 +115,14 @@ public class TestService {
                         i.putExtra("HEADING", "Finish");
                         i.putExtra("EXPLANATION", "Test 2A is done. Thank you very much!");
                     }
-                    callingActivity.startActivity(i);
-                    Animatoo.animateInAndOut(callingActivity.getApplicationContext());
 
-
+                    callingActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            callingActivity.startActivity(i);
+                            Animatoo.animateZoom(callingActivity);
+                        }
+                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();
