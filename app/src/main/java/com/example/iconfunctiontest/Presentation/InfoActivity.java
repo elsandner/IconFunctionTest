@@ -48,12 +48,29 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void onClickBt_Start(View view){
-        final Intent i;
 
-        if(trial==null) {   //Finish
+        final Intent i;
+        if(trial==null) {   //Finish-Screen
             i = new Intent(InfoActivity.this, MainActivity.class);
-        }else{
-            i = new Intent(InfoActivity.this, AliveActivity.class);
+        }else {
+            switch (testID) {
+                case 0:
+                    i = new Intent(InfoActivity.this, MainActivity.class);
+                    break;
+                case 1:
+                case 3:
+                case 5:
+                    //Alive Icon
+                    i = new Intent(InfoActivity.this, AliveActivity.class);
+                    break;
+                case 2:
+                case 4:
+                case 6:
+                    i = new Intent(InfoActivity.this, StandardActivity.class);
+                    break;
+                default:
+                    i = new Intent(InfoActivity.this, MainActivity.class);
+            }
             i.putExtra("TRIAL", trial);
             i.putExtra("TARGET", target);
             i.putExtra("testID", testID);

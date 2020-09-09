@@ -2,7 +2,6 @@ package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -14,11 +13,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
-import com.example.iconfunctiontest.Services.TestService;
+import com.example.iconfunctiontest.Services.TestService2;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
@@ -36,21 +34,21 @@ public class AliveActivity extends AppCompatActivity {
     private TextView tV_Trial;
 
     private GestureService gs;
-    private TestService testService;
+    private TestService2 testService2;
 
     private Bundle bundle;
 
     private int testID;   //depending on this variable, the code executes different logic according to the tests
-                        //0..Alive-Icon (no test), 1..Test1A, 2..Test2A
+                        //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
 
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_visual_mode);
 
         /////// FULLSCREEN /////////////////
-        setContentView(R.layout.activity_visual_mode);
         mContentView = findViewById(R.id.fullscreen_content);
         mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -61,13 +59,13 @@ public class AliveActivity extends AppCompatActivity {
         /////////////////////////////////////
 
         bt_Icon = findViewById(R.id.bt_Icon);
-        tV_Target = findViewById(R.id.tv_Target);
+        tV_Target = findViewById(R.id.tV_Target);
         tV_PopUp = findViewById(R.id.tV_PopUp);
         tV_Trial = findViewById(R.id.tv_Trial);
 
         setGestureService();
-        testService=TestService.getInstance();
         bt_Icon.setOnTouchListener(gs);
+        testService2 = TestService2.getInstance();
 
         //Adopt Text for each Test
         bundle = getIntent().getExtras();
@@ -205,10 +203,10 @@ public class AliveActivity extends AppCompatActivity {
                             case 1:
                                 //Test1A novice users
                                 break;
-                            case 2:
+                            case 3:
                                 //Test2A expert users
                                 long time=System.currentTimeMillis()-timeStart;
-                                testService.onAnswer(selectedOption, AliveActivity.this, time);
+                                testService2.onAnswer(selectedOption, AliveActivity.this, time);
                         }
 
                         //Move Icon back to original position
@@ -283,13 +281,7 @@ public class AliveActivity extends AppCompatActivity {
                 });
             }
 
-
-
-
         };
-
-
-
 
     }
 

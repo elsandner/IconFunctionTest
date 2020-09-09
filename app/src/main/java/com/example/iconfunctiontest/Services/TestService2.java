@@ -6,34 +6,36 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TestService {
+public class TestService2 {
 
     private int numberOfTrials;
     private int highestTrialID;
     private int highestBlockID;
     private int currentTrial;
     ArrayList<Trial> trials;
+    private Class nextClass;
+    private int testID;
 
     // static variable single_instance of type Singleton
-    private static TestService testService = null;
+    private static TestService2 testService2 = null;
 
-    private TestService(){
+    private TestService2(){
     }
 
-    public static TestService getInstance() {
-        if(testService==null)
-            testService=new TestService();
-        return testService;
+    public static TestService2 getInstance() {
+        if(testService2 ==null)
+            testService2 =new TestService2();
+        return testService2;
     }
 
-
-    public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity){
+    public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
+        this.nextClass=nextClass;
+        this.testID=testID;
         numberOfTrials=(number_of_trials*number_of_blocks)-1;
         highestTrialID=number_of_trials-1;
         highestBlockID=number_of_blocks-1;
@@ -57,10 +59,10 @@ public class TestService {
         }
 
 
-        Intent i = new Intent(callingActivity, AliveActivity.class);
+        Intent i = new Intent(callingActivity, nextClass);
         i.putExtra("TRIAL", "1/"+ trials.size());    //+1 because index starts with 0
         i.putExtra("TARGET",trials.get(currentTrial).getTarget());
-        i.putExtra("testID", 2);
+        i.putExtra("testID", testID);
         callingActivity.startActivity(i);
     }
 
@@ -82,8 +84,6 @@ public class TestService {
         return array;
     }
 
-
-    //TODO: Add messured time as parameter
     //TODO: Add positive/negative sound
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
     public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time){
@@ -122,7 +122,8 @@ public class TestService {
                     if(finish){
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Finish");
-                        i.putExtra("EXPLANATION", "Test 2A is done. Thank you very much!");
+                        i.putExtra("EXPLANATION", "Test is done. Thank you very much!");
+                        createXML();
                     }
 
                     else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
@@ -133,14 +134,14 @@ public class TestService {
 
                         i.putExtra("TRIAL", (currentTrial + 1) + "/" + trials.size());
                         i.putExtra("TARGET", trials.get(currentTrial).getTarget());
-                        i.putExtra("testID", 2);
+                        i.putExtra("testID", testID);
                     }
                     else{
                         //continue with next trial
-                        i = new Intent(callingActivity, AliveActivity.class);
+                        i = new Intent(callingActivity, nextClass);
                         i.putExtra("TRIAL", (currentTrial + 1) + "/" + trials.size());
                         i.putExtra("TARGET", trials.get(currentTrial).getTarget());
-                        i.putExtra("testID", 2);
+                        i.putExtra("testID", testID);
                     }
 
                     callingActivity.runOnUiThread(new Runnable() {
@@ -187,6 +188,10 @@ public class TestService {
         }
 
 
+    }
+
+    private void createXML(){
+        //TODO: implement logging
     }
 
 }

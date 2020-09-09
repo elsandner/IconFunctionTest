@@ -17,8 +17,7 @@ import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
-
-import org.w3c.dom.Text;
+import com.example.iconfunctiontest.Services.TestService2;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -97,26 +96,54 @@ public class StandardActivity extends AppCompatActivity {
 
     Button bt_TestIcon, bt_Icon1, bt_Icon2, bt_Icon3 ;
     LinearLayout L_PopUp;
+    private TextView tV_Target, tV_Trial;
+
+    private TestService2 testService2;
+    private long timeStart;
+    private Bundle bundle;
+    private int testID;   //depending on this variable, the code executes different logic according to the tests
+                        //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
+
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_original_mode);
 
+        /////// FULLSCREEN /////////////////
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+        /////////////////////////////////////
+
 
         bt_TestIcon = findViewById(R.id.bt_TestIcon);
         bt_Icon1=findViewById(R.id.bt_Icon1);
         bt_Icon2=findViewById(R.id.bt_Icon2);
         bt_Icon3=findViewById(R.id.bt_Icon3);
         L_PopUp = findViewById(R.id.L_PopUp);
+        tV_Trial = findViewById(R.id.tV_Trial);
+        tV_Target = findViewById(R.id.tV_Target);
 
+        testService2 = TestService2.getInstance();
+
+        //Adopt Text for each Test
+        bundle = getIntent().getExtras();
+
+        if(bundle!=null) {
+            testID=bundle.getInt("testID");
+            tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
+            if(bundle.getInt("TARGET")==-1)
+                tV_Target.setText("Alive Icon");
+            else
+                tV_Target.setText("Target: "+Parameter.Items[bundle.getInt("TARGET")]);
+        }
+
+
+
+        //Dynamically Add Items to Pop-Up Menu
         for(int i=0;i<Parameter.number_of_Items_Standard;i++){
-
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(2,5,2,5);
 
@@ -188,11 +215,25 @@ public class StandardActivity extends AppCompatActivity {
         bt_Icon2.setVisibility(View.INVISIBLE);
         bt_Icon3.setVisibility(View.INVISIBLE);
 
+        timeStart = System.currentTimeMillis();
     }
 
-    private void clickItem(int i, View view){
-        Toast.makeText(getApplicationContext(), "option "+Parameter.Items[i]+" selected", Toast.LENGTH_SHORT).show();
+    private void clickItem(int selectedOption, View view){
+        Toast.makeText(getApplicationContext(), "option "+Parameter.Items[selectedOption]+" selected", Toast.LENGTH_SHORT).show();
         onClickScreen(view);
+
+        switch(testID){
+            case 0: //Standard Icon (No Test)
+                break;
+            case 2: //Test1B
+                break;
+            case 4: //Test2B
+                long time = System.currentTimeMillis() - timeStart + 500; //+500ms -> time of longclick
+                testService2.onAnswer(selectedOption, StandardActivity.this, time);
+                break;
+        }
+
+
     }
 
 
@@ -208,7 +249,6 @@ public class StandardActivity extends AppCompatActivity {
 
     public void onClickBt_TestIcon(View view) {
         System.out.println("Test Icon clicked");
-
     }
 
     public void onClickScreen(View view) {
@@ -222,9 +262,4 @@ public class StandardActivity extends AppCompatActivity {
 
     }
 
-    public void onClickOption1(View view) {
-        Toast.makeText(getApplicationContext(), "option 1 selected", Toast.LENGTH_SHORT).show();
-        onClickScreen(view);
-
-    }
 }

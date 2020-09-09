@@ -47,8 +47,8 @@ public class Parameter {
 // Test 2 Expert Users - Alive Icon vs Standard Icon
     //2A...Subtest using alive-icon
     //2B...Subtest using standard-icon
-    public static int number_of_trials_2=DEFAULT; //Default: same number as Icons
-    public static int number_of_blocks_2=3;
+    public static int number_of_trials_2=number_of_Items_Alive; //Default: same number as Icons
+    public static int number_of_blocks_2=2;
     public static int nextActivity_Delay = 500; //Default=2000 because this is the time, the Toast is on the screen
                                                   //in miliseconds
 
