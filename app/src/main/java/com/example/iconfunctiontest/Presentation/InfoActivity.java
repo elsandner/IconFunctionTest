@@ -52,11 +52,17 @@ public class InfoActivity extends AppCompatActivity {
         final Intent i;
         if(trial==null) {   //Finish-Screen
             i = new Intent(InfoActivity.this, MainActivity.class);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(i);
+                    Animatoo.animateDiagonal(InfoActivity.this);
+                }
+            });
+
         }else {
             switch (testID) {
-                case 0:
-                    i = new Intent(InfoActivity.this, MainActivity.class);
-                    break;
                 case 1:
                 case 3:
                 case 5:
@@ -68,21 +74,24 @@ public class InfoActivity extends AppCompatActivity {
                 case 6:
                     i = new Intent(InfoActivity.this, StandardActivity.class);
                     break;
+                case 0:
                 default:
                     i = new Intent(InfoActivity.this, MainActivity.class);
             }
             i.putExtra("TRIAL", trial);
             i.putExtra("TARGET", target);
             i.putExtra("testID", testID);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(i);
+                    Animatoo.animateSlideLeft(InfoActivity.this);
+                }
+            });
         }
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(i);
-                Animatoo.animateZoom(InfoActivity.this);
-            }
-        });
+
 
     }
 }

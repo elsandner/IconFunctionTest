@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("TARGET",-1);
         i.putExtra("testID",0);
         startActivity(i);
+        Animatoo.animateDiagonal(MainActivity.this);
     }
 
     public void onClickBt_Alive(View view){
@@ -32,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("TARGET",-1);
         i.putExtra("testID",0);
         startActivity(i);
+        Animatoo.animateDiagonal(MainActivity.this);
 
     }
 
     public void onClickBt_Test(View view){
         Intent i = new Intent(MainActivity.this, TestMenuActivity.class);
         startActivity(i);
-        Animatoo.animateSwipeLeft(MainActivity.this);
+        Animatoo.animateSlideUp(MainActivity.this);
     }
 
 }

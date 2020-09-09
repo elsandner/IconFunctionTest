@@ -148,7 +148,7 @@ public class TestService2 {
                         @Override
                         public void run() {
                             callingActivity.startActivity(i);
-                            Animatoo.animateZoom(callingActivity);
+                            Animatoo.animateSlideLeft(callingActivity);
                         }
                     });
 

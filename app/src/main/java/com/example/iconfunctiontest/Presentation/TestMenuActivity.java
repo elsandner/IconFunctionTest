@@ -25,32 +25,35 @@ public class TestMenuActivity extends AppCompatActivity {
     public void onClick_bt_Test1A(View view) {
         Intent i = new Intent( TestMenuActivity.this, MainActivity.class);
         startActivity(i);
-        Animatoo.animateCard(TestMenuActivity.this);
+        Animatoo.animateInAndOut(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test1B(View view) {
         Intent i = new Intent( TestMenuActivity.this, MainActivity.class);
         startActivity(i);
-        Animatoo.animateFade(TestMenuActivity.this);
+        Animatoo.animateSpin(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test2A(View view) {
         testService2.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,AliveActivity.class,3);
+        Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test2B(View view) {
         testService2.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,StandardActivity.class,4);
+        Animatoo.animateDiagonal(TestMenuActivity.this);
+
     }
 
     public void onClick_bt_Test3A(View view) {
         Intent i = new Intent( TestMenuActivity.this, MainActivity.class);
         startActivity(i);
-        Animatoo.animateSplit(TestMenuActivity.this);
+        Animatoo.animateWindmill(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test3B(View view) {
         Intent i = new Intent( TestMenuActivity.this, MainActivity.class);
         startActivity(i);
-        Animatoo.animateSwipeRight(TestMenuActivity.this);
+        Animatoo.animateFade(TestMenuActivity.this);
     }
 }

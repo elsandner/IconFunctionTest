@@ -25,7 +25,7 @@ import static java.lang.Math.abs;
 
 public class AliveActivity extends AppCompatActivity {
 
-    private View mContentView; //needed for fullscreen
+    private View mContentView;
 
     private static final String TAG = "BlindMode";
     private TextView tV_Target;
