@@ -118,17 +118,13 @@ public class GestureService implements View.OnTouchListener {
 
         //Actual angleToDirection
         if(isBetween(alpha,upper_limit.get(0),0)||isBetween(alpha, 360,lower_limit.get(0))){
-            //return directions.get(0);
             return 0;
         }
         for(int i=1;i<lower_limit.size();i++){//Loop all segments
             if(alpha>lower_limit.get(i)&&alpha<upper_limit.get(i))
-                //return directions.get(i);
                 return i;
         }
 
-        //return "Error!!";
-        System.out.println("Angle to direction returns -1 !!!!!! - Alpha: "+alpha+" Items: "+number_of_Items);
         return -1;
     }
 

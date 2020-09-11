@@ -27,7 +27,6 @@ public class Parameter {
 //Alive Icon
     public static int number_of_Items_Alive = DEFAULT; //Default=4
 
-
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
     public static int VisualMode_LongClick_duration = 3; //in seconds
 

@@ -16,9 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
-import com.example.iconfunctiontest.Services.TestService2;
+import com.example.iconfunctiontest.Services.TestService;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
@@ -34,13 +35,14 @@ public class AliveActivity extends AppCompatActivity {
     private TextView tV_Trial;
 
     private GestureService gs;
-    private TestService2 testService2;
+    private TestService testService;
 
     private Bundle bundle;
 
     private int testID;   //depending on this variable, the code executes different logic according to the tests
                         //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
 
+    private int[] itemMap;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -65,7 +67,7 @@ public class AliveActivity extends AppCompatActivity {
 
         setGestureService();
         bt_Icon.setOnTouchListener(gs);
-        testService2 = TestService2.getInstance();
+        testService = TestService.getInstance();
 
         //Adopt Text for each Test
         bundle = getIntent().getExtras();
@@ -78,6 +80,9 @@ public class AliveActivity extends AppCompatActivity {
             else
                 tV_Target.setText("Target: "+Parameter.Items[bundle.getInt("TARGET")]);
         }
+
+        itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
+        System.out.println(Arrays.toString(itemMap));
 
     }
 
@@ -99,7 +104,7 @@ public class AliveActivity extends AppCompatActivity {
             boolean longClick=false;
             boolean dragMode=false;
             boolean touched=false;
-            int selectedOption=-1;
+            int selectedOption=-2;
             double selectedAngle =0.0;
 
             long timeStart;
@@ -161,14 +166,23 @@ public class AliveActivity extends AppCompatActivity {
                                 tV_PopUp.setVisibility(View.VISIBLE);
                             }
 
-                            if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold)||Parameter.enableBlindMode) {
+                            if (  (abs(diffX) > Parameter.popUp_threshold  || abs(diffY) > Parameter.popUp_threshold)   ||   (Parameter.enableBlindMode&&testID!=1))
+                            {
+                                System.out.println("TestID="+testID);
+
                                 if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
                                     tV_PopUp.setText("Cancel");
                                     selectedOption = -1; //Cancel
                                 } else {
                                     selectedAngle=currentAlpha; //TODO: Try to remove variable currentAlpha
                                     selectedOption=AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive);
+
+
+                                    if(testID==1||testID==2)
+                                        selectedOption=itemMap[selectedOption];
+
                                     String item = Parameter.Items[selectedOption];
+
                                     tV_PopUp.setText(item + " (" + df.format(currentAlpha) + "°)");
                                 }
                             }
@@ -187,26 +201,26 @@ public class AliveActivity extends AppCompatActivity {
                         tV_PopUp.setVisibility(View.INVISIBLE);
                         longClick=false;
                         touched=false;
+                        long time;
 
-                        //TODO: What if not during a test?
-                        switch (testID){
-                            case 0:
-                                //Alive Icon ohne Test - Zeigt toast mit selection
-                                String message;
-                                if(selectedOption==-1)
-                                    message="Cancel";
-                                else
-                                    message=Parameter.Items[selectedOption];
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        if(selectedOption!=-2) { //needed to disable blind-mode
+                            switch (testID) {
 
-                                break;
-                            case 1:
-                                //Test1A novice users
-                                break;
-                            case 3:
-                                //Test2A expert users
-                                long time=System.currentTimeMillis()-timeStart;
-                                testService2.onAnswer(selectedOption, AliveActivity.this, time);
+                                case 0:
+                                    //Alive Icon ohne Test - Zeigt toast mit selection
+                                    String message;
+                                    if (selectedOption == -1)
+                                        message = "Cancel";
+                                    else
+                                        message = Parameter.Items[selectedOption];
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 1://Test1A novice users
+                                case 3://Test2A expert users
+                                    time = System.currentTimeMillis() - timeStart;
+                                    testService.onAnswer(selectedOption, AliveActivity.this, time);
+                                    break;
+                            }
                         }
 
                         //Move Icon back to original position
@@ -284,6 +298,7 @@ public class AliveActivity extends AppCompatActivity {
         };
 
     }
+
 
     public void onClickBt_Icon(View view){
         Log.d(TAG, "onClickBt_Icon clicked");

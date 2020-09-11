@@ -11,7 +11,7 @@ import com.example.iconfunctiontest.Presentation.InfoActivity;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TestService2 {
+public class TestService {
 
     private int numberOfTrials;
     private int highestTrialID;
@@ -22,15 +22,15 @@ public class TestService2 {
     private int testID;
 
     // static variable single_instance of type Singleton
-    private static TestService2 testService2 = null;
+    private static TestService testService = null;
 
-    private TestService2(){
+    private TestService(){
     }
 
-    public static TestService2 getInstance() {
-        if(testService2 ==null)
-            testService2 =new TestService2();
-        return testService2;
+    public static TestService getInstance() {
+        if(testService ==null)
+            testService =new TestService();
+        return testService;
     }
 
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
@@ -46,18 +46,17 @@ public class TestService2 {
         int blockCounter=1;
         for(int i=0; i<number_of_blocks;i++){
             //Each Target is a number between 0 and number_of_trials, each number needs to appear once
-            int [] shuffledTargetBlock=getShuffledTargetBlock(number_of_trials);
+            int [] shuffledTargetBlock= shuffleIntArray(number_of_trials);
             for(int j=0; j<number_of_trials;j++){
-                   trials.add(new Trial(j,i,shuffledTargetBlock[j]));
+                trials.add(new Trial(j,i,shuffledTargetBlock[j]));
 
-                   if(j==highestTrialID&&blockCounter==Parameter.blocksBetweenBreak) {
-                       trials.get(trials.size()-1).setDoBreak(true);
-                       blockCounter=0;
-                   }
+                if(j==highestTrialID&&blockCounter==Parameter.blocksBetweenBreak) {
+                    trials.get(trials.size()-1).setDoBreak(true);
+                    blockCounter=0;
+                }
             }
             blockCounter++;
         }
-
 
         Intent i = new Intent(callingActivity, nextClass);
         i.putExtra("TRIAL", "1/"+ trials.size());    //+1 because index starts with 0
@@ -66,7 +65,9 @@ public class TestService2 {
         callingActivity.startActivity(i);
     }
 
-    private int[] getShuffledTargetBlock(int size){
+
+
+    public int[] shuffleIntArray(int size){
 
         int[] array = new int[size];
         for(int i=0; i<array.length;i++){
@@ -109,6 +110,8 @@ public class TestService2 {
         }
 
     }
+
+
 
     private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 
@@ -166,8 +169,11 @@ public class TestService2 {
         Trial trial = trials.get(currentTrial);
         int blockID = trial.getBlockID();
 
-        if(blockID==highestBlockID){
-            trials.add(trials.get(currentTrial)); //if Element in last block - add on end of list
+        if(blockID==highestBlockID){//if Element in last block - add on end of list
+            Trial newTrial = Trial.clone(trials.get(currentTrial)); //copy by value not reference!!
+            trials.add(newTrial);
+            trials.get(trials.size()-2).setDoBreak(false);
+            trials.get(trials.size()-1).setDoBreak(true);
         }
         else {
             int i=currentTrial;
@@ -193,5 +199,8 @@ public class TestService2 {
     private void createXML(){
         //TODO: implement logging
     }
+
+
+
 
 }
