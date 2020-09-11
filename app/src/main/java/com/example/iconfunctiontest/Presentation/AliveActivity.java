@@ -2,6 +2,10 @@ package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -28,6 +32,8 @@ public class AliveActivity extends AppCompatActivity {
 
     private View mContentView;
     private static TextView tV_fullscreenContent;
+    private static SoundPool soundPool;
+    private static int sound_success, sound_error;
 
     private static final String TAG = "BlindMode";
     private TextView tV_Target;
@@ -103,6 +109,10 @@ public class AliveActivity extends AppCompatActivity {
 
 
         itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
+
+        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        sound_success = soundPool.load(this, R.raw.success, 1);
+        sound_error = soundPool.load(this, R.raw.error, 1);
 
     }
 
@@ -338,11 +348,16 @@ public class AliveActivity extends AppCompatActivity {
     }
 
     public static void changeBackgroundColor(boolean answer) {
-        if(answer)
+        if(answer){
+            soundPool.play(sound_success, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_green_light);
-        else
+        }
+        else {
+            soundPool.play(sound_error, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
-    }
+        }   }
+
+
 
 
 }

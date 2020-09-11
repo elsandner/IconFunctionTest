@@ -1,6 +1,11 @@
 package com.example.iconfunctiontest.Services;
 
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaRecorder;
+import android.media.SoundPool;
+import android.os.Build;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +14,7 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
+import com.example.iconfunctiontest.R;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,10 +29,12 @@ public class TestService {
     private Class nextClass;
     private int testID;
 
+
     // static variable single_instance of type Singleton
     private static TestService testService = null;
 
     private TestService(){
+
     }
 
     public static TestService getInstance() {
@@ -65,6 +73,8 @@ public class TestService {
         i.putExtra("TARGET",trials.get(currentTrial).getTarget());
         i.putExtra("testID", testID);
         callingActivity.startActivity(i);
+
+
     }
 
 
@@ -97,7 +107,7 @@ public class TestService {
 
         if(currentTrial<trials.size()-1) {
             if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
-                Toast.makeText(callingActivity, "correct", Toast.LENGTH_SHORT).show();
+
                 if(testID==2||testID==4||testID==6) {
                     StandardActivity.changeBackgroundColor(true);
                 }
@@ -105,19 +115,16 @@ public class TestService {
                     AliveActivity.changeBackgroundColor(true);
                 }
 
-
-
-
             }
-            else {
-                Toast.makeText(callingActivity, "wrong", Toast.LENGTH_SHORT).show();
+            else {//answer was wrong
                 addTrialAgain(currentTrial);
-                if(testID==2||testID==4||testID==6) {
+
+
+                if(testID==2||testID==4||testID==6)
                     StandardActivity.changeBackgroundColor(false);
-                }
-                else{
+                else
                     AliveActivity.changeBackgroundColor(false);
-                }
+
             }
 
 
@@ -217,9 +224,12 @@ public class TestService {
 
     }
 
+
+
     private void createXML(){
         //TODO: implement logging
     }
+
 
 
 

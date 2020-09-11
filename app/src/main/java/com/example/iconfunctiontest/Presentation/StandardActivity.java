@@ -1,10 +1,15 @@
 package com.example.iconfunctiontest.Presentation;
 
+import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -23,9 +28,13 @@ import java.util.Collections;
 
 public class StandardActivity extends AppCompatActivity {
 
-
     private View mContentView;
+
+
     private static TextView tV_fullscreenContent;
+    private static SoundPool soundPool;
+    private static int sound_success, sound_error;
+
 
     Button bt_TestIcon, bt_Icon1, bt_Icon2, bt_Icon3, bt_Continue ;
     LinearLayout L_PopUp;
@@ -35,7 +44,10 @@ public class StandardActivity extends AppCompatActivity {
     private long timeStart, timePressDown;
     private Bundle bundle;
     private int testID;   //depending on this variable, the code executes different logic according to the tests
-                        //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
+    //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
+
+
+
 
 
 
@@ -105,6 +117,10 @@ public class StandardActivity extends AppCompatActivity {
                 }
         );
 
+
+        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        sound_success = soundPool.load(this, R.raw.success, 1);
+        sound_error = soundPool.load(this, R.raw.error, 1);
     }
 
     public void onClick_Continue(View view) {
@@ -220,11 +236,24 @@ public class StandardActivity extends AppCompatActivity {
     }
 
     public static void changeBackgroundColor(boolean answer){
-        if(answer)
+        if(answer){
+            soundPool.play(sound_success, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_green_light);
-        else
+        }
+        else {
+            soundPool.play(sound_error, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
+        }
     }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        soundPool.release();
+        soundPool=null;
+    }
+
+
 
 
 }
