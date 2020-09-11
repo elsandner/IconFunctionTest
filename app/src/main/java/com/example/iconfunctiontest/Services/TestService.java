@@ -6,7 +6,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
+import com.example.iconfunctiontest.Presentation.StandardActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -87,16 +89,35 @@ public class TestService {
 
     //TODO: Add positive/negative sound
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
-    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time){
+    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time_wait, long time_move){
 
-        trials.get(currentTrial).setTime(time);
+
+        trials.get(currentTrial).setTime_wait(time_wait);
+        trials.get(currentTrial).setTime_move(time_move);
 
         if(currentTrial<trials.size()-1) {
-            if(trials.get(currentTrial).setAnswer(selectedOption))//answer was correct
+            if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
                 Toast.makeText(callingActivity, "correct", Toast.LENGTH_SHORT).show();
+                if(testID==2||testID==4||testID==6) {
+                    StandardActivity.changeBackgroundColor(true);
+                }
+                else{
+                    AliveActivity.changeBackgroundColor(true);
+                }
+
+
+
+
+            }
             else {
                 Toast.makeText(callingActivity, "wrong", Toast.LENGTH_SHORT).show();
                 addTrialAgain(currentTrial);
+                if(testID==2||testID==4||testID==6) {
+                    StandardActivity.changeBackgroundColor(false);
+                }
+                else{
+                    AliveActivity.changeBackgroundColor(false);
+                }
             }
 
 

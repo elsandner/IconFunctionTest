@@ -27,11 +27,14 @@ import static java.lang.Math.abs;
 public class AliveActivity extends AppCompatActivity {
 
     private View mContentView;
+    private static TextView tV_fullscreenContent;
 
     private static final String TAG = "BlindMode";
     private TextView tV_Target;
     private TextView tV_PopUp;
+    private TextView tV_Target_Heading;
     private Button bt_Icon;
+    private Button bt_Continue;
     private TextView tV_Trial;
 
     private GestureService gs;
@@ -44,11 +47,13 @@ public class AliveActivity extends AppCompatActivity {
 
     private int[] itemMap;
 
+    long timeStart, timePressDown;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visual_mode);
+        setContentView(R.layout.activity_alive_icon);
 
         /////// FULLSCREEN /////////////////
         mContentView = findViewById(R.id.fullscreen_content);
@@ -61,13 +66,19 @@ public class AliveActivity extends AppCompatActivity {
         /////////////////////////////////////
 
         bt_Icon = findViewById(R.id.bt_Icon);
+        bt_Continue = findViewById(R.id.bt_Continue);
+        tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
         tV_Target = findViewById(R.id.tV_Target);
         tV_PopUp = findViewById(R.id.tV_PopUp);
         tV_Trial = findViewById(R.id.tv_Trial);
+        tV_fullscreenContent=findViewById(R.id.fullscreen_content);
+
+
 
         setGestureService();
         bt_Icon.setOnTouchListener(gs);
         testService = TestService.getInstance();
+
 
         //Adopt Text for each Test
         bundle = getIntent().getExtras();
@@ -75,14 +86,33 @@ public class AliveActivity extends AppCompatActivity {
         if(bundle!=null) {
             testID=bundle.getInt("testID");
             tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
-            if(bundle.getInt("TARGET")==-1)
-                tV_Target.setText("Alive Icon");
-            else
-                tV_Target.setText("Target: "+Parameter.Items[bundle.getInt("TARGET")]);
+            if(bundle.getInt("TARGET")==-1) {
+                tV_Target_Heading.setText("Alive Icon");
+                bt_Icon.setVisibility(View.VISIBLE);
+                bt_Continue.setVisibility(View.INVISIBLE);
+                tV_Target.setVisibility(View.INVISIBLE);
+            }
+            else {
+                tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
+                bt_Icon.setVisibility(View.INVISIBLE);
+                bt_Continue.setVisibility(View.VISIBLE);
+            }
         }
 
+
+
+
         itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
-        System.out.println(Arrays.toString(itemMap));
+
+    }
+
+    public void onClick_Continue(View view) {
+        bt_Continue.setVisibility(View.INVISIBLE);
+        tV_Target.setVisibility(View.INVISIBLE);
+        tV_Target_Heading.setVisibility(View.INVISIBLE);
+        bt_Icon.setVisibility(View.VISIBLE);
+
+        timeStart = System.currentTimeMillis();
 
     }
 
@@ -106,8 +136,6 @@ public class AliveActivity extends AppCompatActivity {
             boolean touched=false;
             int selectedOption=-2;
             double selectedAngle =0.0;
-
-            long timeStart;
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
 
@@ -137,7 +165,7 @@ public class AliveActivity extends AppCompatActivity {
                         dragMode=false;
                         startCountDown(Parameter.VisualMode_LongClick_duration); //changes longClick to true
 
-                        timeStart = System.currentTimeMillis();
+                        timePressDown = System.currentTimeMillis();
                         Log.d(TAG,"Action was DOWN");
                         return true;
 
@@ -201,7 +229,6 @@ public class AliveActivity extends AppCompatActivity {
                         tV_PopUp.setVisibility(View.INVISIBLE);
                         longClick=false;
                         touched=false;
-                        long time;
 
                         if(selectedOption!=-2) { //needed to disable blind-mode
                             switch (testID) {
@@ -217,8 +244,9 @@ public class AliveActivity extends AppCompatActivity {
                                     break;
                                 case 1://Test1A novice users
                                 case 3://Test2A expert users
-                                    time = System.currentTimeMillis() - timeStart;
-                                    testService.onAnswer(selectedOption, AliveActivity.this, time);
+                                    long time_wait = System.currentTimeMillis() - timeStart;
+                                    long time_move =System.currentTimeMillis() - timePressDown;
+                                    testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move);
                                     break;
                             }
                         }
@@ -308,5 +336,13 @@ public class AliveActivity extends AppCompatActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(time);
     }
+
+    public static void changeBackgroundColor(boolean answer) {
+        if(answer)
+            tV_fullscreenContent.setBackgroundResource(android.R.color.holo_green_light);
+        else
+            tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
+    }
+
 
 }
