@@ -226,7 +226,7 @@ public class AliveActivity extends AppCompatActivity {
                             }
 
                             tV_PopUp.animate()  //used for moving PopUp
-                                    .x(motionEvent.getRawX() + dX - 30)
+                                    .x(motionEvent.getRawX() + dX - 40)
                                     .y(motionEvent.getRawY() + dY - 30)
                                     .setDuration(0)
                                     .start();

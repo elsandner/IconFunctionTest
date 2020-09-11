@@ -114,8 +114,10 @@
         android:id="@+id/tV_PopUp"
         android:layout_width="86dp"
         android:layout_height="37dp"
+        android:background="@drawable/custom_rounded_corners_grey"
         android:elevation="100dp"
         android:text="Selection"
+        android:textColor="#000000"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/bt_Icon"
         app:layout_constraintEnd_toEndOf="@+id/bt_Icon" />
