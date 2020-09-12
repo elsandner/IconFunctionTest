@@ -299,6 +299,7 @@ public class AliveActivity extends AppCompatActivity {
                                     break;
                                 case 1://Test1A novice users
                                 case 3://Test2A expert users
+                                case 5://Test3A learning
                                     long time_wait = System.currentTimeMillis() - timeStart;
                                     long time_move =System.currentTimeMillis() - timePressDown;
                                     testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move);

@@ -118,20 +118,20 @@ public class GestureService implements View.OnTouchListener {
 
         //Actual angleToDirection
         if(isBetween(alpha,upper_limit.get(0),0)||isBetween(alpha, 360,lower_limit.get(0))){
-
-
-
-            return 0;
+            if(iconID==0)
+                return 0;
+            else
+                return number_of_Items*(iconID-1);
         }
         for(int i=1;i<lower_limit.size();i++){//Loop all segments
             if(alpha>lower_limit.get(i)&&alpha<upper_limit.get(i))
-                return i;
+                if(iconID==0)
+                    return i;
+                else
+                    return number_of_Items*(iconID-1)+i;
         }
-
         return -1;
     }
-
-
 
     private boolean isBetween(double value, double higherValue, double lowerValue){
         return value <= higherValue && value >= lowerValue;
