@@ -59,38 +59,44 @@ public class StandardActivity extends AppCompatActivity {
         //Dynamically Add Items to Pop-Up Menu
         ArrayList<TextView> buffer=new ArrayList<TextView>();
 
+        int number_of_Items=Parameter.number_of_Items_Standard;
+        if(testID==6)
+            number_of_Items=4*number_of_Items;
+
+        for (int i = 0; i < number_of_Items; i++) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(2, 5, 2, 5);
+
+            TextView currentTV = (TextView) getLayoutInflater().inflate(R.layout.text_view_item, null);
+            currentTV.setLayoutParams(params);
+            currentTV.setText(Parameter.Items[i]);
+
+            final int finalIndex = i;
+            currentTV.setOnClickListener(new TextView.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickItem(finalIndex, view);
+                }
+            });
+            buffer.add(currentTV);
+        }
+
         if(testID!=6) { //Test1B, Test2B
-
-            for (int i = 0; i < Parameter.number_of_Items_Standard; i++) {
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                params.setMargins(2, 5, 2, 5);
-
-                TextView currentTV = (TextView) getLayoutInflater().inflate(R.layout.text_view_item, null);
-                currentTV.setLayoutParams(params);
-                currentTV.setText(Parameter.Items[i]);
-
-
-                final int finalIndex = i;
-                currentTV.setOnClickListener(new TextView.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        clickItem(finalIndex, view);
-                    }
-                });
-                buffer.add(currentTV);
-            }
-
             if (testID == 2)
                 Collections.shuffle(buffer);
+
+            for(TextView TV : buffer){
+                L_PopUp0.addView(TV);
+            }
         }
         else{   //Test3B
-
+            for(int i=0; i<Parameter.number_of_Items_Standard;i++){
+                L_PopUp1.addView(buffer.get(i));
+                L_PopUp2.addView(buffer.get(i+Parameter.number_of_Items_Standard));
+                L_PopUp3.addView(buffer.get(i+Parameter.number_of_Items_Standard*2));
+                L_PopUp4.addView(buffer.get(i+Parameter.number_of_Items_Standard*3));
+            }
         }
-
-        for(TextView TV : buffer){
-            L_PopUp0.addView(TV);
-        }
-
 
 
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
