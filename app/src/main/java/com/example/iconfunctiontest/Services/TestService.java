@@ -9,13 +9,15 @@ import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class TestService {
 
-    private int numberOfTrials;
-    private int highestTrialID;
+    //private int numberOfTrials;
+    //private int highestTrialID;
     private int highestBlockID;
     private int currentTrial;
     ArrayList<Trial> trials;
@@ -39,24 +41,24 @@ public class TestService {
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
         this.nextClass=nextClass;
         this.testID=testID;
-        numberOfTrials=(number_of_trials*number_of_blocks)-1;
-        highestTrialID=number_of_trials-1;
+        //numberOfTrials=(number_of_trials*number_of_blocks);
+        //highestTrialID=number_of_trials;
         highestBlockID=number_of_blocks-1;
         currentTrial=0;
         trials=new ArrayList<>();
 
         if(testID==6)
-            number_of_trials=numberOfTrials*4;
+           number_of_trials=number_of_trials*4;
 
         //The following two loops create an array list filled with all trials of the total subtest
-        int blockCounter=1;
+        int blockCounter=1;//needed for setting break-flag
         for(int i=0; i<number_of_blocks;i++){
             //Each Target is a number between 0 and number_of_trials, each number needs to appear once
             int [] shuffledTargetBlock= shuffleIntArray(number_of_trials);
             for(int j=0; j<number_of_trials;j++){
                 trials.add(new Trial(j,i,shuffledTargetBlock[j]));
 
-                if(j==highestTrialID&&blockCounter==Parameter.blocksBetweenBreak) {
+                if(j==number_of_trials-1&&blockCounter==Parameter.blocksBetweenBreak) {
                     trials.get(trials.size()-1).setDoBreak(true);
                     blockCounter=0;
                 }
@@ -69,6 +71,14 @@ public class TestService {
         i.putExtra("TARGET",trials.get(currentTrial).getTarget());
         i.putExtra("testID", testID);
         callingActivity.startActivity(i);
+
+        System.out.println("###########################################################################################################");
+        System.out.println("highestTrialID="+number_of_trials);
+        for(int x=0; x<trials.size();x++){
+            System.out.print(trials.get(x).isDoBreak()+" - ");
+        }
+        System.out.println("###########################################################################################################");
+
 
 
     }
@@ -105,7 +115,6 @@ public class TestService {
         else {//answer was wrong
             addTrialAgain(currentTrial);
             callFeedbackOnAnswer(testID, false);
-
         }
 
         if(currentTrial<trials.size()-1) {
@@ -127,8 +136,6 @@ public class TestService {
             AliveActivity.feedbackOnAnswer(answer);
         }
     }
-
-
 
     private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 
@@ -213,13 +220,8 @@ public class TestService {
 
     }
 
-
     private void createXML(){
         //TODO: implement logging
     }
-
-
-
-
 
 }
