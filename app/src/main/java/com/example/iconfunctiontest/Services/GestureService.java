@@ -101,7 +101,7 @@ public class GestureService implements View.OnTouchListener {
     }
 
 
-    public int AngleToDirection(double alpha, int number_of_Items){
+    public int AngleToDirection(double alpha, int number_of_Items, int iconID){
 
         double angle = 360.0 / number_of_Items; //angle per section
         ArrayList<Double> lower_limit=new ArrayList<Double>();
@@ -118,6 +118,9 @@ public class GestureService implements View.OnTouchListener {
 
         //Actual angleToDirection
         if(isBetween(alpha,upper_limit.get(0),0)||isBetween(alpha, 360,lower_limit.get(0))){
+
+
+
             return 0;
         }
         for(int i=1;i<lower_limit.size();i++){//Loop all segments

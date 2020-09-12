@@ -41,13 +41,11 @@ public class TestService {
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
         this.nextClass=nextClass;
         this.testID=testID;
-        //numberOfTrials=(number_of_trials*number_of_blocks);
-        //highestTrialID=number_of_trials;
         highestBlockID=number_of_blocks-1;
         currentTrial=0;
         trials=new ArrayList<>();
 
-        if(testID==6)
+        if(testID>4)    //Test3A (ID=5), Test3B(ID=6)
            number_of_trials=number_of_trials*4;
 
         //The following two loops create an array list filled with all trials of the total subtest
