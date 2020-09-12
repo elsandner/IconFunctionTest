@@ -2,7 +2,7 @@ package com.example.iconfunctiontest.Services;
 
 public class Parameter {
 //General
-    private static int DEFAULT=4;
+    private static int DEFAULT=1;
     public static int LongClick_Vibration_time = 200; //in miliseconds
 
     public static String[] Items = {

@@ -1,12 +1,6 @@
 package com.example.iconfunctiontest.Services;
 
 import android.content.Intent;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaRecorder;
-import android.media.SoundPool;
-import android.os.Build;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +8,6 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
-import com.example.iconfunctiontest.R;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -51,6 +44,9 @@ public class TestService {
         highestBlockID=number_of_blocks-1;
         currentTrial=0;
         trials=new ArrayList<>();
+
+        if(testID==6)
+            number_of_trials=numberOfTrials*4;
 
         //The following two loops create an array list filled with all trials of the total subtest
         int blockCounter=1;
@@ -103,38 +99,36 @@ public class TestService {
         trials.get(currentTrial).setTime_wait(time_wait);
         trials.get(currentTrial).setTime_move(time_move);
 
-        if(currentTrial<trials.size()-1) {
-            if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
-
-                if(testID==2||testID==4||testID==6) {
-                    StandardActivity.changeBackgroundColor(true);
-                }
-                else{
-                    AliveActivity.changeBackgroundColor(true);
-                }
-
-            }
-            else {//answer was wrong
-                addTrialAgain(currentTrial);
-
-                if(testID==2||testID==4||testID==6)
-                    StandardActivity.changeBackgroundColor(false);
-                else
-                    AliveActivity.changeBackgroundColor(false);
-
-            }
-
-
-            currentTrial++;
-            nextActivity(callingActivity,false);
+        if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
+            callFeedbackOnAnswer(testID, true);
+        }
+        else {//answer was wrong
+            addTrialAgain(currentTrial);
+            callFeedbackOnAnswer(testID, false);
 
         }
-        else{
+
+        if(currentTrial<trials.size()-1) {
+            currentTrial++;
+            nextActivity(callingActivity,false);
+        }
+        else{//Finish
             trials.get(currentTrial).setAnswer(selectedOption);
             nextActivity(callingActivity,true);
         }
 
     }
+
+    private void callFeedbackOnAnswer(int testID, boolean answer){
+        if(testID==2||testID==4||testID==6) {
+            StandardActivity.feedbackOnAnswer(answer);
+        }
+        else{
+            AliveActivity.feedbackOnAnswer(answer);
+        }
+    }
+
+
 
     private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 

@@ -29,10 +29,11 @@
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:onClick="onClickScreen"
 
+        android:onClick="onClickScreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,13 +74,13 @@
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/custom_rounded_corners_grey"
+        android:elevation="100dp"
         android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/bt_Icon0"
         app:layout_constraintEnd_toEndOf="@+id/bt_Icon0"
         app:layout_constraintHorizontal_bias="0.914"
         app:layout_constraintStart_toStartOf="parent">
-
     </LinearLayout>
 
     <TextView
@@ -150,8 +151,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
-        app:layout_constraintVertical_bias="0.56">
+        app:layout_constraintTop_toTopOf="@+id/fullscreen_content">
 
         <TextView
             android:id="@+id/tV_label1"
@@ -194,6 +194,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/custom_rounded_corners_grey"
+            android:elevation="100dp"
             android:orientation="vertical"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/bt_Icon1"
@@ -219,6 +220,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/custom_rounded_corners_grey"
+            android:elevation="100dp"
             android:orientation="vertical"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/bt_Icon2"
@@ -256,6 +258,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/custom_rounded_corners_grey"
+            android:elevation="100dp"
             android:orientation="vertical"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/bt_Icon3"
@@ -295,6 +298,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/custom_rounded_corners_grey"
+            android:elevation="100dp"
             android:orientation="vertical"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/bt_Icon4"

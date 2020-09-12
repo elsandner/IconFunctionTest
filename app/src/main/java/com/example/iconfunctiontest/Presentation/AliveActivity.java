@@ -347,7 +347,7 @@ public class AliveActivity extends AppCompatActivity {
         v.vibrate(time);
     }
 
-    public static void changeBackgroundColor(boolean answer) {
+    public static void feedbackOnAnswer(boolean answer) {
         if(answer){
             soundPool.play(sound_success, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_green_light);

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -142,12 +143,16 @@ public class StandardActivity extends AppCompatActivity {
 
                         L_PopUp0.setVisibility(View.VISIBLE);
 
+
+
                         timePressDown = System.currentTimeMillis();
                         return false;
                     }
                 }
         );
 
+
+        //TODO: figure out why background of cL_Icons changes to gray
         bt_Icon1.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
@@ -155,8 +160,12 @@ public class StandardActivity extends AppCompatActivity {
                         vibrate(Parameter.LongClick_Vibration_time);
 
                         L_PopUp1.setVisibility(View.VISIBLE);
+                        L_PopUp2.setVisibility(View.INVISIBLE);
+                        L_PopUp3.setVisibility(View.INVISIBLE);
+                        L_PopUp4.setVisibility(View.INVISIBLE);
 
                         timePressDown = System.currentTimeMillis();
+
                         return false;
                     }
                 }
@@ -168,7 +177,10 @@ public class StandardActivity extends AppCompatActivity {
                     public boolean onLongClick(View view) {
                         vibrate(Parameter.LongClick_Vibration_time);
 
+                        L_PopUp1.setVisibility(View.INVISIBLE);
                         L_PopUp2.setVisibility(View.VISIBLE);
+                        L_PopUp3.setVisibility(View.INVISIBLE);
+                        L_PopUp4.setVisibility(View.INVISIBLE);
 
                         timePressDown = System.currentTimeMillis();
                         return false;
@@ -182,7 +194,10 @@ public class StandardActivity extends AppCompatActivity {
                     public boolean onLongClick(View view) {
                         vibrate(Parameter.LongClick_Vibration_time);
 
+                        L_PopUp1.setVisibility(View.INVISIBLE);
+                        L_PopUp2.setVisibility(View.INVISIBLE);
                         L_PopUp3.setVisibility(View.VISIBLE);
+                        L_PopUp4.setVisibility(View.INVISIBLE);
 
                         timePressDown = System.currentTimeMillis();
                         return false;
@@ -196,6 +211,9 @@ public class StandardActivity extends AppCompatActivity {
                     public boolean onLongClick(View view) {
                         vibrate(Parameter.LongClick_Vibration_time);
 
+                        L_PopUp1.setVisibility(View.INVISIBLE);
+                        L_PopUp2.setVisibility(View.INVISIBLE);
+                        L_PopUp3.setVisibility(View.INVISIBLE);
                         L_PopUp4.setVisibility(View.VISIBLE);
 
                         timePressDown = System.currentTimeMillis();
@@ -227,20 +245,24 @@ public class StandardActivity extends AppCompatActivity {
     //This method is executed when element in pop up menu is clicked
     private void clickItem(int selectedOption, View view){
         Toast.makeText(getApplicationContext(), Parameter.Items[selectedOption]+" selected", Toast.LENGTH_SHORT).show();
-        L_PopUp0.setVisibility(View.INVISIBLE);
 
-
-
-        long time_wait = System.currentTimeMillis() - timeStart -500; //the 500ms which the longClick takes are part of time_move
-        long time_move = System.currentTimeMillis() - timeStart + 500;
+        long time_wait = timePressDown - timeStart -500; //the 500ms which the longClick takes are part of time_move
+        long time_move = System.currentTimeMillis() - timePressDown + 500;
         switch(testID){
             case 0: //Standard Icon (No Test)
+                L_PopUp0.setVisibility(View.INVISIBLE);
                 break;
             case 2: //Test1B
             case 4: //Test2B
+                L_PopUp0.setVisibility(View.INVISIBLE);
                 testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move); //TODO: add second time stemp
                 break;
             case 6://Test3B
+                L_PopUp1.setVisibility(View.INVISIBLE);
+                L_PopUp2.setVisibility(View.INVISIBLE);
+                L_PopUp3.setVisibility(View.INVISIBLE);
+                L_PopUp4.setVisibility(View.INVISIBLE);
+                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move); //TODO: add second time stemp
                 break;
         }
 
@@ -305,7 +327,7 @@ public class StandardActivity extends AppCompatActivity {
         }
     }
 
-    public static void changeBackgroundColor(boolean answer){
+    public static void feedbackOnAnswer(boolean answer){
         if(answer){
             soundPool.play(sound_success, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_green_light);
