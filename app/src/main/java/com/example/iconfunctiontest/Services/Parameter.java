@@ -21,7 +21,17 @@ public class Parameter {
             "Item M",
             "Item N",
             "Item O",
-            "Item P"    //Nr 16
+            "Item P",   //Nr 16
+            "Item Q",
+            "Item R",
+            "Item S",
+            "Item T",
+            "Item U",
+            "Item V",
+            "Item W",
+            "Item X",
+            "Item Y",
+            "Item Z"    //Nr26
     };
 
 //Alive Icon

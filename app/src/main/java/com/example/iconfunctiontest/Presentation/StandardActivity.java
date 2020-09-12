@@ -1,15 +1,11 @@
 package com.example.iconfunctiontest.Presentation;
 
-import android.animation.AnimatorSet;
-import android.annotation.SuppressLint;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -35,10 +31,12 @@ public class StandardActivity extends AppCompatActivity {
     private static SoundPool soundPool;
     private static int sound_success, sound_error;
 
-
-    Button bt_TestIcon, bt_Icon1, bt_Icon2, bt_Icon3, bt_Continue ;
-    LinearLayout L_PopUp;
     private TextView tV_Target_Heading, tV_Target, tV_Trial;
+
+    private ConstraintLayout cL_Icons;
+    private Button bt_Icon0, bt_Icon1, bt_Icon2, bt_Icon3, bt_Icon4, bt_Continue ;
+    private LinearLayout L_PopUp0, L_PopUp1, L_PopUp2,L_PopUp3,L_PopUp4;
+    private TextView tV_label0, tV_label1, tV_label2, tV_label3, tV_label4;
 
     private TestService testService;
     private long timeStart, timePressDown;
@@ -47,75 +45,52 @@ public class StandardActivity extends AppCompatActivity {
     //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
 
 
-
-
-
-
-
-    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_standard_icon);
 
         activateFullscreen();
-
-        bt_TestIcon = findViewById(R.id.bt_TestIcon);
-        bt_Icon1=findViewById(R.id.bt_Icon1);
-        bt_Icon2=findViewById(R.id.bt_Icon2);
-        bt_Icon3=findViewById(R.id.bt_Icon3);
-        bt_Continue=findViewById(R.id.bt_Continue);
-        L_PopUp = findViewById(R.id.L_PopUp);
-        tV_Trial = findViewById(R.id.tV_Trial);
-        tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
-        tV_Target = findViewById(R.id.tV_Target);
-        tV_fullscreenContent=findViewById(R.id.fullscreen_content);
+        initializeUI_Elements();
+        setTextAndVisibility();
 
         testService = TestService.getInstance();
-
-
-        setTextAndVisibility();
 
         //Dynamically Add Items to Pop-Up Menu
         ArrayList<TextView> buffer=new ArrayList<TextView>();
 
-        for(int i=0;i<Parameter.number_of_Items_Standard;i++){
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(2,5,2,5);
+        if(testID!=6) { //Test1B, Test2B
 
-            TextView currentTV = (TextView)getLayoutInflater().inflate(R.layout.text_view_item, null);
-            currentTV.setLayoutParams(params);
-            currentTV.setText(Parameter.Items[i]);
+            for (int i = 0; i < Parameter.number_of_Items_Standard; i++) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(2, 5, 2, 5);
+
+                TextView currentTV = (TextView) getLayoutInflater().inflate(R.layout.text_view_item, null);
+                currentTV.setLayoutParams(params);
+                currentTV.setText(Parameter.Items[i]);
 
 
-            final int finalIndex = i;
-            currentTV.setOnClickListener(new TextView.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickItem(finalIndex, view);
-                }
-            });
-            buffer.add(currentTV);
+                final int finalIndex = i;
+                currentTV.setOnClickListener(new TextView.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        clickItem(finalIndex, view);
+                    }
+                });
+                buffer.add(currentTV);
+            }
+
+            if (testID == 2)
+                Collections.shuffle(buffer);
         }
+        else{   //Test3B
 
-        if(testID==2)
-            Collections.shuffle(buffer);
+        }
 
         for(TextView TV : buffer){
-            L_PopUp.addView(TV);
+            L_PopUp0.addView(TV);
         }
 
-
-
-        bt_TestIcon.setOnLongClickListener(
-                new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        longClickTestIcon();
-                        return false;
-                    }
-                }
-        );
 
 
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
@@ -123,37 +98,130 @@ public class StandardActivity extends AppCompatActivity {
         sound_error = soundPool.load(this, R.raw.error, 1);
     }
 
+    private void initializeUI_Elements(){
+        tV_Trial = findViewById(R.id.tV_Trial);
+        tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
+        tV_Target = findViewById(R.id.tV_Target);
+
+        bt_Continue=findViewById(R.id.bt_Continue);
+        cL_Icons = findViewById(R.id.cL_Icons);
+
+        bt_Icon1=findViewById(R.id.bt_Icon1);
+        bt_Icon2=findViewById(R.id.bt_Icon2);
+        bt_Icon3=findViewById(R.id.bt_Icon3);
+        bt_Icon4=findViewById(R.id.bt_Icon4);
+
+        tV_label1=findViewById(R.id.tV_label1);
+        tV_label2=findViewById(R.id.tV_label2);
+        tV_label3=findViewById(R.id.tV_label3);
+        tV_label4=findViewById(R.id.tV_label4);
+
+        L_PopUp1 = findViewById(R.id.L_PopUp1);
+        L_PopUp2 = findViewById(R.id.L_PopUp2);
+        L_PopUp3 = findViewById(R.id.L_PopUp3);
+        L_PopUp4 = findViewById(R.id.L_PopUp4);
+
+        bt_Icon0 = findViewById(R.id.bt_Icon0);
+        L_PopUp0 = findViewById(R.id.L_PopUp0);
+        tV_label0 = findViewById(R.id.tV_label0);
+
+        tV_fullscreenContent=findViewById(R.id.fullscreen_content);
+
+
+        bt_Icon0.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        vibrate(Parameter.LongClick_Vibration_time);
+
+                        L_PopUp0.setVisibility(View.VISIBLE);
+
+                        timePressDown = System.currentTimeMillis();
+                        return false;
+                    }
+                }
+        );
+
+        bt_Icon1.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        vibrate(Parameter.LongClick_Vibration_time);
+
+                        L_PopUp1.setVisibility(View.VISIBLE);
+
+                        timePressDown = System.currentTimeMillis();
+                        return false;
+                    }
+                }
+        );
+
+        bt_Icon2.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        vibrate(Parameter.LongClick_Vibration_time);
+
+                        L_PopUp2.setVisibility(View.VISIBLE);
+
+                        timePressDown = System.currentTimeMillis();
+                        return false;
+                    }
+                }
+        );
+
+        bt_Icon3.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        vibrate(Parameter.LongClick_Vibration_time);
+
+                        L_PopUp3.setVisibility(View.VISIBLE);
+
+                        timePressDown = System.currentTimeMillis();
+                        return false;
+                    }
+                }
+        );
+
+        bt_Icon4.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        vibrate(Parameter.LongClick_Vibration_time);
+
+                        L_PopUp4.setVisibility(View.VISIBLE);
+
+                        timePressDown = System.currentTimeMillis();
+                        return false;
+                    }
+                }
+        );
+    }
+
     public void onClick_Continue(View view) {
-        bt_Continue.setVisibility(View.INVISIBLE);
-        tV_Target.setVisibility(View.INVISIBLE);
+
         tV_Target_Heading.setVisibility(View.INVISIBLE);
-        bt_TestIcon.setVisibility(View.VISIBLE);
+        tV_Target.setVisibility(View.INVISIBLE);
+        bt_Continue.setVisibility(View.INVISIBLE);
+
+        if (testID != 6) {  //Test1B, Test2B - using 1 Icon
+            bt_Icon0.setVisibility(View.VISIBLE);
+            tV_label0.setVisibility(View.VISIBLE);
+        }
+
+        else{ //Test3B - using 4 Icons
+            cL_Icons.setVisibility(View.VISIBLE);
+        }
 
         timeStart = System.currentTimeMillis();//TODO: correct times
 
     }
 
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    private void longClickTestIcon(){
-        vibrate(Parameter.LongClick_Vibration_time);
-
-        L_PopUp.setVisibility(View.VISIBLE);
-        bt_Icon1.setVisibility(View.INVISIBLE);
-        bt_Icon2.setVisibility(View.INVISIBLE);
-        bt_Icon3.setVisibility(View.INVISIBLE);
-
-        timePressDown = System.currentTimeMillis();
-    }
-
     //This method is executed when element in pop up menu is clicked
     private void clickItem(int selectedOption, View view){
         Toast.makeText(getApplicationContext(), Parameter.Items[selectedOption]+" selected", Toast.LENGTH_SHORT).show();
-
+        L_PopUp0.setVisibility(View.INVISIBLE);
 
 
 
@@ -164,8 +232,6 @@ public class StandardActivity extends AppCompatActivity {
                 break;
             case 2: //Test1B
             case 4: //Test2B
-                L_PopUp.setVisibility(View.INVISIBLE);
-                bt_TestIcon.setVisibility(View.INVISIBLE);
                 testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move); //TODO: add second time stemp
                 break;
             case 6://Test3B
@@ -176,13 +242,9 @@ public class StandardActivity extends AppCompatActivity {
     }
 
 
-    private void vibrate(int miliseconds){
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(miliseconds);
-    }
+
 
     public void onClickBt_Icon(View view) {
-
         System.out.println("Wrong Icon clicked");
     }
 
@@ -191,11 +253,11 @@ public class StandardActivity extends AppCompatActivity {
     }
 
     public void onClickScreen(View view) {
-        L_PopUp.setVisibility(View.INVISIBLE);
-        //bt_Icon1.setVisibility(View.VISIBLE);
-        //bt_Icon2.setVisibility(View.VISIBLE);
-        //bt_Icon3.setVisibility(View.VISIBLE);
-
+        L_PopUp0.setVisibility(View.INVISIBLE);
+        L_PopUp1.setVisibility(View.INVISIBLE);
+        L_PopUp2.setVisibility(View.INVISIBLE);
+        L_PopUp3.setVisibility(View.INVISIBLE);
+        L_PopUp4.setVisibility(View.INVISIBLE);
     }
 
     private void activateFullscreen(){
@@ -214,24 +276,26 @@ public class StandardActivity extends AppCompatActivity {
         if(bundle!=null) {
             testID=bundle.getInt("testID");
             tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
-            if(bundle.getInt("TARGET")==-1) {
+
+            if(bundle.getInt("testID")==0) { //instruction Mode
                 tV_Target_Heading.setText("Standard Icon");
                 tV_Target.setVisibility(View.INVISIBLE);
-                bt_TestIcon.setVisibility(View.VISIBLE);
-                bt_Icon1.setVisibility(View.INVISIBLE);
-                bt_Icon2.setVisibility(View.INVISIBLE);
-                bt_Icon3.setVisibility(View.INVISIBLE);
                 bt_Continue.setVisibility(View.INVISIBLE);
+                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
+                bt_Icon0.setVisibility(View.VISIBLE);
+
             }
 
-            else {
+            else { //Test cases
                 tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
-                bt_TestIcon.setVisibility(View.INVISIBLE);
-                bt_Icon1.setVisibility(View.INVISIBLE);
-                bt_Icon2.setVisibility(View.INVISIBLE);
-                bt_Icon3.setVisibility(View.INVISIBLE);
+                tV_Target.setVisibility(View.VISIBLE);
                 bt_Continue.setVisibility(View.VISIBLE);
+
+                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
+                bt_Icon0.setVisibility(View.INVISIBLE);
+                tV_label0.setVisibility(View.INVISIBLE);
             }
+
         }
     }
 
@@ -244,6 +308,16 @@ public class StandardActivity extends AppCompatActivity {
             soundPool.play(sound_error, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
         }
+    }
+
+    private void vibrate(int miliseconds){
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(miliseconds);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override

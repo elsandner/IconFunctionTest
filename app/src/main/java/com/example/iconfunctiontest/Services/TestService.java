@@ -97,10 +97,8 @@ public class TestService {
         return array;
     }
 
-    //TODO: Add positive/negative sound
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
     public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time_wait, long time_move){
-
 
         trials.get(currentTrial).setTime_wait(time_wait);
         trials.get(currentTrial).setTime_move(time_move);
@@ -118,7 +116,6 @@ public class TestService {
             }
             else {//answer was wrong
                 addTrialAgain(currentTrial);
-
 
                 if(testID==2||testID==4||testID==6)
                     StandardActivity.changeBackgroundColor(false);
@@ -138,8 +135,6 @@ public class TestService {
         }
 
     }
-
-
 
     private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 
@@ -223,7 +218,6 @@ public class TestService {
 
 
     }
-
 
 
     private void createXML(){

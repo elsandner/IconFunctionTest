@@ -33,16 +33,25 @@
         android:keepScreenOn="true"
         android:onClick="onClickScreen"
 
-        tools:layout_editor_absoluteY="101dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tV_label0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Icon"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/bt_Icon0"
+        app:layout_constraintStart_toStartOf="@+id/bt_Icon0"
+        app:layout_constraintTop_toBottomOf="@+id/bt_Icon0" />
 
     <Button
         android:id="@+id/bt_Continue"
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:layout_marginStart="105dp"
-        android:layout_marginLeft="105dp"
-        android:layout_marginEnd="106dp"
-        android:layout_marginRight="106dp"
 
         android:background="@drawable/custom_rounded_corners_blue"
         android:onClick="onClick_Continue"
@@ -54,6 +63,24 @@
         app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
         app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
         tools:ignore="OnClick" />
+
+    <LinearLayout
+        android:id="@+id/L_PopUp0"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/custom_rounded_corners_grey"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/bt_Icon0"
+        app:layout_constraintEnd_toEndOf="@+id/bt_Icon0"
+        app:layout_constraintHorizontal_bias="0.914"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tV_Target"
@@ -85,49 +112,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/bt_Icon2"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center|center"
-        android:background="@drawable/custom_rounded_corners"
-        android:onClick="onClickBt_Icon"
-        android:text="other icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_Target_Heading" />
-
-    <Button
-        android:id="@+id/bt_Icon3"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center|center"
-        android:background="@drawable/custom_rounded_corners"
-        android:onClick="onClickBt_Icon"
-        android:text="other icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.652"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_Target_Heading"
-        app:layout_constraintVertical_bias="0.67" />
-
-    <Button
-        android:id="@+id/bt_TestIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="left|center_vertical"
-        android:background="@drawable/custom_rounded_corners"
-        android:onClick="onClickBt_TestIcon"
-        android:text="Test Icon "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_Target_Heading" />
-
     <TextView
         android:id="@+id/tV_Target_Heading"
         android:layout_width="match_parent"
@@ -146,36 +130,180 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <LinearLayout
-        android:id="@+id/L_PopUp"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/custom_rounded_corners_grey"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/bt_TestIcon"
-        app:layout_constraintEnd_toEndOf="@+id/bt_TestIcon"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
-        android:id="@+id/bt_Icon1"
+        android:id="@+id/bt_Icon0"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_gravity="center|center"
+        android:layout_gravity="left|center_vertical"
         android:background="@drawable/custom_rounded_corners"
-        android:onClick="onClickBt_Icon"
-        android:text="other icon"
+        android:onClick="onClickBt_TestIcon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_Target_Heading"
-        app:layout_constraintVertical_bias="0.67" />
+        app:layout_constraintTop_toTopOf="@+id/fullscreen_content_controls" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cL_Icons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
+        app:layout_constraintVertical_bias="0.56">
+
+        <TextView
+            android:id="@+id/tV_label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="130dp"
+            android:text="Icon 1"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bt_Icon1"
+            app:layout_constraintStart_toStartOf="@+id/bt_Icon1" />
+
+        <Button
+            android:id="@+id/bt_Icon1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:onClick="onClickBt_Icon"
+            app:layout_constraintBottom_toTopOf="@+id/tV_label1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.35"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/bt_Icon2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:onClick="onClickBt_Icon"
+            app:layout_constraintBottom_toTopOf="@+id/tV_label2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/L_PopUp1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/custom_rounded_corners_grey"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/bt_Icon1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bt_Icon1" />
+
+        <TextView
+            android:id="@+id/tV_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="130dp"
+            android:text="Icon 3"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bt_Icon2"
+            app:layout_constraintStart_toStartOf="@+id/bt_Icon2" />
+
+        <LinearLayout
+            android:id="@+id/L_PopUp2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/custom_rounded_corners_grey"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/bt_Icon2"
+            app:layout_constraintEnd_toEndOf="@+id/bt_Icon2"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tV_label3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Icon 3"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bt_Icon3"
+            app:layout_constraintStart_toStartOf="@+id/bt_Icon3" />
+
+        <Button
+            android:id="@+id/bt_Icon3"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center|center"
+            android:background="@drawable/custom_rounded_corners"
+            android:onClick="onClickBt_Icon"
+            app:layout_constraintBottom_toTopOf="@+id/tV_label3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.35"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/L_PopUp3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/custom_rounded_corners_grey"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/bt_Icon3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bt_Icon3">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tV_label4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Icon 3"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bt_Icon4"
+            app:layout_constraintStart_toStartOf="@+id/bt_Icon4" />
+
+        <Button
+            android:id="@+id/bt_Icon4"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center|center"
+            android:background="@drawable/custom_rounded_corners"
+            android:onClick="onClickBt_Icon"
+            app:layout_constraintBottom_toTopOf="@+id/tV_label4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/L_PopUp4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/custom_rounded_corners_grey"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/bt_Icon4"
+            app:layout_constraintEnd_toEndOf="@+id/bt_Icon4"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
