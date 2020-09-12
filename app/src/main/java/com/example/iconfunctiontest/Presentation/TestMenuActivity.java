@@ -42,23 +42,16 @@ public class TestMenuActivity extends AppCompatActivity {
     public void onClick_bt_Test2B(View view) {
         testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,StandardActivity.class,4);
         Animatoo.animateDiagonal(TestMenuActivity.this);
-
     }
 
     public void onClick_bt_Test3A(View view) {
-
-        Intent i = new Intent( TestMenuActivity.this, MainActivity.class);
-        startActivity(i);
-        Animatoo.animateWindmill(TestMenuActivity.this);
-
+        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,AliveActivity.class,5);
+        Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test3B(View view) {
-
         testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,StandardActivity.class,6);
         Animatoo.animateDiagonal(TestMenuActivity.this);
-
-
 
     }
 

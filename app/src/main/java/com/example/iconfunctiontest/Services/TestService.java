@@ -72,14 +72,6 @@ public class TestService {
         i.putExtra("testID", testID);
         callingActivity.startActivity(i);
 
-        System.out.println("###########################################################################################################");
-        System.out.println("highestTrialID="+number_of_trials);
-        for(int x=0; x<trials.size();x++){
-            System.out.print(trials.get(x).isDoBreak()+" - ");
-        }
-        System.out.println("###########################################################################################################");
-
-
 
     }
 

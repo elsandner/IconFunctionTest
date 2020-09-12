@@ -105,12 +105,28 @@ public class StandardActivity extends AppCompatActivity {
         sound_error = soundPool.load(this, R.raw.error, 1);
     }
 
+    private void activateFullscreen(){
+        mContentView = findViewById(R.id.fullscreen_content);
+        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
     private void initializeUI_Elements(){
         tV_Trial = findViewById(R.id.tV_Trial);
         tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
         tV_Target = findViewById(R.id.tV_Target);
 
         bt_Continue=findViewById(R.id.bt_Continue);
+
+        bt_Icon0 = findViewById(R.id.bt_Icon0);
+        tV_label0 = findViewById(R.id.tV_label0);
+        L_PopUp0 = findViewById(R.id.L_PopUp0);
+
+
         cL_Icons = findViewById(R.id.cL_Icons);
 
         bt_Icon1=findViewById(R.id.bt_Icon1);
@@ -127,10 +143,6 @@ public class StandardActivity extends AppCompatActivity {
         L_PopUp2 = findViewById(R.id.L_PopUp2);
         L_PopUp3 = findViewById(R.id.L_PopUp3);
         L_PopUp4 = findViewById(R.id.L_PopUp4);
-
-        bt_Icon0 = findViewById(R.id.bt_Icon0);
-        L_PopUp0 = findViewById(R.id.L_PopUp0);
-        tV_label0 = findViewById(R.id.tV_label0);
 
         tV_fullscreenContent=findViewById(R.id.fullscreen_content);
 
@@ -223,6 +235,35 @@ public class StandardActivity extends AppCompatActivity {
         );
     }
 
+    private void setTextAndVisibility(){
+        bundle = getIntent().getExtras();
+
+        if(bundle!=null) {
+            testID=bundle.getInt("testID");
+            tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
+
+            if(testID==0) { //instruction Mode
+                tV_Target_Heading.setText("Standard Icon");
+                tV_Target.setVisibility(View.INVISIBLE);
+                bt_Continue.setVisibility(View.INVISIBLE);
+                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
+                bt_Icon0.setVisibility(View.VISIBLE);
+
+            }
+
+            else { //Test Mode
+                tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
+                tV_Target.setVisibility(View.VISIBLE);
+                bt_Continue.setVisibility(View.VISIBLE);
+
+                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
+                bt_Icon0.setVisibility(View.INVISIBLE);
+                tV_label0.setVisibility(View.INVISIBLE);
+            }
+
+        }
+    }
+
     public void onClick_Continue(View view) {
 
         tV_Target_Heading.setVisibility(View.INVISIBLE);
@@ -270,8 +311,6 @@ public class StandardActivity extends AppCompatActivity {
     }
 
 
-
-
     public void onClickBt_Icon(View view) {
         System.out.println("Wrong Icon clicked");
     }
@@ -286,45 +325,6 @@ public class StandardActivity extends AppCompatActivity {
         L_PopUp2.setVisibility(View.INVISIBLE);
         L_PopUp3.setVisibility(View.INVISIBLE);
         L_PopUp4.setVisibility(View.INVISIBLE);
-    }
-
-    private void activateFullscreen(){
-        mContentView = findViewById(R.id.fullscreen_content);
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-    }
-
-    private void setTextAndVisibility(){
-        bundle = getIntent().getExtras();
-
-        if(bundle!=null) {
-            testID=bundle.getInt("testID");
-            tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
-
-            if(bundle.getInt("testID")==0) { //instruction Mode
-                tV_Target_Heading.setText("Standard Icon");
-                tV_Target.setVisibility(View.INVISIBLE);
-                bt_Continue.setVisibility(View.INVISIBLE);
-                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
-                bt_Icon0.setVisibility(View.VISIBLE);
-
-            }
-
-            else { //Test cases
-                tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
-                tV_Target.setVisibility(View.VISIBLE);
-                bt_Continue.setVisibility(View.VISIBLE);
-
-                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
-                bt_Icon0.setVisibility(View.INVISIBLE);
-                tV_label0.setVisibility(View.INVISIBLE);
-            }
-
-        }
     }
 
     public static void feedbackOnAnswer(boolean answer){

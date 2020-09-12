@@ -2,10 +2,8 @@ package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
@@ -23,7 +22,6 @@ import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
@@ -35,13 +33,11 @@ public class AliveActivity extends AppCompatActivity {
     private static SoundPool soundPool;
     private static int sound_success, sound_error;
 
-    private static final String TAG = "BlindMode";
-    private TextView tV_Target;
+    private TextView tV_Target, tV_Target_Heading, tV_Trial;
     private TextView tV_PopUp;
-    private TextView tV_Target_Heading;
-    private Button bt_Icon;
-    private Button bt_Continue;
-    private TextView tV_Trial;
+    private Button bt_Icon0, bt_Icon1, bt_Icon2, bt_Icon3, bt_Icon4, bt_Continue ;
+    private TextView tV_label0, tV_label1, tV_label2, tV_label3, tV_label4;
+    private ConstraintLayout cL_Icons;
 
     private GestureService gs;
     private TestService testService;
@@ -61,52 +57,13 @@ public class AliveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alive_icon);
 
-        /////// FULLSCREEN /////////////////
-        mContentView = findViewById(R.id.fullscreen_content);
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        /////////////////////////////////////
-
-        bt_Icon = findViewById(R.id.bt_Icon);
-        bt_Continue = findViewById(R.id.bt_Continue);
-        tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
-        tV_Target = findViewById(R.id.tV_Target);
-        tV_PopUp = findViewById(R.id.tV_PopUp);
-        tV_Trial = findViewById(R.id.tv_Trial);
-        tV_fullscreenContent=findViewById(R.id.fullscreen_content);
-
-
+        activateFullscreen();
+        initializeUI_Elements();
+        setTextAndVisibility();
 
         setGestureService();
-        bt_Icon.setOnTouchListener(gs);
+        bt_Icon0.setOnTouchListener(gs);
         testService = TestService.getInstance();
-
-
-        //Adopt Text for each Test
-        bundle = getIntent().getExtras();
-
-        if(bundle!=null) {
-            testID=bundle.getInt("testID");
-            tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
-            if(bundle.getInt("TARGET")==-1) {
-                tV_Target_Heading.setText("Alive Icon");
-                bt_Icon.setVisibility(View.VISIBLE);
-                bt_Continue.setVisibility(View.INVISIBLE);
-                tV_Target.setVisibility(View.INVISIBLE);
-            }
-            else {
-                tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
-                bt_Icon.setVisibility(View.INVISIBLE);
-                bt_Continue.setVisibility(View.VISIBLE);
-            }
-        }
-
-
-
 
         itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
 
@@ -116,21 +73,89 @@ public class AliveActivity extends AppCompatActivity {
 
     }
 
+    private void activateFullscreen(){
+        mContentView = findViewById(R.id.fullscreen_content);
+        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+    private void initializeUI_Elements(){
+        tV_Trial = findViewById(R.id.tv_Trial);
+        tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
+        tV_Target = findViewById(R.id.tV_Target);
+
+        bt_Continue = findViewById(R.id.bt_Continue);
+
+        bt_Icon0 = findViewById(R.id.bt_Icon0);
+        tV_label0=findViewById(R.id.tV_label0);
+
+        tV_PopUp = findViewById(R.id.tV_PopUp);
+
+        cL_Icons = findViewById(R.id.cL_Icons);
+
+        bt_Icon1=findViewById(R.id.bt_Icon1);
+        bt_Icon2=findViewById(R.id.bt_Icon2);
+        bt_Icon3=findViewById(R.id.bt_Icon3);
+        bt_Icon4=findViewById(R.id.bt_Icon4);
+
+        tV_label1=findViewById(R.id.tV_label1);
+        tV_label2=findViewById(R.id.tV_label2);
+        tV_label3=findViewById(R.id.tV_label3);
+        tV_label4=findViewById(R.id.tV_label4);
+
+        tV_fullscreenContent=findViewById(R.id.fullscreen_content);
+    }
+
+    private void setTextAndVisibility(){
+        bundle = getIntent().getExtras();
+
+        if(bundle!=null) {
+            testID=bundle.getInt("testID");
+            tV_Trial.setText("Trial "+bundle.getString("TRIAL"));
+
+            if(testID==0) {//instruction Mode
+                tV_Target_Heading.setText("Alive Icon");
+                tV_Target.setVisibility(View.INVISIBLE);
+                bt_Continue.setVisibility(View.INVISIBLE);
+                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
+                bt_Icon0.setVisibility(View.VISIBLE);
+
+            }
+            else {//Test Mode
+                tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
+                tV_Target.setVisibility(View.VISIBLE);
+                bt_Continue.setVisibility(View.VISIBLE);
+
+                cL_Icons.setVisibility(View.INVISIBLE); //All Icons
+                bt_Icon0.setVisibility(View.INVISIBLE);
+                tV_label0.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
     public void onClick_Continue(View view) {
-        bt_Continue.setVisibility(View.INVISIBLE);
-        tV_Target.setVisibility(View.INVISIBLE);
+
         tV_Target_Heading.setVisibility(View.INVISIBLE);
-        bt_Icon.setVisibility(View.VISIBLE);
+        tV_Target.setVisibility(View.INVISIBLE);
+        bt_Continue.setVisibility(View.INVISIBLE);
+
+        if (testID != 5) {  //Test1A, Test2A - using 1 Icon
+            bt_Icon0.setVisibility(View.VISIBLE);
+            tV_label0.setVisibility(View.VISIBLE);
+        }
+        else{ //Test3B - using 4 Icons
+            cL_Icons.setVisibility(View.VISIBLE);
+        }
 
         timeStart = System.currentTimeMillis();
 
     }
 
-    //Needed for Fullscreen
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
+
 
     private void setGestureService(){
         gs= new GestureService(AliveActivity.this) {
@@ -176,7 +201,7 @@ public class AliveActivity extends AppCompatActivity {
                         startCountDown(Parameter.VisualMode_LongClick_duration); //changes longClick to true
 
                         timePressDown = System.currentTimeMillis();
-                        Log.d(TAG,"Action was DOWN");
+                        Log.d("GESTURE","Action was DOWN");
                         return true;
 
                     case (MotionEvent.ACTION_MOVE):
@@ -184,7 +209,7 @@ public class AliveActivity extends AppCompatActivity {
 
 
                         if(dragMode){
-                            Log.d(TAG, "In Drag Mode!");
+                            Log.d("GESTURE", "In Drag Mode!");
                             view.animate()  //used for moving icon
                                     .x(motionEvent.getRawX() + dX)
                                     .y(motionEvent.getRawY() + dY)
@@ -232,7 +257,7 @@ public class AliveActivity extends AppCompatActivity {
                                     .start();
                         }
 
-                        Log.d(TAG, "Action was MOVE");
+                        Log.d("GESTURE", "Action was MOVE");
                         return true;
 
                     case (MotionEvent.ACTION_UP) :
@@ -278,11 +303,11 @@ public class AliveActivity extends AppCompatActivity {
                                 }
                             }
                         }.start();
-                        Log.d(TAG,"Action was UP");
+                        Log.d("GESTURE","Action was UP");
                         return true;
 
 
-
+/*
                     case (MotionEvent.ACTION_CANCEL) :
                         Log.d(TAG,"Action was CANCEL");
                         return true;
@@ -291,6 +316,8 @@ public class AliveActivity extends AppCompatActivity {
                         Log.d(TAG,"Movement occurred outside bounds " +
                                 "of current screen element");
                         return true;
+
+ */
 
                     default :
                         return super.onTouch( view, motionEvent);
@@ -310,7 +337,7 @@ public class AliveActivity extends AppCompatActivity {
                             }
                         }
                         if(longClick){
-                            Log.d(TAG, "LongClick Detected!!");
+                            Log.d("GESTURE", "LongClick Detected");
                             vibrate(Parameter.LongClick_Vibration_time);
 
                             dragMode=true;
@@ -337,9 +364,7 @@ public class AliveActivity extends AppCompatActivity {
 
     }
 
-
     public void onClickBt_Icon(View view){
-        Log.d(TAG, "onClickBt_Icon clicked");
     }
 
     public void vibrate(int time){
@@ -357,7 +382,17 @@ public class AliveActivity extends AppCompatActivity {
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
         }   }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        soundPool.release();
+        soundPool=null;
+    }
 
 
 }

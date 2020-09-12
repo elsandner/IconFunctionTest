@@ -94,7 +94,7 @@
         android:background="@color/cardview_shadow_end_color"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:text="Alive Icon"
+        android:text="Standard Icon"
         android:textColor="#33b5e5"
         android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="@id/fullscreen_content_controls"
