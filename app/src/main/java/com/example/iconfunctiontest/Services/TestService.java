@@ -9,28 +9,25 @@ import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
 
-import java.lang.reflect.Array;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class TestService {
 
-    //private int numberOfTrials;
-    //private int highestTrialID;
     private int highestBlockID;
     private int currentTrial;
     ArrayList<Trial> trials;
     private Class nextClass;
     private int testID;
 
-
     // static variable single_instance of type Singleton
     private static TestService testService = null;
 
-    private TestService(){
-
-    }
+    private TestService(){    }
 
     public static TestService getInstance() {
         if(testService ==null)
@@ -72,8 +69,6 @@ public class TestService {
 
 
     }
-
-
 
     public int[] shuffleIntArray(int size){
 
@@ -137,10 +132,12 @@ public class TestService {
                     final Intent i;
 
                     if(finish){
+                        System.out.println("execute FINISH - next activity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        writeToLogFile();
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Finish");
                         i.putExtra("EXPLANATION", "Test is done. Thank you very much!");
-                        createXML();
+
                     }
 
                     else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
@@ -210,8 +207,41 @@ public class TestService {
 
     }
 
-    private void createXML(){
-        //TODO: implement logging
+    private void writeToLogFile(){
+
+
+
+        /*
+        This code basically shows how to write to csv using java. Anyways it does not work at all because the csv File is stored on the computer and not on the phone
+        TODO: figure out how to store the csv file on the phone
+        TODO: implement logging
+         */
+
+
+
+        System.out.println("finished writing to log-file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        try{
+            PrintWriter pW = new PrintWriter(new File("C:\\Users\\elias\\AndroidStudioProjects\\IconFunctionTest\\app\\src\\main\\res\\output\\log.csv"));
+
+            StringBuilder sb=new StringBuilder();
+
+            sb.append("UserName");
+            sb.append("testID");
+            sb.append("TIME");
+
+            pW.write(sb.toString());
+            pW.close();
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
     }
 
 }
