@@ -1,10 +1,14 @@
 package com.example.iconfunctiontest.Presentation;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,13 +18,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
+import com.opencsv.CSVWriter;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
@@ -36,8 +47,6 @@ public class AliveActivity extends AppCompatActivity {
     private TextView tV_PopUp;
     private Button bt_Icon0, bt_Icon1, bt_Icon2, bt_Icon3, bt_Icon4, bt_Continue ;
     private TextView tV_label0, tV_label1, tV_label2, tV_label3, tV_label4;
-    //private ConstraintLayout cL_Icons;
-
 
     private TestService testService;
 
@@ -403,6 +412,8 @@ public class AliveActivity extends AppCompatActivity {
             soundPool.play(sound_error, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
         }   }
+
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -1,23 +1,34 @@
 package com.example.iconfunctiontest.Services;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
+import com.opencsv.CSVWriter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class TestService {
 
-    //private int numberOfTrials;
-    //private int highestTrialID;
     private int highestBlockID;
     private int currentTrial;
     ArrayList<Trial> trials;
@@ -72,8 +83,6 @@ public class TestService {
 
 
     }
-
-
 
     public int[] shuffleIntArray(int size){
 
@@ -140,7 +149,7 @@ public class TestService {
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Finish");
                         i.putExtra("EXPLANATION", "Test is done. Thank you very much!");
-                        createXML();
+                        createCSV(callingActivity);
                     }
 
                     else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
@@ -210,8 +219,29 @@ public class TestService {
 
     }
 
-    private void createXML(){
-        //TODO: implement logging
+    private void createCSV(final AppCompatActivity callingActivity){
+
+        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() + "/logfile.csv"); // Here csv file name is MyCsvFile.csv
+        CSVWriter writer = null;
+        try {
+            writer = new CSVWriter(new FileWriter(csv));
+
+            List<String[]> data = new ArrayList<String[]>();
+            data.add(new String[]{"This", "is"});
+            data.add(new String[]{"a", "test"});
+            data.add(new String[]{"if", "writing"});
+            data.add(new String[]{"to csv", "works"});
+
+            writer.writeAll(data); // data is adding to csv
+
+            writer.close();
+            //callRead();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("executed write csv from TestService");
+        System.out.println(csv);
     }
 
 }

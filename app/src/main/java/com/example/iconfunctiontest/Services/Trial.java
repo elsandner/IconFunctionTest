@@ -15,7 +15,6 @@ public class Trial {
     }
 
 
-
     public static Trial clone(Trial refTrial){
         Trial newTrial=new Trial(refTrial.getTrialID(), refTrial.getBlockID(),refTrial.getTarget());
         newTrial.setAnswer(refTrial.getAnswer());

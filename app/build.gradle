@@ -41,7 +41,10 @@ dependencies {
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:1.10.19'
 
+
     //for Animations
     implementation 'com.github.mohammadatif:Animatoo:master'
+    //For writing to CSV
+    implementation 'com.opencsv:opencsv:4.6'
 
 }
