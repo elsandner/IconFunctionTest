@@ -5,7 +5,7 @@ public class Trial {
     private int trialID, blockID;
     private int target, answer; //Stored as Index of Parameter.Item Array
     private boolean doBreak; //is true if after this element a break should follow
-    private long time_wait, time_move; //messured Time between pull-down and lift-off
+    private long time_wait, time_execute; //messured Time between pull-down and lift-off
 
     public Trial (int trialID, int blockID, int target){
         this.trialID=trialID;
@@ -73,11 +73,11 @@ public class Trial {
         this.time_wait = time_wait;
     }
 
-    public long getTime_move() {
-        return time_move;
+    public long getTime_execute() {
+        return time_execute;
     }
 
-    public void setTime_move(long time_move) {
-        this.time_move = time_move;
+    public void setTime_execute(long time_execute) {
+        this.time_execute = time_execute;
     }
 }

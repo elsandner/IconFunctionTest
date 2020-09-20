@@ -10,11 +10,16 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
+import com.example.iconfunctiontest.Services.Parameter;
+import com.google.android.material.textfield.TextInputEditText;
 import com.opencsv.CSVWriter;
 
 import java.io.FileWriter;
@@ -24,11 +29,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextInputEditText name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        name = findViewById(R.id.input_Name);
+        name.setText(Parameter.getName());
     }
+
+
 
     public void onClickBt_Standard(View view) {
         Intent i = new Intent(MainActivity.this, StandardActivity.class);
@@ -37,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         i.putExtra("testID",0);
         startActivity(i);
         Animatoo.animateDiagonal(MainActivity.this);
-        writeXML();
     }
 
     public void onClickBt_Alive(View view){
@@ -51,46 +62,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickBt_Test(View view){
-        Intent i = new Intent(MainActivity.this, TestMenuActivity.class);
-        startActivity(i);
-        Animatoo.animateSlideUp(MainActivity.this);
+        //TODO: create new activity to enter name or find an other better solution
+        //save name
+        if(!name.getText().toString().equals("Enter your Name..")) {
+            Parameter.setName(name.getText().toString());
 
-        //Ask user for permission to write csv file
-        if (Build.VERSION.SDK_INT >= 23) {
-            int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            Intent i = new Intent(MainActivity.this, TestMenuActivity.class);
+            startActivity(i);
+            Animatoo.animateSlideUp(MainActivity.this);
+
+            //Ask user for permission to write csv file
+            if (Build.VERSION.SDK_INT >= 23) {
+                int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
             }
         }
-    }
-
-    ////////////////////////////////////
-    //just fot test purpose
-    public void writeXML(){
-        //Ask for run-time permission
-
-        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() + "/logfile.csv"); // Here csv file name is MyCsvFile.csv
-        CSVWriter writer = null;
-        try {
-            writer = new CSVWriter(new FileWriter(csv));
-
-            List<String[]> data = new ArrayList<String[]>();
-            data.add(new String[]{"Country", "Capital"});
-            data.add(new String[]{"India", "New Delhi"});
-            data.add(new String[]{"United States", "Washington D.C"});
-            data.add(new String[]{"Germany", "Berlin"});
-
-            writer.writeAll(data); // data is adding to csv
-
-            writer.close();
-            //callRead();
-        } catch (IOException e) {
-            e.printStackTrace();
+        else{
+            Toast.makeText(getApplicationContext(), "Enter  your name first!", Toast.LENGTH_LONG).show();
         }
 
-        System.out.println("Saved Data");
-        System.out.println(csv);
+
     }
-    //////////////////////////////////////7
+
+
 
 }

@@ -1,15 +1,9 @@
 package com.example.iconfunctiontest.Services;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Environment;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
@@ -17,13 +11,9 @@ import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
 import com.opencsv.CSVWriter;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -106,7 +96,7 @@ public class TestService {
     public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time_wait, long time_move){
 
         trials.get(currentTrial).setTime_wait(time_wait);
-        trials.get(currentTrial).setTime_move(time_move);
+        trials.get(currentTrial).setTime_execute(time_move);
 
         if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
             callFeedbackOnAnswer(testID, true);
@@ -149,7 +139,7 @@ public class TestService {
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Finish");
                         i.putExtra("EXPLANATION", "Test is done. Thank you very much!");
-                        createCSV(callingActivity);
+                        createCSV();
                     }
 
                     else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
@@ -219,21 +209,40 @@ public class TestService {
 
     }
 
-    private void createCSV(final AppCompatActivity callingActivity){
+    private void createCSV(){
 
-        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() + "/logfile.csv"); // Here csv file name is MyCsvFile.csv
+        String trial, targetItem, selectedItem, answer, prepareTime, executeTime;
+        String FILENAME="/logfile_Test"+testID+"_"+Parameter.getName()+".csv";//TestID, Name
+        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME); // Here csv file name is MyCsvFile.csv
+        String[] heading={"Trial","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time"}; //TODO: Add swipe distance
         CSVWriter writer = null;
         try {
             writer = new CSVWriter(new FileWriter(csv));
 
+
             List<String[]> data = new ArrayList<String[]>();
-            data.add(new String[]{"This", "is"});
-            data.add(new String[]{"a", "test"});
-            data.add(new String[]{"if", "writing"});
-            data.add(new String[]{"to csv", "works"});
+            data.add(heading);
+            //data.add(new String[]{"This", "is"});
+
+            int n=0;
+            for(Trial cT: trials){//cT...current Trial
+                n++;
+                trial=Integer.toString(n);
+                targetItem = Parameter.Items[cT.getTarget()];
+                selectedItem = Parameter.Items[cT.getAnswer()];
+                if(targetItem.equals(selectedItem))
+                    answer="correct";
+                else
+                    answer="false";
+                prepareTime = Long.toString(cT.getTime_wait());
+                executeTime = Long.toString(cT.getTime_execute());
+
+                data.add(new String[]{trial,targetItem,selectedItem,answer,prepareTime,executeTime});
+
+            }
+
 
             writer.writeAll(data); // data is adding to csv
-
             writer.close();
             //callRead();
         } catch (IOException e) {
@@ -241,7 +250,6 @@ public class TestService {
         }
 
         System.out.println("executed write csv from TestService");
-        System.out.println(csv);
     }
 
 }
