@@ -9,26 +9,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.google.android.material.textfield.TextInputEditText;
-import com.opencsv.CSVWriter;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Bundle bundle;
     TextInputEditText name;
 
     @Override
@@ -37,8 +28,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         name = findViewById(R.id.input_Name);
-    }
 
+        bundle = getIntent().getExtras();
+
+        if(bundle!=null){
+            name.setText(bundle.getString("USERNAME"));
+        }
+    }
 
     public void onClickBt_Standard(View view) {
         Intent i = new Intent(MainActivity.this, StandardActivity.class);
@@ -60,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickBt_Test(View view){
-        //TODO: create new activity to enter name or find an other better solution
-        //save name
         String username = name.getText().toString();
         if(username.matches("")){
             Toast.makeText(getApplicationContext(), "Enter  your name first!", Toast.LENGTH_LONG).show();

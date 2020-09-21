@@ -1,11 +1,17 @@
 package com.example.iconfunctiontest.Services;
 
+import android.util.DisplayMetrics;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
+
 public class Trial {
-    //Store: trialID, Target, Answer, ..
     private int trialID, blockID;
     private int target, answer; //Stored as Index of Parameter.Item Array
     private boolean doBreak; //is true if after this element a break should follow
     private long time_wait, time_execute; //messured Time between pull-down and lift-off
+    private double downX, downY, upX, upY; //only needed for Alive-Icon
+    //TODO: Add touch down and lift off coordinates for Alive Icon
 
     public Trial (int trialID, int blockID, int target){
         this.trialID=trialID;
@@ -60,7 +66,6 @@ public class Trial {
     public boolean isDoBreak() {
         return doBreak;
     }
-
     public void setDoBreak(boolean doBreak) {
         this.doBreak = doBreak;
     }
@@ -68,16 +73,52 @@ public class Trial {
     public long getTime_wait() {
         return time_wait;
     }
-
     public void setTime_wait(long time_wait) {
         this.time_wait = time_wait;
     }
-
     public long getTime_execute() {
         return time_execute;
     }
-
     public void setTime_execute(long time_execute) {
         this.time_execute = time_execute;
     }
+
+    public double getDownX() {
+        return downX;
+    }
+    public void setDownX(double downX) {
+        this.downX = downX;
+    }
+    public double getDownY() {
+        return downY;
+    }
+    public void setDownY(double downY) {
+        this.downY = downY;
+    }
+    public double getUpX() {
+        return upX;
+    }
+    public void setUpX(double upX) {
+        this.upX = upX;
+    }
+    public double getUpY() {
+        return upY;
+    }
+    public void setUpY(double upY) {
+        this.upY = upY;
+    }
+
+
+    public double getSwipeDistance() {
+        double diffX=abs(upX-downX);
+        double diffY=abs(upY-downY);
+
+        double swipeDistance=sqrt(diffX*diffX+diffY*diffY);//in pixels
+
+
+
+
+        return sqrt(diffX*diffX+diffY*diffY);
+    }
+
 }

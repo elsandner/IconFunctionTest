@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
+import com.example.iconfunctiontest.Services.Parameter;
 
 public class InfoActivity extends AppCompatActivity {
 
@@ -39,20 +41,15 @@ public class InfoActivity extends AppCompatActivity {
             trial=bundle.getString("TRIAL");
             target=bundle.getInt("TARGET");
             testID=bundle.getInt("testID");
-
-            System.out.println("Trial: "+trial);
-            System.out.println("Target: "+target);
-            System.out.println("testID: "+testID);
         }
 
     }
 
     public void onClickBt_Start(View view){
-
         final Intent i;
         if(trial==null) {   //Finish-Screen
             i = new Intent(InfoActivity.this, MainActivity.class);
-
+            i.putExtra("USERNAME", Parameter.getName());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -62,22 +59,12 @@ public class InfoActivity extends AppCompatActivity {
             });
 
         }else {
-            switch (testID) {
-                case 1:
-                case 3:
-                case 5:
-                    //Alive Icon
-                    i = new Intent(InfoActivity.this, AliveActivity.class);
-                    break;
-                case 2:
-                case 4:
-                case 6:
-                    i = new Intent(InfoActivity.this, StandardActivity.class);
-                    break;
-                case 0:
-                default:
-                    i = new Intent(InfoActivity.this, MainActivity.class);
-            }
+
+            if(testID%2==0) // 2,4,6 ... =Standard icon
+                i = new Intent(InfoActivity.this, StandardActivity.class);
+            else
+                i = new Intent(InfoActivity.this, AliveActivity.class);
+
             i.putExtra("TRIAL", trial);
             i.putExtra("TARGET", target);
             i.putExtra("testID", testID);
@@ -90,8 +77,6 @@ public class InfoActivity extends AppCompatActivity {
                 }
             });
         }
-
-
 
     }
 }

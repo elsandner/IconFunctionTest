@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -24,16 +23,13 @@ import java.util.Collections;
 
 
 public class StandardActivity extends AppCompatActivity {
-
     private View mContentView;
-
 
     private static TextView tV_fullscreenContent;
     private static SoundPool soundPool;
     private static int sound_success, sound_error;
 
     private TextView tV_Target_Heading, tV_Target, tV_Trial;
-
     private ConstraintLayout cL_Icons;
     private Button bt_Icon0, bt_Icon1, bt_Icon2, bt_Icon3, bt_Icon4, bt_Continue ;
     private LinearLayout L_PopUp0, L_PopUp1, L_PopUp2,L_PopUp3,L_PopUp4;
@@ -99,7 +95,6 @@ public class StandardActivity extends AppCompatActivity {
             }
         }
 
-
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         sound_success = soundPool.load(this, R.raw.success, 1);
         sound_error = soundPool.load(this, R.raw.error, 1);
@@ -126,7 +121,6 @@ public class StandardActivity extends AppCompatActivity {
         tV_label0 = findViewById(R.id.tV_label0);
         L_PopUp0 = findViewById(R.id.L_PopUp0);
 
-
         cL_Icons = findViewById(R.id.cL_Icons);
 
         bt_Icon1=findViewById(R.id.bt_Icon1);
@@ -146,25 +140,18 @@ public class StandardActivity extends AppCompatActivity {
 
         tV_fullscreenContent=findViewById(R.id.fullscreen_content);
 
-
         bt_Icon0.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
                         vibrate(Parameter.LongClick_Vibration_time);
-
                         L_PopUp0.setVisibility(View.VISIBLE);
-
-
-
                         timePressDown = System.currentTimeMillis();
                         return false;
                     }
                 }
         );
 
-
-        //TODO: figure out why background of cL_Icons changes to gray
         bt_Icon1.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
@@ -248,7 +235,6 @@ public class StandardActivity extends AppCompatActivity {
                 bt_Continue.setVisibility(View.INVISIBLE);
                 cL_Icons.setVisibility(View.INVISIBLE); //All Icons
                 bt_Icon0.setVisibility(View.VISIBLE);
-
             }
 
             else { //Test Mode
@@ -265,7 +251,6 @@ public class StandardActivity extends AppCompatActivity {
     }
 
     public void onClick_Continue(View view) {
-
         tV_Target_Heading.setVisibility(View.INVISIBLE);
         tV_Target.setVisibility(View.INVISIBLE);
         bt_Continue.setVisibility(View.INVISIBLE);
@@ -279,8 +264,7 @@ public class StandardActivity extends AppCompatActivity {
             cL_Icons.setVisibility(View.VISIBLE);
         }
 
-        timeStart = System.currentTimeMillis();//TODO: correct times
-
+        timeStart = System.currentTimeMillis();
     }
 
     //This method is executed when element in pop up menu is clicked
@@ -296,27 +280,24 @@ public class StandardActivity extends AppCompatActivity {
             case 2: //Test1B
             case 4: //Test2B
                 L_PopUp0.setVisibility(View.INVISIBLE);
-                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move); //TODO: add second time stemp
+                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
                 break;
             case 6://Test3B
                 L_PopUp1.setVisibility(View.INVISIBLE);
                 L_PopUp2.setVisibility(View.INVISIBLE);
                 L_PopUp3.setVisibility(View.INVISIBLE);
                 L_PopUp4.setVisibility(View.INVISIBLE);
-                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move); //TODO: add second time stemp
+                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
                 break;
         }
-
-
     }
 
-
     public void onClickBt_Icon(View view) {
-        System.out.println("Wrong Icon clicked");
+
     }
 
     public void onClickBt_TestIcon(View view) {
-        System.out.println("Test Icon clicked");
+
     }
 
     public void onClickScreen(View view) {
@@ -354,8 +335,5 @@ public class StandardActivity extends AppCompatActivity {
         soundPool.release();
         soundPool=null;
     }
-
-
-
 
 }

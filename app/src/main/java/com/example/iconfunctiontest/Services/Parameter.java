@@ -4,26 +4,30 @@ public class Parameter {
     //General
     private static String name="default";
 
-    private static int DEFAULT=2;
+    private static int DEFAULT=4;
     public static int LongClick_Vibration_time = 200; //in miliseconds
 
     public static String[] Items = {
-            "Item A",
-            "Item B",
-            "Item C",
-            "Item D",   //Nr 4
-            "Item E",
-            "Item F",   //Nr 6
-            "Item G",
-            "Item H",   //Nr 8
-            "Item I",
-            "Item J",
-            "Item K",
-            "Item L",   //Nr 12
+            "Red A",
+            "Red B",
+            "Red C",
+            "Red D",   //Nr 4
+            "Blue A",
+            "Blue B",
+            "Blue C",
+            "Blue D",
+            "Yellow A",
+            "Yellow B",
+            "Yellow C",
+            "Yellow D",
+            "Green A",
+            "Green B",
+            "Green C",
+            "Green D",
             "Item M",
             "Item N",
             "Item O",
-            "Item P",   //Nr 16
+            "Item P",
             "Item Q",
             "Item R",
             "Item S",
@@ -33,17 +37,17 @@ public class Parameter {
             "Item W",
             "Item X",
             "Item Y",
-            "Item Z"    //Nr26
+            "Item Z"
     };
 
 //Alive Icon
     public static int number_of_Items_Alive = DEFAULT; //Default=4
 
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
-    public static int VisualMode_LongClick_duration = 3; //in seconds
+    public static int AliveIcon_LongClick_duration = 3; //in seconds
 
     // Delay time between releasing the finger from screen till icon starts moving back to original position
-    public static int VisualMode_MoveIconBack_Delay = 1; //in seconds
+    public static int AliveIcon_MoveIconBack_Delay = 1; //in seconds
 
     public static int MoveIconBack_Duration =1000; //in miliseconds
 
@@ -53,17 +57,15 @@ public class Parameter {
 //Standard Icon
     public static int number_of_Items_Standard = DEFAULT; //Default=4
 
-
-
-// Test 2 Expert Users - Alive Icon vs Standard Icon
+// Tests Expert Users - Alive Icon vs Standard Icon
     //2A...Subtest using alive-icon
     //2B...Subtest using standard-icon
-    public static int number_of_trials_2=number_of_Items_Alive; //Default: same number as Icons
-    public static int number_of_blocks_2=2;
+    public static int number_of_trials_2=DEFAULT; //Default: same number as Icons
+    public static int number_of_blocks_2=6;
     public static int nextActivity_Delay = 1000; //Default=2000 because this is the time, the Toast is on the screen
                                                   //in miliseconds
 
-    public static int blocksBetweenBreak =1;
+    public static int blocksBetweenBreak =2;
 
     public static String getName() {
         return name;

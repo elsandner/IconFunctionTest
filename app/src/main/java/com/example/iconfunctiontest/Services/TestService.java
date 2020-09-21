@@ -1,9 +1,12 @@
 package com.example.iconfunctiontest.Services;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Environment;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,10 +100,15 @@ public class TestService {
     }
 
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
-    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time_wait, long time_move){
+    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time_wait, long time_move, double downX, double downY, double upX, double upY){
 
         trials.get(currentTrial).setTime_wait(time_wait);
         trials.get(currentTrial).setTime_execute(time_move);
+
+        trials.get(currentTrial).setDownX(downX);
+        trials.get(currentTrial).setDownY(downY);
+        trials.get(currentTrial).setUpX(upX);
+        trials.get(currentTrial).setUpY(upY);
 
         if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
             callFeedbackOnAnswer(testID, true);
@@ -144,7 +152,7 @@ public class TestService {
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Finish");
                         i.putExtra("EXPLANATION", "Test is done. Thank you very much!");
-                        createCSV();
+                        createCSV(callingActivity);
                     }
 
                     else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
@@ -215,31 +223,38 @@ public class TestService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void createCSV(){
+    private void createCSV(final AppCompatActivity callingActivity){
 
         String FILENAME="/logfile_Test"+testID+"_"+Parameter.getName()+".csv";//TestID, Name
         String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME); // Here csv file name is MyCsvFile.csv
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
 
         String iconType="Alive";
         if(testID%2==0){    //Test ID is Even --> 2,4,6 =Alive Icon
             iconType="Standard";
         }
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
 
-        String [] testInfo={"Participant:", Parameter.getName(),"","Icon Type:", iconType,"", "Date:",date.toString()};
+        String [] testInfo={"Participant:", Parameter.getName(),"", "Date:",date.toString(), "","Icon Type:", iconType,"","Test Type:",getTestType(testID)};
         String [] blankLine={};
-        String[] heading={"Trial","Trial ID", "Block ID","Repetition","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time", }; //TODO: Add swipe distance
-        String trial, trialID, blockID,repetition, targetItem, selectedItem, answer, prepareTime, executeTime;
+        String [] headingStandard={"Trial","Trial ID", "Block ID","Repetition","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time"};
+        String[] headingAlive={"Trial","Trial ID", "Block ID","Repetition","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance [mm]"}; //TODO: Add swipe distance
+        String trial, trialID, blockID,repetition, targetItem, selectedItem, answer, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance;
         CSVWriter writer = null;
         try {
             writer = new CSVWriter(new FileWriter(csv));
 
-
             List<String[]> data = new ArrayList<String[]>();
             data.add(testInfo);
             data.add(blankLine);
-            data.add(heading);
+
+            if(testID%2==0)    //Test ID is Even --> 2,4,6 =Standard Icon
+                data.add(headingStandard);
+            else
+                data.add(headingAlive);
+
+
 
             int n=0;
             for(Trial cT: trials){//cT...current Trial
@@ -250,7 +265,12 @@ public class TestService {
                 repetition=countRepetitions((n-1));
 
                 targetItem = Parameter.Items[cT.getTarget()];
-                selectedItem = Parameter.Items[cT.getAnswer()];
+
+                if(cT.getAnswer()==-1)
+                    selectedItem="Cancel";
+                else
+                    selectedItem = Parameter.Items[cT.getAnswer()];
+
                 if(targetItem.equals(selectedItem))
                     answer="correct";
                 else
@@ -258,7 +278,16 @@ public class TestService {
                 prepareTime = Long.toString(cT.getTime_wait());
                 executeTime = Long.toString(cT.getTime_execute());
 
-                data.add(new String[]{trial,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime});
+                if(testID%2==1){ //Only for Alive Icon
+                    downX=Double.toString(cT.getDownX());
+                    downY=Double.toString(cT.getDownX());
+                    upX=Double.toString(cT.getUpX());
+                    upY=Double.toString(cT.getUpY());
+                    swipeDistance=convertPixelToMilimeters(cT.getSwipeDistance(),callingActivity);
+                    data.add(new String[]{trial,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime,downX,downY,upX,upY,swipeDistance});
+                }
+                else
+                    data.add(new String[]{trial,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime});
 
             }
 
@@ -289,6 +318,24 @@ public class TestService {
             }
         }
         return Integer.toString(repetition);
+    }
+
+    private String convertPixelToMilimeters(double pixelValue, final AppCompatActivity callingActivity){
+        final DisplayMetrics dm = callingActivity.getResources().getDisplayMetrics();
+        double mmValue= pixelValue / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
+        return Double.toString(mmValue);
+    }
+
+    private String getTestType(int testID){
+        switch(testID){
+            case 1:
+            case 2: return "Novice User";
+            case 3:
+            case 4: return "Expert User";
+            case 5:
+            case 6: return "Learning Performance";
+        }
+        return "invalid input";
     }
 
 }

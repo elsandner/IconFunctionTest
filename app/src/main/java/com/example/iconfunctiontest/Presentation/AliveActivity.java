@@ -1,16 +1,11 @@
 package com.example.iconfunctiontest.Presentation;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,27 +13,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
-import com.opencsv.CSVWriter;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
 
 public class AliveActivity extends AppCompatActivity {
-
     private View mContentView;
+
     private static TextView tV_fullscreenContent;
     private static SoundPool soundPool;
     private static int sound_success, sound_error;
@@ -49,14 +37,10 @@ public class AliveActivity extends AppCompatActivity {
     private TextView tV_label0, tV_label1, tV_label2, tV_label3, tV_label4;
 
     private TestService testService;
-
     private Bundle bundle;
-
     private int testID;   //depending on this variable, the code executes different logic according to the tests
                         //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
-
     private int[] itemMap;
-
     long timeStart, timePressDown;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -82,7 +66,6 @@ public class AliveActivity extends AppCompatActivity {
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         sound_success = soundPool.load(this, R.raw.success, 1);
         sound_error = soundPool.load(this, R.raw.error, 1);
-
     }
 
     private void activateFullscreen(){
@@ -107,8 +90,6 @@ public class AliveActivity extends AppCompatActivity {
 
         tV_PopUp = findViewById(R.id.tV_PopUp);
 
-        //cL_Icons = findViewById(R.id.cL_Icons);
-
         bt_Icon1=findViewById(R.id.bt_Icon1);
         bt_Icon2=findViewById(R.id.bt_Icon2);
         bt_Icon3=findViewById(R.id.bt_Icon3);
@@ -123,9 +104,6 @@ public class AliveActivity extends AppCompatActivity {
     }
 
     private void setTextAndVisibility(){
-
-        //cL_Icons.setVisibility(View.INVISIBLE); //All Icons
-
         bt_Icon1.setVisibility(View.INVISIBLE);
         bt_Icon2.setVisibility(View.INVISIBLE);
         bt_Icon3.setVisibility(View.INVISIBLE);
@@ -149,7 +127,6 @@ public class AliveActivity extends AppCompatActivity {
 
                 bt_Icon0.setVisibility(View.VISIBLE);
                 tV_label0.setVisibility(View.VISIBLE);
-
             }
             else {//Test Mode
                 tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
@@ -162,7 +139,6 @@ public class AliveActivity extends AppCompatActivity {
     }
 
     public void onClick_Continue(View view) {
-
         tV_Target_Heading.setVisibility(View.INVISIBLE);
         tV_Target.setVisibility(View.INVISIBLE);
         bt_Continue.setVisibility(View.INVISIBLE);
@@ -184,7 +160,6 @@ public class AliveActivity extends AppCompatActivity {
         }
 
         timeStart = System.currentTimeMillis();
-
     }
 
     private GestureService getGestureService(final int iconID){
@@ -194,18 +169,16 @@ public class AliveActivity extends AppCompatActivity {
             float originalX=0.0f;
             float originalY=0.0f;
 
-            double downX = 0;
+            double downX =0;
             double downY=0;
             boolean longClick=false;
             boolean dragMode=false;
             boolean touched=false;
             int selectedOption=-2;
-            //double selectedAngle =0.0;
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
-
                 int action = motionEvent.getAction();
                 double currentAlpha=0;
 
@@ -227,17 +200,17 @@ public class AliveActivity extends AppCompatActivity {
                         //detect long click
                         longClick=true;
                         dragMode=false;
-                        startCountDown(Parameter.VisualMode_LongClick_duration); //changes longClick to true
+                        startCountDown(Parameter.AliveIcon_LongClick_duration); //changes longClick to true
 
                         timePressDown = System.currentTimeMillis();
-                        Log.d("GESTURE","Action was DOWN");
+                        //Log.d("GESTURE","Action was DOWN");
                         return true;
 
                     case (MotionEvent.ACTION_MOVE):
                         longClick=false;
 
                         if(dragMode){
-                            Log.d("GESTURE", "In Drag Mode!");
+                            //Log.d("GESTURE", "In Drag Mode!");
                             view.animate()  //used for moving icon
                                     .x(motionEvent.getRawX() + dX)
                                     .y(motionEvent.getRawY() + dY)
@@ -251,7 +224,7 @@ public class AliveActivity extends AppCompatActivity {
 
                             currentAlpha = calcAngle(diffX, diffY);
 
-                            DecimalFormat df = new DecimalFormat("#");//TODO: Prop. not needed since degrees are not printed anymore
+                            DecimalFormat df = new DecimalFormat("#");
 
                             if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
                                 tV_PopUp.setVisibility(View.VISIBLE);
@@ -263,16 +236,13 @@ public class AliveActivity extends AppCompatActivity {
                                     tV_PopUp.setText("Cancel");
                                     selectedOption = -1; //Cancel
                                 } else {
-                                    //selectedAngle=currentAlpha; //TODO: Try to remove variable currentAlpha
 
                                     selectedOption=AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive, iconID);
 
-                                    if(testID==1) //War bevore:  if(testID==1||testID==2)
+                                    if(testID==1)
                                         selectedOption=itemMap[selectedOption];
 
-                                    String item = Parameter.Items[selectedOption];
-
-                                    tV_PopUp.setText(item + " (" + df.format(currentAlpha) + "°)"); //TODO: why does'nt it show the degrees ??
+                                    tV_PopUp.setText(Parameter.Items[selectedOption]);
                                 }
                             }
 
@@ -282,14 +252,9 @@ public class AliveActivity extends AppCompatActivity {
                                     .setDuration(0)
                                     .start();
                         }
-
-                        Log.d("DEBUG", "rawX: "+motionEvent.getRawX()+"\t\trawY: "+motionEvent.getRawY());
-
-
-                        Log.d("GESTURE", "Action was MOVE");
                         return true;
 
-                    case (MotionEvent.ACTION_UP) :
+                    case (MotionEvent.ACTION_UP):
                         tV_PopUp.setVisibility(View.INVISIBLE);
                         longClick=false;
                         touched=false;
@@ -309,9 +274,13 @@ public class AliveActivity extends AppCompatActivity {
                                 case 1://Test1A novice users
                                 case 3://Test2A expert users
                                 case 5://Test3A learning
-                                    long time_wait = System.currentTimeMillis() - timeStart;
+                                    long time_wait = timePressDown - timeStart;
                                     long time_move =System.currentTimeMillis() - timePressDown;
-                                    testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move);
+
+                                    double upX=motionEvent.getX();
+                                    double upY=motionEvent.getY();
+
+                                    testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move,downX,downY,upX,upY);
                                     break;
                             }
                         }
@@ -322,7 +291,7 @@ public class AliveActivity extends AppCompatActivity {
 
                                 if (dragMode) {
                                     try {
-                                        TimeUnit.SECONDS.sleep(Parameter.VisualMode_MoveIconBack_Delay);  //time delay
+                                        TimeUnit.SECONDS.sleep(Parameter.AliveIcon_MoveIconBack_Delay);  //time delay
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -333,28 +302,14 @@ public class AliveActivity extends AppCompatActivity {
                                 }
                             }
                         }.start();
-                        Log.d("GESTURE","Action was UP");
+                        //Log.d("GESTURE","Action was UP");
                         return true;
-
-
-/*
-                    case (MotionEvent.ACTION_CANCEL) :
-                        Log.d(TAG,"Action was CANCEL");
-                        return true;
-
-                    case (MotionEvent.ACTION_OUTSIDE) :
-                        Log.d(TAG,"Movement occurred outside bounds " +
-                                "of current screen element");
-                        return true;
-
- */
 
                     default :
                         return super.onTouch( view, motionEvent);
                 }
 
             }
-
 
             private void startCountDown(final int seconds){  //detect long click
                 new Thread(){
@@ -366,13 +321,12 @@ public class AliveActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        if(longClick){
-                            Log.d("GESTURE", "LongClick Detected");
-                            vibrate(Parameter.LongClick_Vibration_time);
 
+                        if(longClick){
+                            //Log.d("GESTURE", "LongClick Detected");
+                            vibrate(Parameter.LongClick_Vibration_time);
                             dragMode=true;
                         }
-
                     }
                 }.start();
             }
@@ -391,7 +345,6 @@ public class AliveActivity extends AppCompatActivity {
             }
 
         };
-
         return gestureService;
     }
 
@@ -413,8 +366,6 @@ public class AliveActivity extends AppCompatActivity {
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
         }   }
 
-
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -426,6 +377,5 @@ public class AliveActivity extends AppCompatActivity {
         soundPool.release();
         soundPool=null;
     }
-
 
 }

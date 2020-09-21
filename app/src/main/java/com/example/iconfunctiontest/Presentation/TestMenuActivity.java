@@ -15,13 +15,11 @@ public class TestMenuActivity extends AppCompatActivity {
 
     private TestService testService;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_menu);
         testService = TestService.getInstance();
-
     }
 
     public void onClick_bt_Test1A(View view) {
