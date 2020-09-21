@@ -1,8 +1,11 @@
 package com.example.iconfunctiontest.Services;
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Environment;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -14,6 +17,7 @@ import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -129,6 +133,7 @@ public class TestService {
     private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 
         final Thread thread = new Thread(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 try {
@@ -209,35 +214,51 @@ public class TestService {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void createCSV(){
 
-        String trial, targetItem, selectedItem, answer, prepareTime, executeTime;
         String FILENAME="/logfile_Test"+testID+"_"+Parameter.getName()+".csv";//TestID, Name
         String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME); // Here csv file name is MyCsvFile.csv
-        String[] heading={"Trial","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time"}; //TODO: Add swipe distance
+
+        String iconType="Alive";
+        if(testID%2==0){    //Test ID is Even --> 2,4,6 =Alive Icon
+            iconType="Standard";
+        }
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
+
+        String [] testInfo={"Participant:", Parameter.getName(),"","Icon Type:", iconType,"", "Date:",date.toString()};
+        String [] blankLine={};
+        String[] heading={"Trial","Trial ID", "Block ID","Repetition","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time", }; //TODO: Add swipe distance
+        String trial, trialID, blockID,repetition, targetItem, selectedItem, answer, prepareTime, executeTime;
         CSVWriter writer = null;
         try {
             writer = new CSVWriter(new FileWriter(csv));
 
 
             List<String[]> data = new ArrayList<String[]>();
+            data.add(testInfo);
+            data.add(blankLine);
             data.add(heading);
-            //data.add(new String[]{"This", "is"});
 
             int n=0;
             for(Trial cT: trials){//cT...current Trial
                 n++;
                 trial=Integer.toString(n);
+                trialID=Integer.toString(cT.getTrialID());
+                blockID=Integer.toString(cT.getBlockID());
+                repetition=countRepetitions((n-1));
+
                 targetItem = Parameter.Items[cT.getTarget()];
                 selectedItem = Parameter.Items[cT.getAnswer()];
                 if(targetItem.equals(selectedItem))
                     answer="correct";
                 else
-                    answer="false";
+                    answer="wrong";
                 prepareTime = Long.toString(cT.getTime_wait());
                 executeTime = Long.toString(cT.getTime_execute());
 
-                data.add(new String[]{trial,targetItem,selectedItem,answer,prepareTime,executeTime});
+                data.add(new String[]{trial,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime});
 
             }
 
@@ -250,6 +271,24 @@ public class TestService {
         }
 
         System.out.println("executed write csv from TestService");
+    }
+
+    private String countRepetitions(int refIndex){
+        int repetition=1;
+        Trial trial = trials.get(refIndex);
+        int refTrialID=trial.getTrialID();
+        int refBlockID=trial.getBlockID();
+
+        for(int i=0;i<refIndex;i++){
+            Trial currentTrial = trials.get(i);
+            int currentTrialID=currentTrial.getTrialID();
+            int currentBlockID=currentTrial.getBlockID();
+
+            if(refTrialID==currentTrialID&&refBlockID==currentBlockID){
+                repetition++;
+            }
+        }
+        return Integer.toString(repetition);
     }
 
 }

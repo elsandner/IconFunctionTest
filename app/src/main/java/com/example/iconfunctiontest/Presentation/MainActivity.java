@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         name = findViewById(R.id.input_Name);
-        name.setText(Parameter.getName());
     }
-
 
 
     public void onClickBt_Standard(View view) {
@@ -64,9 +62,12 @@ public class MainActivity extends AppCompatActivity {
     public void onClickBt_Test(View view){
         //TODO: create new activity to enter name or find an other better solution
         //save name
-        if(!name.getText().toString().equals("Enter your Name..")) {
-            Parameter.setName(name.getText().toString());
-
+        String username = name.getText().toString();
+        if(username.matches("")){
+            Toast.makeText(getApplicationContext(), "Enter  your name first!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Parameter.setName(username);
             Intent i = new Intent(MainActivity.this, TestMenuActivity.class);
             startActivity(i);
             Animatoo.animateSlideUp(MainActivity.this);
@@ -79,13 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        else{
-            Toast.makeText(getApplicationContext(), "Enter  your name first!", Toast.LENGTH_LONG).show();
-        }
-
 
     }
-
-
 
 }
