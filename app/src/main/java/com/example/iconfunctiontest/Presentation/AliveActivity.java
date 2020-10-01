@@ -127,6 +127,10 @@ public class AliveActivity extends AppCompatActivity {
 
                 bt_Icon0.setVisibility(View.VISIBLE);
                 tV_label0.setVisibility(View.VISIBLE);
+
+
+
+
             }
             else {//Test Mode
                 tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
@@ -139,9 +143,13 @@ public class AliveActivity extends AppCompatActivity {
     }
 
     public void onClick_Continue(View view) {
-        tV_Target_Heading.setVisibility(View.INVISIBLE);
-        tV_Target.setVisibility(View.INVISIBLE);
+
         bt_Continue.setVisibility(View.INVISIBLE);
+
+        if(Parameter.hide_Target_In_Test){
+            tV_Target_Heading.setVisibility(View.INVISIBLE);
+            tV_Target.setVisibility(View.INVISIBLE);
+        }
 
         if (testID != 5) {  //Test1A, Test2A - using 1 Icon
             bt_Icon0.setVisibility(View.VISIBLE);

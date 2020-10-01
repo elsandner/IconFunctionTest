@@ -159,7 +159,7 @@ public class TestService {
                         //doBreak
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Break");
-                        i.putExtra("EXPLANATION", "Enjoy your break. Press continue when you want to go on with the test.");
+                        i.putExtra("EXPLANATION", "Press continue when you want to go on with the test.");
 
                         i.putExtra("TRIAL", (currentTrial + 1) + "/" + trials.size());
                         i.putExtra("TARGET", trials.get(currentTrial).getTarget());

@@ -251,9 +251,13 @@ public class StandardActivity extends AppCompatActivity {
     }
 
     public void onClick_Continue(View view) {
-        tV_Target_Heading.setVisibility(View.INVISIBLE);
-        tV_Target.setVisibility(View.INVISIBLE);
+
         bt_Continue.setVisibility(View.INVISIBLE);
+
+        if(Parameter.hide_Target_In_Test){
+            tV_Target_Heading.setVisibility(View.INVISIBLE);
+            tV_Target.setVisibility(View.INVISIBLE);
+        }
 
         if (testID != 6) {  //Test1B, Test2B - using 1 Icon
             bt_Icon0.setVisibility(View.VISIBLE);

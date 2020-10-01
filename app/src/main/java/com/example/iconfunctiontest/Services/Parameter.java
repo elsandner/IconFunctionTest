@@ -5,6 +5,9 @@ public class Parameter {
     private static String name="default";
 
     private static int DEFAULT=4;
+
+    public static boolean hide_Target_In_Test=false;
+    public static boolean show_radialSegments;
     public static int LongClick_Vibration_time = 200; //in miliseconds
 
     public static String[] Items = {
@@ -44,11 +47,10 @@ public class Parameter {
     public static int number_of_Items_Alive = DEFAULT; //Default=4
 
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
-    public static int AliveIcon_LongClick_duration = 3; //in seconds
 
+    public static int AliveIcon_LongClick_duration = Integer.MAX_VALUE; //in seconds //deaktivate: Integer.MAX_VALUE;
     // Delay time between releasing the finger from screen till icon starts moving back to original position
     public static int AliveIcon_MoveIconBack_Delay = 1; //in seconds
-
     public static int MoveIconBack_Duration =1000; //in miliseconds
 
     public static double popUp_threshold = 100;

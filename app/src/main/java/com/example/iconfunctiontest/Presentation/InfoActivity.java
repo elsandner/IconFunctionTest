@@ -29,10 +29,10 @@ public class InfoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         tV_heading = (TextView) findViewById(R.id.tV_heading);
-        tV_heading.setText("Break Screen");
+        tV_heading.setText("Break"); //Default
 
         tV_explanation =(TextView) findViewById(R.id.tV_explanation);
-        tV_explanation.setText("Now do a break as long as you want. Press  the button to continue");
+        tV_explanation.setText("Now do a break as long as you want. Press  the button to continue"); //Default
 
         if(bundle!=null){
             tV_heading.setText(bundle.getString("HEADING"));
