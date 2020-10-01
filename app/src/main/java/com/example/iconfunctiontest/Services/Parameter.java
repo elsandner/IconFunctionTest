@@ -7,7 +7,7 @@ public class Parameter {
     private static int DEFAULT=4;
 
     public static boolean hide_Target_In_Test=false;
-    public static boolean show_radialSegments;
+    public static boolean show_radialSegments=true;
     public static int LongClick_Vibration_time = 200; //in miliseconds
 
     public static String[] Items = {
@@ -44,7 +44,7 @@ public class Parameter {
     };
 
 //Alive Icon
-    public static int number_of_Items_Alive = DEFAULT; //Default=4
+    public static int number_of_Items_Alive = 4; //Default=4
 
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
 

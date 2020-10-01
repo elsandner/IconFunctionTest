@@ -31,12 +31,6 @@ public class GestureService implements View.OnTouchListener {
     }
 
     public double calcAngle(double diffX, double diffY){
-        /*
-        if(diffX==0&&diffY==0){
-            return -2; //Click
-        }
-        */
-
 
         double alpha = Math.atan2(diffX,diffY);
         alpha=alpha*(180/Math.PI); //convert from "Bogenmaß" to Degree

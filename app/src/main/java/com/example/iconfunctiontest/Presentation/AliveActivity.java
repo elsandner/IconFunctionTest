@@ -2,17 +2,23 @@ package com.example.iconfunctiontest.Presentation;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
@@ -20,6 +26,7 @@ import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
@@ -128,10 +135,10 @@ public class AliveActivity extends AppCompatActivity {
                 bt_Icon0.setVisibility(View.VISIBLE);
                 tV_label0.setVisibility(View.VISIBLE);
 
-
-
-
+                if(Parameter.show_radialSegments)
+                    createRadialSegments(Parameter.number_of_Items_Alive);
             }
+
             else {//Test Mode
                 tV_Target.setText(Parameter.Items[bundle.getInt("TARGET")]);
                 bt_Continue.setVisibility(View.VISIBLE);
@@ -140,6 +147,53 @@ public class AliveActivity extends AppCompatActivity {
                 tV_label0.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    private void createRadialSegments(int segments) {
+        FrameLayout fL_radial_segment_container = findViewById(R.id.fL_radia_segment_container);
+        int color[] = {
+                Color.GREEN,
+                Color.BLUE,
+                Color.CYAN,
+                Color.DKGRAY,
+                Color.MAGENTA,
+                Color.YELLOW,
+                Color.LTGRAY,
+                Color.argb(1,223, 219, 93),
+                Color.argb(1,242, 110, 187),
+                Color.argb(1,223, 93, 93),
+                Color.argb(1,220, 242, 110),
+                Color.argb(1,110, 185, 242),
+                Color.argb(1,203, 110, 242),
+                Color.argb(1,76, 154, 80),
+                Color.argb(1,76, 133, 154 ),
+                Color.argb(1,76, 77, 154),
+                Color.argb(1,130, 76, 154 ),
+                Color.argb(1,154, 76, 76 ),
+                Color.argb(1,179, 195, 255 ),
+        };//TODO: Extend this list to test with more Items
+
+        int angle = (int) (360.0 / segments); //angle per segment = half of the real segment-angle
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        ProgressBar radialSegment_Last = (ProgressBar) inflater.inflate(R.layout.radial_segment, null);
+        radialSegment_Last.setProgress(360);
+        radialSegment_Last.getProgressDrawable().setColorFilter(color[0], PorterDuff.Mode.SRC_ATOP);
+        fL_radial_segment_container.addView(radialSegment_Last);
+
+        for(int i=segments-1;i>=1;i--){
+                ProgressBar radialSegment = (ProgressBar) inflater.inflate(R.layout.radial_segment, null);
+                radialSegment.setProgress((angle * i)+(angle/2));
+                radialSegment.getProgressDrawable().setColorFilter(color[i], PorterDuff.Mode.SRC_ATOP);
+                fL_radial_segment_container.addView(radialSegment);
+        }
+
+        ProgressBar radialSegment_First = (ProgressBar) inflater.inflate(R.layout.radial_segment, null);
+        radialSegment_First.setProgress(angle/2);
+        radialSegment_First.getProgressDrawable().setColorFilter(color[0], PorterDuff.Mode.SRC_ATOP);
+        fL_radial_segment_container.addView(radialSegment_First);
+
     }
 
     public void onClick_Continue(View view) {
