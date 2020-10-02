@@ -39,32 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tV_label0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Icon"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="@+id/bt_Icon0"
-        app:layout_constraintStart_toStartOf="@+id/bt_Icon0"
-        app:layout_constraintTop_toBottomOf="@+id/bt_Icon0" />
-
-    <Button
-        android:id="@+id/bt_Continue"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-
-        android:background="@drawable/custom_rounded_corners_blue"
-        android:onClick="onClick_Continue"
-        android:text="continue"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="@+id/fullscreen_content"
-        app:layout_constraintEnd_toEndOf="@+id/fullscreen_content"
-        app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
-        app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
-        tools:ignore="OnClick" />
-
     <LinearLayout
         android:id="@+id/L_PopUp0"
         android:layout_width="0dp"
@@ -89,8 +63,9 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
 
+        android:layout_marginEnd="8dp"
         android:background="@color/cardview_shadow_end_color"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
@@ -101,6 +76,27 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/fullscreen_content_controls"
         app:layout_constraintTop_toBottomOf="@+id/tV_Target_Heading" />
+
+    <TextView
+        android:id="@+id/tV_Selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/cardview_shadow_end_color"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="Item X selected"
+        android:textColor="#33b5e5"
+        android:textSize="40dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/fullscreen_content_controls"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/fullscreen_content_controls"
+        app:layout_constraintTop_toBottomOf="@+id/tV_Target" />
 
     <TextView
         android:id="@+id/tV_Trial"
@@ -142,6 +138,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fullscreen_content_controls" />
+
+    <TextView
+        android:id="@+id/tV_label0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test Icon"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/bt_Icon0"
+        app:layout_constraintStart_toStartOf="@+id/bt_Icon0"
+        app:layout_constraintTop_toBottomOf="@+id/bt_Icon0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cL_Icons"
@@ -308,7 +314,25 @@
             app:layout_constraintStart_toStartOf="parent">
 
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/bt_Continue"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+
+        android:background="@drawable/custom_rounded_corners_blue"
+        android:onClick="onClick_Continue"
+        android:text="continue"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintBottom_toBottomOf="@+id/fullscreen_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75"
+        tools:ignore="OnClick" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,6 +44,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <FrameLayout
+        android:id="@+id/fL_radia_segment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:splitMotionEvents="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </FrameLayout>
+
     <TextView
         android:id="@+id/tV_Target_Heading"
         android:layout_width="match_parent"
@@ -69,8 +80,9 @@
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
 
+        android:layout_marginEnd="8dp"
         android:background="@color/cardview_shadow_end_color"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
@@ -82,25 +94,26 @@
         app:layout_constraintStart_toStartOf="@id/fullscreen_content_controls"
         app:layout_constraintTop_toBottomOf="@+id/tV_Target_Heading" />
 
-    <Button
-        android:id="@+id/bt_Continue"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="105dp"
-        android:layout_marginLeft="105dp"
-        android:layout_marginEnd="106dp"
-        android:layout_marginRight="106dp"
+    <TextView
+        android:id="@+id/tV_Selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
-        android:background="@drawable/custom_rounded_corners_blue"
-        android:onClick="onClick_Continue"
-        android:text="continue"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/cardview_light_background"
-        app:layout_constraintBottom_toBottomOf="@+id/fullscreen_content"
-        app:layout_constraintEnd_toEndOf="@+id/fullscreen_content"
-        app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
-        app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
-        tools:ignore="OnClick" />
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/cardview_shadow_end_color"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="Item X selected"
+        android:textColor="#33b5e5"
+        android:textSize="40dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/fullscreen_content_controls"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/fullscreen_content_controls"
+        app:layout_constraintTop_toBottomOf="@+id/tV_Target" />
 
     <Button
         android:id="@+id/bt_Icon0"
@@ -109,7 +122,6 @@
         android:layout_gravity="center|center"
         android:background="@drawable/custom_rounded_corners_red"
         android:onClick="onClickBt_Icon"
-        android:text="ICON"
         app:layout_constraintBottom_toBottomOf="@+id/fullscreen_content"
         app:layout_constraintEnd_toEndOf="@+id/fullscreen_content"
         app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
@@ -144,6 +156,7 @@
         android:id="@+id/tV_label0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:text="Icon "
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="@+id/bt_Icon0"
@@ -238,17 +251,26 @@
         app:layout_constraintStart_toStartOf="@+id/bt_Icon4"
         app:layout_constraintTop_toBottomOf="@+id/bt_Icon4" />
 
-    <FrameLayout
-        android:id="@+id/fL_radia_segment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:splitMotionEvents="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <Button
+        android:id="@+id/bt_Continue"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginLeft="105dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginRight="106dp"
 
-    </FrameLayout>
+        android:background="@drawable/custom_rounded_corners_blue"
+        android:onClick="onClick_Continue"
+        android:text="continue"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintBottom_toBottomOf="@+id/fullscreen_content"
+        app:layout_constraintEnd_toEndOf="@+id/fullscreen_content"
+        app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
+        app:layout_constraintTop_toTopOf="@+id/fullscreen_content"
+        app:layout_constraintVertical_bias="0.75"
+        tools:ignore="OnClick" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

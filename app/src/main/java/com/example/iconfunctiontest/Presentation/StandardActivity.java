@@ -1,5 +1,6 @@
 package com.example.iconfunctiontest.Presentation;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -31,7 +32,7 @@ public class StandardActivity extends AppCompatActivity {
     private static SoundPool soundPool;
     private static int sound_success, sound_error;
 
-    private TextView tV_Target_Heading, tV_Target, tV_Trial;
+    private TextView tV_Target_Heading, tV_Target, tV_Trial, tV_Selection;
     private ConstraintLayout cL_Icons;
     private Button bt_Icon0, bt_Icon1, bt_Icon2, bt_Icon3, bt_Icon4, bt_Continue ;
     private LinearLayout L_PopUp0, L_PopUp1, L_PopUp2,L_PopUp3,L_PopUp4;
@@ -130,6 +131,7 @@ public class StandardActivity extends AppCompatActivity {
         tV_Trial = findViewById(R.id.tV_Trial);
         tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
         tV_Target = findViewById(R.id.tV_Target);
+        tV_Selection =findViewById(R.id.tV_Selection);
 
         bt_Continue=findViewById(R.id.bt_Continue);
 
@@ -262,7 +264,6 @@ public class StandardActivity extends AppCompatActivity {
                 bt_Icon0.setVisibility(View.INVISIBLE);
                 tV_label0.setVisibility(View.INVISIBLE);
             }
-
         }
     }
 
@@ -289,27 +290,50 @@ public class StandardActivity extends AppCompatActivity {
 
     //This method is executed when element in pop up menu is clicked
     private void clickItem(int selectedOption, View view){
-        Toast.makeText(getApplicationContext(), Parameter.Items[selectedOption]+" selected", Toast.LENGTH_SHORT).show();
 
         long time_wait = timePressDown - timeStart -500; //the 500ms which the longClick takes are part of time_move
         long time_move = System.currentTimeMillis() - timePressDown + 500;
+
+        tV_Target.setVisibility(View.INVISIBLE);
+        tV_Selection.setVisibility(View.VISIBLE);
+        tV_Selection.setText(Parameter.Items[selectedOption]+" selected");
+
         switch(testID){
             case 0: //Standard Icon (No Test)
                 L_PopUp0.setVisibility(View.INVISIBLE);
+
+                Thread thread = new Thread(){
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(Parameter.nextActivity_Delay);
+                            tV_Selection.setVisibility(View.INVISIBLE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
+
                 break;
             case 2: //Test1B
             case 4: //Test2B
+                tV_Target_Heading.setVisibility(View.INVISIBLE);
                 L_PopUp0.setVisibility(View.INVISIBLE);
+                bt_Icon0.setVisibility(View.INVISIBLE);
+                tV_label0.setVisibility(View.INVISIBLE);
                 testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
                 break;
             case 6://Test3B
-                L_PopUp1.setVisibility(View.INVISIBLE);
-                L_PopUp2.setVisibility(View.INVISIBLE);
-                L_PopUp3.setVisibility(View.INVISIBLE);
-                L_PopUp4.setVisibility(View.INVISIBLE);
+                tV_Target_Heading.setVisibility(View.INVISIBLE);
+                cL_Icons.setVisibility(View.INVISIBLE);
                 testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
                 break;
         }
+
+
+
     }
 
     public void onClickBt_Icon(View view) {
@@ -329,9 +353,12 @@ public class StandardActivity extends AppCompatActivity {
     }
 
     public static void feedbackOnAnswer(boolean answer){
+
+
         if(answer){
             soundPool.play(sound_success, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_green_light);
+
         }
         else {
             soundPool.play(sound_error, 1, 1, 0, 0, 1);

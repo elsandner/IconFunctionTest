@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -40,7 +41,7 @@ public class AliveActivity extends AppCompatActivity {
     private static SoundPool soundPool;
     private static int sound_success, sound_error;
 
-    private TextView tV_Target, tV_Target_Heading, tV_Trial;
+    private TextView tV_Target, tV_Target_Heading, tV_Trial, tV_Selection;
     private TextView tV_PopUp;
     private Button bt_Icon0, bt_Icon1, bt_Icon2, bt_Icon3, bt_Icon4, bt_Continue ;
     private TextView tV_label0, tV_label1, tV_label2, tV_label3, tV_label4;
@@ -104,6 +105,7 @@ public class AliveActivity extends AppCompatActivity {
         tV_Trial = findViewById(R.id.tv_Trial);
         tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
         tV_Target = findViewById(R.id.tV_Target);
+        tV_Selection = findViewById(R.id.tV_Selection);
 
         bt_Continue = findViewById(R.id.bt_Continue);
 
@@ -336,16 +338,31 @@ public class AliveActivity extends AppCompatActivity {
                             touched = false;
 
                             if (selectedOption != -2) { //needed to disable blind-mode
-                                switch (testID) {
 
+                                String selection;
+                                if (selectedOption == -1)
+                                    selection = "Cancel";
+                                else
+                                    selection = Parameter.Items[selectedOption];
+                                tV_Selection.setVisibility(View.VISIBLE);
+                                tV_Selection.setText(selection+" selected");
+
+                                switch (testID) {
                                     case 0:
-                                        //Alive Icon ohne Test - Zeigt toast mit selection
-                                        String message;
-                                        if (selectedOption == -1)
-                                            message = "Cancel";
-                                        else
-                                            message = Parameter.Items[selectedOption];
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                        Thread thread = new Thread(){
+                                            @RequiresApi(api = Build.VERSION_CODES.N)
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Thread.sleep(Parameter.nextActivity_Delay);
+                                                    tV_Selection.setVisibility(View.INVISIBLE);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        };
+                                        thread.start();
+
                                         break;
                                     case 1://Test1A novice users
                                     case 3://Test2A expert users
@@ -355,6 +372,22 @@ public class AliveActivity extends AppCompatActivity {
 
                                         double upX = motionEvent.getX();
                                         double upY = motionEvent.getY();
+
+                                        tV_Target.setVisibility(View.INVISIBLE);
+                                        tV_Target_Heading.setVisibility(View.INVISIBLE);
+
+                                        bt_Icon0.setVisibility(View.INVISIBLE);
+                                        tV_label0.setVisibility(View.INVISIBLE);
+
+                                        bt_Icon1.setVisibility(View.INVISIBLE);
+                                        bt_Icon2.setVisibility(View.INVISIBLE);
+                                        bt_Icon3.setVisibility(View.INVISIBLE);
+                                        bt_Icon4.setVisibility(View.INVISIBLE);
+
+                                        tV_label1.setVisibility(View.INVISIBLE);
+                                        tV_label2.setVisibility(View.INVISIBLE);
+                                        tV_label3.setVisibility(View.INVISIBLE);
+                                        tV_label4.setVisibility(View.INVISIBLE);
 
                                         testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move, downX, downY, upX, upY);
                                         break;
@@ -381,8 +414,9 @@ public class AliveActivity extends AppCompatActivity {
                             //Log.d("GESTURE","Action was UP");
                             return true;
 
+
                         default:
-                            return super.onTouch(view, motionEvent);
+                            return true;
                     }
 
             }
@@ -447,11 +481,14 @@ public class AliveActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    /*
     @Override
     protected void onDestroy(){
         super.onDestroy();
         soundPool.release();
         soundPool=null;
     }
+
+     */
 
 }
