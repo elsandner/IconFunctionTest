@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
@@ -45,7 +44,6 @@ public class StandardActivity extends AppCompatActivity {
     //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
     private boolean inTest=false;
     private boolean popUpOpen=false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -310,9 +308,6 @@ public class StandardActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     public void onClick_Continue(View view) {
 
         inTest=true;
@@ -389,7 +384,6 @@ public class StandardActivity extends AppCompatActivity {
 
 
     }
-
 
     public void onClickScreen(View view) {
         if(inTest||testID==0)

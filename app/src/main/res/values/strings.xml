@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IconFunctionTest</string>
+    <string name="app_name">Alive Icon Test</string>
     <string name="title_activity_first_test">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
