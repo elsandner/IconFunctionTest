@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_light_background"
+    android:splitMotionEvents="false"
     tools:context=".Presentation.AliveActivity">
-
 
     <LinearLayout
         android:id="@+id/fullscreen_content_controls"
@@ -21,7 +21,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UselessParent"></LinearLayout>
+        tools:ignore="UselessParent"
+        >
+    </LinearLayout>
 
 
     <!-- This FrameLayout insets its children based on system windows using
@@ -34,6 +36,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:keepScreenOn="true"
+        android:splitMotionEvents="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -239,6 +242,7 @@
         android:id="@+id/fL_radia_segment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:splitMotionEvents="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

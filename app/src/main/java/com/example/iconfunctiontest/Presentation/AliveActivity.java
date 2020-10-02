@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -70,7 +72,20 @@ public class AliveActivity extends AppCompatActivity {
 
         itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
 
-        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder().build();
+
+            soundPool = new SoundPool
+                    .Builder()
+                    .setMaxStreams(5)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        }
+
+        else {
+            soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        }
+
         sound_success = soundPool.load(this, R.raw.success, 1);
         sound_error = soundPool.load(this, R.raw.error, 1);
     }
@@ -241,135 +256,134 @@ public class AliveActivity extends AppCompatActivity {
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
-                int action = motionEvent.getAction();
-                double currentAlpha=0;
 
-                switch(action) {
-                    case (MotionEvent.ACTION_DOWN):
-                        touched=true;
+                    int action = motionEvent.getAction();
+                    double currentAlpha = 0;
 
-                        if(originalX==0.0f&&originalY==0.0f){ //set reference for moving back to origin position
-                            originalX=view.getX();
-                            originalY=view.getY();
-                        }
+                    switch (action) {
+                        case (MotionEvent.ACTION_DOWN):
+                            touched = true;
 
-                        dX = originalX - motionEvent.getRawX();//used for moving icon
-                        dY = originalY - motionEvent.getRawY();//used for moving icon
-
-                        downX=motionEvent.getX();
-                        downY=motionEvent.getY();
-
-                        //detect long click
-                        longClick=true;
-                        dragMode=false;
-                        startCountDown(Parameter.AliveIcon_LongClick_duration); //changes longClick to true
-
-                        timePressDown = System.currentTimeMillis();
-                        //Log.d("GESTURE","Action was DOWN");
-                        return true;
-
-                    case (MotionEvent.ACTION_MOVE):
-                        longClick=false;
-
-                        if(dragMode){
-                            //Log.d("GESTURE", "In Drag Mode!");
-                            view.animate()  //used for moving icon
-                                    .x(motionEvent.getRawX() + dX)
-                                    .y(motionEvent.getRawY() + dY)
-                                    .setDuration(0)
-                                    .start();
-                        }
-
-                        else {
-                            double diffX = motionEvent.getX() - downX;
-                            double diffY = motionEvent.getY() - downY;
-
-                            currentAlpha = calcAngle(diffX, diffY);
-
-                            DecimalFormat df = new DecimalFormat("#");
-
-                            if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
-                                tV_PopUp.setVisibility(View.VISIBLE);
+                            if (originalX == 0.0f && originalY == 0.0f) { //set reference for moving back to origin position
+                                originalX = view.getX();
+                                originalY = view.getY();
                             }
 
-                            if (  (abs(diffX) > Parameter.popUp_threshold  || abs(diffY) > Parameter.popUp_threshold)   ||   (Parameter.enableBlindMode&&testID!=1)) //testID!=1 because in this test, the Blind-Mode allways needs to be disabled
-                            {
-                                if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
-                                    tV_PopUp.setText("Cancel");
-                                    selectedOption = -1; //Cancel
-                                } else {
+                            dX = originalX - motionEvent.getRawX();//used for moving icon
+                            dY = originalY - motionEvent.getRawY();//used for moving icon
 
-                                    selectedOption=AngleToDirection(currentAlpha,Parameter.number_of_Items_Alive, iconID);
+                            downX = motionEvent.getX();
+                            downY = motionEvent.getY();
 
-                                    if(testID==1)
-                                        selectedOption=itemMap[selectedOption];
+                            //detect long click
+                            longClick = true;
+                            dragMode = false;
+                            startCountDown(Parameter.AliveIcon_LongClick_duration); //changes longClick to true
 
-                                    tV_PopUp.setText(Parameter.Items[selectedOption]);
+                            timePressDown = System.currentTimeMillis();
+                            //Log.d("GESTURE","Action was DOWN");
+                            return true;
+
+                        case (MotionEvent.ACTION_MOVE):
+                            longClick = false;
+
+                            if (dragMode) {
+                                //Log.d("GESTURE", "In Drag Mode!");
+                                view.animate()  //used for moving icon
+                                        .x(motionEvent.getRawX() + dX)
+                                        .y(motionEvent.getRawY() + dY)
+                                        .setDuration(0)
+                                        .start();
+                            } else {
+                                double diffX = motionEvent.getX() - downX;
+                                double diffY = motionEvent.getY() - downY;
+
+                                currentAlpha = calcAngle(diffX, diffY);
+
+                                DecimalFormat df = new DecimalFormat("#");
+
+                                if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
+                                    tV_PopUp.setVisibility(View.VISIBLE);
                                 }
-                            }
 
-                            tV_PopUp.animate()  //used for moving PopUp
-                                    .x(motionEvent.getRawX() + dX - 40)
-                                    .y(motionEvent.getRawY() + dY - 30)
-                                    .setDuration(0)
-                                    .start();
-                        }
-                        return true;
+                                if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) || (Parameter.enableBlindMode && testID != 1)) //testID!=1 because in this test, the Blind-Mode allways needs to be disabled
+                                {
+                                    if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
+                                        tV_PopUp.setText("Cancel");
+                                        selectedOption = -1; //Cancel
+                                    } else {
 
-                    case (MotionEvent.ACTION_UP):
-                        tV_PopUp.setVisibility(View.INVISIBLE);
-                        longClick=false;
-                        touched=false;
+                                        selectedOption = AngleToDirection(currentAlpha, Parameter.number_of_Items_Alive, iconID);
 
-                        if(selectedOption!=-2) { //needed to disable blind-mode
-                            switch (testID) {
+                                        if (testID == 1)
+                                            selectedOption = itemMap[selectedOption];
 
-                                case 0:
-                                    //Alive Icon ohne Test - Zeigt toast mit selection
-                                    String message;
-                                    if (selectedOption == -1)
-                                        message = "Cancel";
-                                    else
-                                        message = Parameter.Items[selectedOption];
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 1://Test1A novice users
-                                case 3://Test2A expert users
-                                case 5://Test3A learning
-                                    long time_wait = timePressDown - timeStart;
-                                    long time_move =System.currentTimeMillis() - timePressDown;
-
-                                    double upX=motionEvent.getX();
-                                    double upY=motionEvent.getY();
-
-                                    testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move,downX,downY,upX,upY);
-                                    break;
-                            }
-                        }
-
-                        //Move Icon back to original position
-                        new Thread() {
-                            public void run() {
-
-                                if (dragMode) {
-                                    try {
-                                        TimeUnit.SECONDS.sleep(Parameter.AliveIcon_MoveIconBack_Delay);  //time delay
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                                        tV_PopUp.setText(Parameter.Items[selectedOption]);
                                     }
                                 }
 
-                                if(!touched) {
-                                    moveIconToOriginalPosition(view);
+                                tV_PopUp.animate()  //used for moving PopUp
+                                        .x(motionEvent.getRawX() + dX - 40)
+                                        .y(motionEvent.getRawY() + dY - 30)
+                                        .setDuration(0)
+                                        .start();
+                            }
+                            return true;
+
+                        case (MotionEvent.ACTION_UP):
+                            tV_PopUp.setVisibility(View.INVISIBLE);
+                            longClick = false;
+                            touched = false;
+
+                            if (selectedOption != -2) { //needed to disable blind-mode
+                                switch (testID) {
+
+                                    case 0:
+                                        //Alive Icon ohne Test - Zeigt toast mit selection
+                                        String message;
+                                        if (selectedOption == -1)
+                                            message = "Cancel";
+                                        else
+                                            message = Parameter.Items[selectedOption];
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 1://Test1A novice users
+                                    case 3://Test2A expert users
+                                    case 5://Test3A learning
+                                        long time_wait = timePressDown - timeStart;
+                                        long time_move = System.currentTimeMillis() - timePressDown;
+
+                                        double upX = motionEvent.getX();
+                                        double upY = motionEvent.getY();
+
+                                        testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move, downX, downY, upX, upY);
+                                        break;
                                 }
                             }
-                        }.start();
-                        //Log.d("GESTURE","Action was UP");
-                        return true;
 
-                    default :
-                        return super.onTouch( view, motionEvent);
-                }
+                            //Move Icon back to original position
+                            new Thread() {
+                                public void run() {
+
+                                    if (dragMode) {
+                                        try {
+                                            TimeUnit.SECONDS.sleep(Parameter.AliveIcon_MoveIconBack_Delay);  //time delay
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    if (!touched) {
+                                        moveIconToOriginalPosition(view);
+                                    }
+                                }
+                            }.start();
+                            //Log.d("GESTURE","Action was UP");
+                            return true;
+
+                        default:
+                            return super.onTouch(view, motionEvent);
+                    }
 
             }
 

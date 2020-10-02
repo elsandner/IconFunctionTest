@@ -4,7 +4,7 @@ public class Parameter {
     //General
     private static String name="default";
 
-    private static int DEFAULT=4;
+    private static int DEFAULT=2;
 
     public static boolean hide_Target_In_Test=false;
     public static boolean show_radialSegments=true;
@@ -44,7 +44,7 @@ public class Parameter {
     };
 
 //Alive Icon
-    public static int number_of_Items_Alive = 4; //Default=4
+    public static int number_of_Items_Alive = DEFAULT; //Default=4
 
     public static boolean enableBlindMode =true; //Default=true, disable it only for testing novice users
 
@@ -63,7 +63,7 @@ public class Parameter {
     //2A...Subtest using alive-icon
     //2B...Subtest using standard-icon
     public static int number_of_trials_2=DEFAULT; //Default: same number as Icons
-    public static int number_of_blocks_2=6;
+    public static int number_of_blocks_2=2;
     public static int nextActivity_Delay = 1000; //Default=2000 because this is the time, the Toast is on the screen
                                                   //in miliseconds
 

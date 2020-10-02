@@ -65,8 +65,6 @@ public class GestureService implements View.OnTouchListener {
         return alpha;
     }
 
-
-
     public String AngleToDirectionSTRING(double alpha, int number_of_Items){
 
         double angle = 360.0 / number_of_Items; //angle per section
@@ -93,7 +91,6 @@ public class GestureService implements View.OnTouchListener {
 
         return "Error!!";
     }
-
 
     public int AngleToDirection(double alpha, int number_of_Items, int iconID){
 
@@ -130,6 +127,5 @@ public class GestureService implements View.OnTouchListener {
     private boolean isBetween(double value, double higherValue, double lowerValue){
         return value <= higherValue && value >= lowerValue;
     }
-
 
 }
