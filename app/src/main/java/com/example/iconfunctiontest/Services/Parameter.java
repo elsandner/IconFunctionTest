@@ -8,7 +8,7 @@ public class Parameter {
 
     public static boolean hide_Target_In_Test=false;
     public static boolean show_radialSegments=true;
-    public static int LongClick_Vibration_time = 200; //in miliseconds
+    public static int LongClick_Vibration_time = 5; //in miliseconds
 
     public static String[] Items = {
             "Red A",
@@ -68,11 +68,9 @@ public class Parameter {
                                                   //in miliseconds
 
     public static int blocksBetweenBreak =2;
-
     public static String getName() {
         return name;
     }
-
     public static void setName(String name) {
         Parameter.name = name;
     }

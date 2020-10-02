@@ -43,6 +43,8 @@ public class StandardActivity extends AppCompatActivity {
     private Bundle bundle;
     private int testID;   //depending on this variable, the code executes different logic according to the tests
     //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
+    private boolean inTest=false;
+    private boolean popUpOpen=false;
 
 
     @Override
@@ -158,14 +160,27 @@ public class StandardActivity extends AppCompatActivity {
 
         tV_fullscreenContent=findViewById(R.id.fullscreen_content);
 
+
+        View.OnClickListener clickListener =new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                executeOnClick(view);
+            }
+        };
+
+        bt_Icon0.setOnClickListener(clickListener);
+        bt_Icon1.setOnClickListener(clickListener);
+        bt_Icon2.setOnClickListener(clickListener);
+        bt_Icon3.setOnClickListener(clickListener);
+        bt_Icon4.setOnClickListener(clickListener);
+
+
+
         bt_Icon0.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        vibrate(Parameter.LongClick_Vibration_time);
-                        L_PopUp0.setVisibility(View.VISIBLE);
-                        timePressDown = System.currentTimeMillis();
-                        return false;
+                        return executeOnLongClick(0, view);
                     }
                 }
         );
@@ -174,16 +189,7 @@ public class StandardActivity extends AppCompatActivity {
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        vibrate(Parameter.LongClick_Vibration_time);
-
-                        L_PopUp1.setVisibility(View.VISIBLE);
-                        L_PopUp2.setVisibility(View.INVISIBLE);
-                        L_PopUp3.setVisibility(View.INVISIBLE);
-                        L_PopUp4.setVisibility(View.INVISIBLE);
-
-                        timePressDown = System.currentTimeMillis();
-
-                        return false;
+                        return executeOnLongClick(1, view);
                     }
                 }
         );
@@ -192,15 +198,7 @@ public class StandardActivity extends AppCompatActivity {
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        vibrate(Parameter.LongClick_Vibration_time);
-
-                        L_PopUp1.setVisibility(View.INVISIBLE);
-                        L_PopUp2.setVisibility(View.VISIBLE);
-                        L_PopUp3.setVisibility(View.INVISIBLE);
-                        L_PopUp4.setVisibility(View.INVISIBLE);
-
-                        timePressDown = System.currentTimeMillis();
-                        return false;
+                        return executeOnLongClick(2, view);
                     }
                 }
         );
@@ -209,15 +207,7 @@ public class StandardActivity extends AppCompatActivity {
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        vibrate(Parameter.LongClick_Vibration_time);
-
-                        L_PopUp1.setVisibility(View.INVISIBLE);
-                        L_PopUp2.setVisibility(View.INVISIBLE);
-                        L_PopUp3.setVisibility(View.VISIBLE);
-                        L_PopUp4.setVisibility(View.INVISIBLE);
-
-                        timePressDown = System.currentTimeMillis();
-                        return false;
+                        return executeOnLongClick(3, view);
                     }
                 }
         );
@@ -226,18 +216,71 @@ public class StandardActivity extends AppCompatActivity {
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        vibrate(Parameter.LongClick_Vibration_time);
-
-                        L_PopUp1.setVisibility(View.INVISIBLE);
-                        L_PopUp2.setVisibility(View.INVISIBLE);
-                        L_PopUp3.setVisibility(View.INVISIBLE);
-                        L_PopUp4.setVisibility(View.VISIBLE);
-
-                        timePressDown = System.currentTimeMillis();
-                        return false;
+                        return executeOnLongClick(4, view);
                     }
                 }
         );
+
+
+
+    }
+    private void executeOnClick(View view){
+        if(popUpOpen) {
+            popUpOpen=false;
+            clickItem(-1, view);
+
+            if(testID==0) {
+                L_PopUp0.setVisibility(View.INVISIBLE);
+                tV_Selection.setVisibility(View.VISIBLE);
+                tV_Selection.setText("Selection Canceled");
+                Thread thread = new Thread(){
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(Parameter.nextActivity_Delay);
+                            tV_Selection.setVisibility(View.INVISIBLE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
+            }
+        }
+    }
+
+    private boolean executeOnLongClick(int iconNumber, View view){
+
+        vibrate(Parameter.LongClick_Vibration_time);
+
+        L_PopUp1.setVisibility(View.INVISIBLE);
+        L_PopUp2.setVisibility(View.INVISIBLE);
+        L_PopUp3.setVisibility(View.INVISIBLE);
+        L_PopUp4.setVisibility(View.INVISIBLE);
+
+        switch(iconNumber){
+            case 0:
+                L_PopUp0.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                L_PopUp1.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                L_PopUp2.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                L_PopUp3.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                L_PopUp4.setVisibility(View.VISIBLE);
+                break;
+        }
+
+        timePressDown = System.currentTimeMillis();
+        popUpOpen=true;
+        return true;
+
     }
 
     private void setTextAndVisibility(){
@@ -267,7 +310,12 @@ public class StandardActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     public void onClick_Continue(View view) {
+
+        inTest=true;
 
         bt_Continue.setVisibility(View.INVISIBLE);
 
@@ -291,12 +339,18 @@ public class StandardActivity extends AppCompatActivity {
     //This method is executed when element in pop up menu is clicked
     private void clickItem(int selectedOption, View view){
 
+        inTest=false;
+        popUpOpen=false;
         long time_wait = timePressDown - timeStart -500; //the 500ms which the longClick takes are part of time_move
         long time_move = System.currentTimeMillis() - timePressDown + 500;
 
         tV_Target.setVisibility(View.INVISIBLE);
         tV_Selection.setVisibility(View.VISIBLE);
-        tV_Selection.setText(Parameter.Items[selectedOption]+" selected");
+
+        if(selectedOption==-1)
+            tV_Selection.setText("Selection Canceled");
+        else
+            tV_Selection.setText(Parameter.Items[selectedOption]+" selected");
 
         switch(testID){
             case 0: //Standard Icon (No Test)
@@ -336,24 +390,13 @@ public class StandardActivity extends AppCompatActivity {
 
     }
 
-    public void onClickBt_Icon(View view) {
-
-    }
-
-    public void onClickBt_TestIcon(View view) {
-
-    }
 
     public void onClickScreen(View view) {
-        L_PopUp0.setVisibility(View.INVISIBLE);
-        L_PopUp1.setVisibility(View.INVISIBLE);
-        L_PopUp2.setVisibility(View.INVISIBLE);
-        L_PopUp3.setVisibility(View.INVISIBLE);
-        L_PopUp4.setVisibility(View.INVISIBLE);
+        if(inTest||testID==0)
+            executeOnClick(view);
     }
 
     public static void feedbackOnAnswer(boolean answer){
-
 
         if(answer){
             soundPool.play(sound_success, 1, 1, 0, 0, 1);
@@ -375,7 +418,6 @@ public class StandardActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
     }
-
 
     @Override
     protected void onDestroy(){
