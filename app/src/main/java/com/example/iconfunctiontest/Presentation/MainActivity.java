@@ -20,20 +20,23 @@ import com.google.android.material.textfield.TextInputEditText;
 public class MainActivity extends AppCompatActivity {
 
     private Bundle bundle;
-    TextInputEditText name;
+    TextInputEditText userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        name = findViewById(R.id.input_Name);
+        userID = findViewById(R.id.input_ID);
 
+        /* was used when return to main-menu after test was finished
         bundle = getIntent().getExtras();
 
         if(bundle!=null){
-            name.setText(bundle.getString("USERNAME"));
+            userID.setText(bundle.getString("USERID"));
         }
+
+         */
     }
 
     public void onClickBt_Standard(View view) {
@@ -56,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickBt_Test(View view){
-        String username = name.getText().toString();
+        String username = userID.getText().toString();
         if(username.matches("")){
-            Toast.makeText(getApplicationContext(), "Enter  your name first!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Enter  your ID first!", Toast.LENGTH_LONG).show();
         }
         else{
-            Parameter.setName(username);
+            Parameter.setUserID(username);
             Intent i = new Intent(MainActivity.this, TestMenuActivity.class);
             startActivity(i);
             Animatoo.animateSlideUp(MainActivity.this);

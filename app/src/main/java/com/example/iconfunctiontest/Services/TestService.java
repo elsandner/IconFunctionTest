@@ -1,8 +1,6 @@
 package com.example.iconfunctiontest.Services;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -19,6 +17,9 @@ import com.opencsv.CSVWriter;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,45 +226,44 @@ public class TestService {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void createCSV(final AppCompatActivity callingActivity){
 
-        String FILENAME="/logfile_Test"+testID+"_"+Parameter.getName()+".csv";//TestID, Name
-        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME); // Here csv file name is MyCsvFile.csv
+        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Selected Item", "Answer", "Prepare Time", "Execution Time"};
+        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Selected Item", "Answer", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance [mm]"};
+        String key,userID, iconType,testType, trialID, blockID,repetition, targetItem, selectedItem, answer, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance;
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-
-        String iconType="Alive";
-        if(testID%2==0){    //Test ID is Even --> 2,4,6 =Alive Icon
-            iconType="Standard";
+        userID=Parameter.getUserID();
+        String time = "DATE_TIME";
+        DateTimeFormatter formatter;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_hh:mm");
+            time=formatter.format(localDateTime);
         }
+        String FILENAME="/logfile_Test"+testID+"_ID"+Parameter.getUserID()+"_"+time+".csv";
+        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME);
 
-        String [] testInfo={"Participant:", Parameter.getName(),"", "Date:",date.toString(), "","Icon Type:", iconType,"","Test Type:",getTestType(testID)};
-        String [] blankLine={};
-        String [] headingStandard={"Trial","Trial ID", "Block ID","Repetition","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time"};
-        String[] headingAlive={"Trial","Trial ID", "Block ID","Repetition","Target Item", "Selected Item","Answer", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance [mm]"}; //TODO: Add swipe distance
-        String trial, trialID, blockID,repetition, targetItem, selectedItem, answer, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance;
-        CSVWriter writer = null;
         try {
-            writer = new CSVWriter(new FileWriter(csv));
+            CSVWriter writer = new CSVWriter(new FileWriter(csv),';');//CSVWriter is deprecated but works fine for our purpose
 
-            List<String[]> data = new ArrayList<String[]>();
-            data.add(testInfo);
-            data.add(blankLine);
+            List<String[]> data = new ArrayList<>();
 
             if(testID%2==0)    //Test ID is Even --> 2,4,6 =Standard Icon
                 data.add(headingStandard);
             else
                 data.add(headingAlive);
 
-
-
             int n=0;
             for(Trial cT: trials){//cT...current Trial
                 n++;
-                trial=Integer.toString(n);
+                key=Integer.toString(n);
+
+                iconType="Alive";
+                if(testID%2==0)   //Test ID is Even --> 2,4,6 =Standard Icon
+                    iconType="Standard";
+
+                testType=getTestType(testID);
                 trialID=Integer.toString(cT.getTrialID());
                 blockID=Integer.toString(cT.getBlockID());
                 repetition=countRepetitions((n-1));
-
                 targetItem = Parameter.Items[cT.getTarget()];
 
                 if(cT.getAnswer()==-1)
@@ -275,6 +275,7 @@ public class TestService {
                     answer="correct";
                 else
                     answer="wrong";
+
                 prepareTime = Long.toString(cT.getTime_wait());
                 executeTime = Long.toString(cT.getTime_execute());
 
@@ -284,17 +285,27 @@ public class TestService {
                     upX=Double.toString(cT.getUpX());
                     upY=Double.toString(cT.getUpY());
                     swipeDistance=convertPixelToMilimeters(cT.getSwipeDistance(),callingActivity);
-                    data.add(new String[]{trial,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime,downX,downY,upX,upY,swipeDistance});
+
+                    System.out.println("ADD DATA ALIVE ICON");
+                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance});
                 }
                 else
-                    data.add(new String[]{trial,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime});
+                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime});
 
             }
+
+            /*
+            System.out.println("SIZE OF ARRAY LIST: "+data.size());
+            for(int i =0; i<data.size();i++){
+                System.out.println(data.get(i).toString());
+            }
+
+             */
 
 
             writer.writeAll(data); // data is adding to csv
             writer.close();
-            //callRead();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

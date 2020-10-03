@@ -53,6 +53,7 @@ public class StandardActivity extends AppCompatActivity {
         activateFullscreen();
         initializeUI_Elements();
         setTextAndVisibility();
+        createSoundPool();
 
         testService = TestService.getInstance();
 
@@ -98,6 +99,9 @@ public class StandardActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void createSoundPool(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder().build();
 
@@ -114,7 +118,6 @@ public class StandardActivity extends AppCompatActivity {
 
         sound_success = soundPool.load(this, R.raw.success, 1);
         sound_error = soundPool.load(this, R.raw.error, 1);
-
     }
 
     private void activateFullscreen(){
@@ -413,11 +416,13 @@ public class StandardActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    /*
     @Override
     protected void onDestroy(){
         super.onDestroy();
         soundPool.release();
         soundPool=null;
     }
+     */
 
 }

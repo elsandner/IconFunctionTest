@@ -62,6 +62,7 @@ public class AliveActivity extends AppCompatActivity {
         activateFullscreen();
         initializeUI_Elements();
         setTextAndVisibility();
+        createSoundPool();
 
         bt_Icon0.setOnTouchListener(getGestureService(0));
         bt_Icon1.setOnTouchListener(getGestureService(1));
@@ -72,7 +73,10 @@ public class AliveActivity extends AppCompatActivity {
         testService = TestService.getInstance();
 
         itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
+    }
 
+/////OnCreate sub-methodes///////
+    private void createSoundPool(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder().build();
 
@@ -82,11 +86,9 @@ public class AliveActivity extends AppCompatActivity {
                     .setAudioAttributes(audioAttributes)
                     .build();
         }
-
         else {
             soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         }
-
         sound_success = soundPool.load(this, R.raw.success, 1);
         sound_error = soundPool.load(this, R.raw.error, 1);
     }
@@ -212,6 +214,7 @@ public class AliveActivity extends AppCompatActivity {
         fL_radial_segment_container.addView(radialSegment_First);
 
     }
+////////////////////////////////
 
     public void onClick_Continue(View view) {
 
@@ -456,9 +459,6 @@ public class AliveActivity extends AppCompatActivity {
 
         };
         return gestureService;
-    }
-
-    public void onClickBt_Icon(View view){
     }
 
     public void vibrate(int time){

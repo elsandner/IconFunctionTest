@@ -2,7 +2,7 @@ package com.example.iconfunctiontest.Services;
 
 public class Parameter {
     //General
-    private static String name="default";
+    private static String userID ="default";
 
     private static int DEFAULT=2;
 
@@ -68,10 +68,10 @@ public class Parameter {
                                                   //in miliseconds
 
     public static int blocksBetweenBreak =2;
-    public static String getName() {
-        return name;
+    public static String getUserID() {
+        return userID;
     }
-    public static void setName(String name) {
-        Parameter.name = name;
+    public static void setUserID(String userID) {
+        Parameter.userID = userID;
     }
 }
