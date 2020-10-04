@@ -38,11 +38,11 @@ public class StandardActivity extends AppCompatActivity {
 
     private TestService testService;
     private long timeStart, timePressDown;
-    private Bundle bundle;
+    private Bundle bundle;//used to receive parameters from other activity
     private int testID;   //depending on this variable, the code executes different logic according to the tests
     //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
-    private boolean inTest=false;
-    private boolean popUpOpen=false;
+    private boolean inTest=false;   //this variable is false when instruction screen (with continue button) or feedback screen (red/green) is shown. If the icon itself is shown this variable is true.
+    private boolean popUpOpen=false; //when one of the popUp menues is shown, this variable is true
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +60,11 @@ public class StandardActivity extends AppCompatActivity {
         ArrayList<TextView> buffer=new ArrayList<TextView>();
 
         int number_of_Items=Parameter.number_of_Items_Standard;
-        if(testID==6)
+
+        if(testID==6)//in this test four icons are on the screen
             number_of_Items=4*number_of_Items;
 
+        //create UI Elements programmatically (number is variable and depends on parameter)
         for (int i = 0; i < number_of_Items; i++) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(2, 5, 2, 5);
@@ -81,15 +83,15 @@ public class StandardActivity extends AppCompatActivity {
             buffer.add(currentTV);
         }
 
-        if(testID!=6) { //Test1B, Test2B
+        if(testID!=6) { //Test1B, Test2B (1 Icon)
             if (testID == 2)
-                Collections.shuffle(buffer);
+                Collections.shuffle(buffer); //randomize the order of the elements in the popUp Menu for novice user test
 
-            for(TextView TV : buffer){
-                L_PopUp0.addView(TV);
-            }
+            for(TextView TV : buffer)
+                L_PopUp0.addView(TV);//Add created textViews to popUp
+
         }
-        else{   //Test3B
+        else{   //Test3B (4 Icons)
             for(int i=0; i<Parameter.number_of_Items_Standard;i++){
                 L_PopUp1.addView(buffer.get(i));
                 L_PopUp2.addView(buffer.get(i+Parameter.number_of_Items_Standard));
@@ -100,6 +102,7 @@ public class StandardActivity extends AppCompatActivity {
 
     }
 
+    //SoundPool is needed to play positive and negative sound as feedback
     private void createSoundPool(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder().build();
@@ -129,6 +132,7 @@ public class StandardActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    //This Method initializes all needed UI Elements and also contains the clickListeners and longClickListeners for all Icons
     private void initializeUI_Elements(){
         tV_Trial = findViewById(R.id.tV_Trial);
         tV_Target_Heading = findViewById(R.id.tV_Target_Heading);
@@ -160,7 +164,6 @@ public class StandardActivity extends AppCompatActivity {
 
         tV_fullscreenContent=findViewById(R.id.fullscreen_content);
 
-
         View.OnClickListener clickListener =new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -173,8 +176,6 @@ public class StandardActivity extends AppCompatActivity {
         bt_Icon2.setOnClickListener(clickListener);
         bt_Icon3.setOnClickListener(clickListener);
         bt_Icon4.setOnClickListener(clickListener);
-
-
 
         bt_Icon0.setOnLongClickListener(
                 new View.OnLongClickListener() {
@@ -221,9 +222,9 @@ public class StandardActivity extends AppCompatActivity {
                 }
         );
 
-
-
     }
+
+    //Clicking an Icon when PopUp is shown corresponds to canceling the selection
     private void executeOnClick(View view){
         if(popUpOpen) {
             popUpOpen=false;
@@ -250,6 +251,7 @@ public class StandardActivity extends AppCompatActivity {
         }
     }
 
+    //Long Click on Icon opens the popUp Menu
     private boolean executeOnLongClick(int iconNumber, View view){
 
         vibrate(Parameter.LongClick_Vibration_time);
@@ -283,6 +285,7 @@ public class StandardActivity extends AppCompatActivity {
 
     }
 
+    //Default visibility when acitivity is opened
     private void setTextAndVisibility(){
         bundle = getIntent().getExtras();
 
@@ -310,10 +313,10 @@ public class StandardActivity extends AppCompatActivity {
         }
     }
 
+    //This method changes the visibility of UI Elements during the test
     public void onClick_Continue(View view) {
 
         inTest=true;
-
         bt_Continue.setVisibility(View.INVISIBLE);
 
         if(Parameter.hide_Target_In_Test){
@@ -396,6 +399,7 @@ public class StandardActivity extends AppCompatActivity {
             executeOnClick(view);
     }
 
+    //This method is called after firing an selection (or cancel the selection) - it gives audio and visual feedback
     public static void feedbackOnAnswer(boolean answer){
 
         if(answer){
@@ -409,6 +413,7 @@ public class StandardActivity extends AppCompatActivity {
         }
     }
 
+    //Used as feedback when doing a longClick
     private void vibrate(int miliseconds){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(miliseconds);
@@ -418,14 +423,5 @@ public class StandardActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
     }
-
-    /*
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        soundPool.release();
-        soundPool=null;
-    }
-     */
 
 }

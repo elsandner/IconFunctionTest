@@ -133,11 +133,11 @@
         android:layout_height="80dp"
         android:layout_gravity="left|center_vertical"
         android:background="@drawable/calculator"
-        android:onClick="onClickBt_TestIcon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fullscreen_content_controls" />
+    <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
     <TextView
         android:id="@+id/tV_label0"
@@ -153,7 +153,6 @@
         android:id="@+id/cL_Icons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onClickBt_Icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -181,6 +180,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.3"
             app:layout_constraintStart_toStartOf="parent" />
+        <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
         <Button
             android:id="@+id/bt_Icon2"
@@ -191,6 +191,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.7"
             app:layout_constraintStart_toStartOf="parent" />
+        <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
         <LinearLayout
             android:id="@+id/L_PopUp1"

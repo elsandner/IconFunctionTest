@@ -2,7 +2,6 @@ package com.example.iconfunctiontest.Presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +10,7 @@ import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
 
+//This class contains contains onClick Methodes to start the designated test.
 public class TestMenuActivity extends AppCompatActivity {
 
     private TestService testService;
@@ -23,32 +23,32 @@ public class TestMenuActivity extends AppCompatActivity {
     }
 
     public void onClick_bt_Test1A(View view) {
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,AliveActivity.class,1);
+        testService.startTest(Parameter.number_of_trials, Parameter.number_of_blocks, TestMenuActivity.this,AliveActivity.class,1);
         Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test1B(View view) {
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,StandardActivity.class,2);
+        testService.startTest(Parameter.number_of_trials, Parameter.number_of_blocks, TestMenuActivity.this,StandardActivity.class,2);
         Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test2A(View view) {
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,AliveActivity.class,3);
+        testService.startTest(Parameter.number_of_trials, Parameter.number_of_blocks, TestMenuActivity.this,AliveActivity.class,3);
         Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test2B(View view) {
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,StandardActivity.class,4);
+        testService.startTest(Parameter.number_of_trials, Parameter.number_of_blocks, TestMenuActivity.this,StandardActivity.class,4);
         Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test3A(View view) {
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,AliveActivity.class,5);
+        testService.startTest(Parameter.number_of_trials, Parameter.number_of_blocks, TestMenuActivity.this,AliveActivity.class,5);
         Animatoo.animateDiagonal(TestMenuActivity.this);
     }
 
     public void onClick_bt_Test3B(View view) {
-        testService.startTest(Parameter.number_of_trials_2, Parameter.number_of_blocks_2, TestMenuActivity.this,StandardActivity.class,6);
+        testService.startTest(Parameter.number_of_trials, Parameter.number_of_blocks, TestMenuActivity.this,StandardActivity.class,6);
         Animatoo.animateDiagonal(TestMenuActivity.this);
 
     }

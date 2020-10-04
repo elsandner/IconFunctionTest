@@ -28,17 +28,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         userID = findViewById(R.id.input_ID);
-
-        /* was used when return to main-menu after test was finished
-        bundle = getIntent().getExtras();
-
-        if(bundle!=null){
-            userID.setText(bundle.getString("USERID"));
-        }
-
-         */
     }
 
+    //Opens Standard Icon Simulator in Instruction Mode
     public void onClickBt_Standard(View view) {
         Intent i = new Intent(MainActivity.this, StandardActivity.class);
         i.putExtra("TRIAL", "");
@@ -48,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Animatoo.animateDiagonal(MainActivity.this);
     }
 
+    //Opens Alive Icon Simulator in Instruction Mode
     public void onClickBt_Alive(View view){
         Intent i = new Intent(MainActivity.this, AliveActivity.class);
         i.putExtra("TRIAL", "");
@@ -58,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Opens Menu with all tests. To do so, the ID needs to be entered first
     public void onClickBt_Test(View view){
         String username = userID.getText().toString();
         if(username.matches("")){

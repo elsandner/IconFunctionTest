@@ -2,7 +2,6 @@ package com.example.iconfunctiontest.Services;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//public class GestureService implements View.OnTouchListener, View.OnLongClickListener {
+//This class contains some Methods to recognize and handle touch gestures in Alive Icon simulation
 public class GestureService implements View.OnTouchListener {
 
     private static final String TAG = "Gesture Service";
@@ -18,7 +17,7 @@ public class GestureService implements View.OnTouchListener {
     private double touch_downX=0;
     private double touch_downY=0;
 
-    private ArrayList<String> directions=new ArrayList<String>(); //NEW
+    private ArrayList<String> directions=new ArrayList<String>();//stores all visited directions to log all visited Items
 
     //Constructor
     public GestureService(Context c) {
@@ -26,10 +25,13 @@ public class GestureService implements View.OnTouchListener {
     }
 
     @SuppressLint("ClickableViewAccessibility")
+    //This method is overwriten in AliveActivity
+    //this implementation it is never used
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
           return gestureDetector.onTouchEvent(motionEvent);
     }
 
+    //This method calculates the angle in degrees between the horizontal axis of the coordinate system and the line from touch-down point to lift-off point
     public double calcAngle(double diffX, double diffY){
 
         double alpha = Math.atan2(diffX,diffY);
@@ -65,33 +67,7 @@ public class GestureService implements View.OnTouchListener {
         return alpha;
     }
 
-    public String AngleToDirectionSTRING(double alpha, int number_of_Items){
-
-        double angle = 360.0 / number_of_Items; //angle per section
-        ArrayList<Double> lower_limit=new ArrayList<Double>();
-        ArrayList<Double> upper_limit=new ArrayList<Double>();
-
-        //First segment is balanced to x-axis
-        lower_limit.add(360-(angle/2));
-        upper_limit.add(angle/2);
-
-        for(int i=1; i<number_of_Items;i++){
-            lower_limit.add(upper_limit.get(i-1));
-            upper_limit.add(upper_limit.get(i-1)+angle);
-        }
-
-        //Actual angleToDirection
-        if(isBetween(alpha,upper_limit.get(0),0)||isBetween(alpha, 360,lower_limit.get(0))){
-           return directions.get(0);
-        }
-        for(int i=1;i<lower_limit.size();i++){//Loop all segments
-            if(alpha>lower_limit.get(i)&&alpha<upper_limit.get(i))
-                return directions.get(i);
-        }
-
-        return "Error!!";
-    }
-
+    //This method maps the calculated angle with the index of the item. The number of items is variable
     public int AngleToDirection(double alpha, int number_of_Items, int iconID){
 
         double angle = 360.0 / number_of_Items; //angle per section
@@ -124,6 +100,7 @@ public class GestureService implements View.OnTouchListener {
         return -1;
     }
 
+    //helper method for AngleToDirection
     private boolean isBetween(double value, double higherValue, double lowerValue){
         return value <= higherValue && value >= lowerValue;
     }

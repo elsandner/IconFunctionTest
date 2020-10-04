@@ -41,16 +41,19 @@ public class TestService {
     // static variable single_instance of type Singleton
     private static TestService testService = null;
 
+    //empty private constructor (Singleton Pattern)
     private TestService(){
 
     }
 
+    //get Singleton instance
     public static TestService getInstance() {
         if(testService ==null)
             testService =new TestService();
         return testService;
     }
 
+    //This method is called when the test beginns, depending on parameters and test type it creates all needed trials for the test and opens the Alive or Standard Activity
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
         this.nextClass=nextClass;
         this.testID=testID;
@@ -86,6 +89,7 @@ public class TestService {
 
     }
 
+    //used to randomize the order of the targets
     public int[] shuffleIntArray(int size){
 
         int[] array = new int[size];
@@ -104,7 +108,9 @@ public class TestService {
         return array;
     }
 
-    //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
+    //This method is executed when participant hit his selection
+    //It receives all parameters which are tracked and stores them into the trials ArrayList (from where it gets readed for logging)
+    //also this method calls the designated feedback method or the designated next activity
     public void onAnswer(int selectedOption, final AppCompatActivity callingActivity,
                          long time_wait, long time_move,
                          double downX, double downY,
@@ -144,6 +150,7 @@ public class TestService {
 
     }
 
+    //calls the designated feedbackOnAnswer method which needs to be a element of the Activity class.
     private void callFeedbackOnAnswer(int testID, boolean answer){
         if(testID==2||testID==4||testID==6) {
             StandardActivity.feedbackOnAnswer(answer);
@@ -153,6 +160,7 @@ public class TestService {
         }
     }
 
+    //This Method manages to call the designated next Activity and pass all needed parameters to it
     private void nextActivity(final AppCompatActivity callingActivity, final boolean finish){
 
         final Thread thread = new Thread(){
@@ -205,6 +213,7 @@ public class TestService {
 
     }
 
+    //If participant hits the wrong answer, the trial is added to the end of the current block again
     private void addTrialAgain(int currentTrial){
 
         Trial trial = trials.get(currentTrial);
@@ -230,14 +239,15 @@ public class TestService {
                 }
                 i++;
             }
-
-
         }
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+
+    //This Method Manages the logging of the main file
+    //it gets the data from all trial Objects of the test and writes it into a CSV file
+    //each entry contains information of one trial
+    //This CSV file into the root folder of the phones file system
     private void createCSV_Main(final AppCompatActivity callingActivity){
 
         String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
@@ -323,16 +333,12 @@ public class TestService {
                         travelDistance = Double.toString(travelDistances.get(n - 1));
                     }
 
-                    //
                     //define vistedItems
                     VisitedItems="";
                     for(int i=0;i<cT.getLogMovement_VisitedItems().size();i++){
                         VisitedItems+=cT.getLogMovement_VisitedItems().get(i);
                     }
                     NrVisits=Integer.toString(cT.getLogMovement_VisitedItems().size());
-
-
-                    //
 
                     if(cT.getSwipeDistance()<Parameter.popUp_threshold)
                         Mode="Blind Mode";
@@ -343,7 +349,6 @@ public class TestService {
                 }
                 else
                     data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
-
             }
             writer.writeAll(data); // data is adding to csv
             writer.close();
@@ -412,6 +417,7 @@ public class TestService {
         return travelDistances;
     }
 
+    //helper method for logging which counts how many trial-objects with the same blockID and the same trialID exist
     private String countRepetitions(int refIndex){
         int repetition=1;
         Trial trial = trials.get(refIndex);
@@ -430,12 +436,14 @@ public class TestService {
         return Integer.toString(repetition);
     }
 
+    //All distances are values in pixel. this method allows to log the distances in mm
     private String convertPixelToMilimeters(double pixelValue, final AppCompatActivity callingActivity){
         final DisplayMetrics dm = callingActivity.getResources().getDisplayMetrics();
         double mmValue= pixelValue / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
         return Double.toString(mmValue);
     }
 
+    //returns a String for the log-file depending on the testID
     private String getTestType(int testID){
         switch(testID){
             case 1:
@@ -448,8 +456,8 @@ public class TestService {
         return "invalid input";
     }
 
+    //this method calculates the sum of all euclidian distances between two serial touch points
     private double calculateTravelDistance(Trial trial){
-
          double travelDistance=0;
          for(int i=1;i<trial.getLogMovement_Coordinate_X().size();i++){
              double diffX = abs(trial.getLogMovement_Coordinate_X().get(i)-trial.getLogMovement_Coordinate_X().get(i-1));

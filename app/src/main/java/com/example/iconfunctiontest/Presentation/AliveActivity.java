@@ -17,23 +17,21 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.GestureService;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
 
+//This class contains all the logic used for the simulation of the Alive Icon.
 public class AliveActivity extends AppCompatActivity {
     private View mContentView;
 
@@ -47,10 +45,10 @@ public class AliveActivity extends AppCompatActivity {
     private TextView tV_label0, tV_label1, tV_label2, tV_label3, tV_label4;
 
     private TestService testService;
-    private Bundle bundle;
+    private Bundle bundle;  //needed to deliver and receive parameters from/to other activities.
     private int testID;   //depending on this variable, the code executes different logic according to the tests
                         //0..Alive-Icon (no test), 1..Test1A, 2..Test1B, 3..Test2A, 4..Test2B, 5..Test3A, 6..Test3B
-    private int[] itemMap;
+    private int[] itemMap; //used for randomize the item position for novice user test
     long timeStart, timePressDown;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -190,7 +188,7 @@ public class AliveActivity extends AppCompatActivity {
                 Color.argb(1,130, 76, 154 ),
                 Color.argb(1,154, 76, 76 ),
                 Color.argb(1,179, 195, 255 ),
-        };//TODO: Extend this list to test with more Items
+        };//TODO: Extend this list to use with more Items
 
         int angle = (int) (360.0 / segments); //angle per segment = half of the real segment-angle
 
@@ -216,6 +214,7 @@ public class AliveActivity extends AppCompatActivity {
     }
 ////////////////////////////////
 
+    //This Method changes the visibility of grafic-elements when clicking the continue button
     public void onClick_Continue(View view) {
 
         bt_Continue.setVisibility(View.INVISIBLE);
@@ -245,6 +244,7 @@ public class AliveActivity extends AppCompatActivity {
         timeStart = System.currentTimeMillis();
     }
 
+    //This method is also called in OnCreate and implements the gestureService which handles all touch movements and touch events
     private GestureService getGestureService(final int iconID){
         GestureService gestureService = new GestureService(AliveActivity.this) {
 
@@ -268,19 +268,17 @@ public class AliveActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
 
-                    int action = motionEvent.getAction();
-                    double currentAlpha = 0;
-
-                    switch (action) {
+                int action = motionEvent.getAction();
+                switch (action) {
                         case (MotionEvent.ACTION_DOWN):
-
                             touched = true;
 
-                            if (originalX == 0.0f && originalY == 0.0f) { //set reference for moving back to origin position
+                        //this is only needed when feature "Move Icon after long click is used" (needed when icon position is close to edge)
+                            //set reference for moving back to origin position
+                            if (originalX == 0.0f && originalY == 0.0f) {
                                 originalX = view.getX();
                                 originalY = view.getY();
                             }
-
                             dX = originalX - motionEvent.getRawX();//used for moving icon
                             dY = originalY - motionEvent.getRawY();//used for moving icon
 
@@ -291,9 +289,9 @@ public class AliveActivity extends AppCompatActivity {
                             longClick = true;
                             dragMode = false;
                             startCountDown(Parameter.AliveIcon_LongClick_duration); //changes longClick to true
+                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                             timePressDown = System.currentTimeMillis();
-                            //Log.d("GESTURE","Action was DOWN");
                             return true;
 
                         case (MotionEvent.ACTION_MOVE):
@@ -316,6 +314,7 @@ public class AliveActivity extends AppCompatActivity {
                                     logMovement_Coordinate_Y.add(motionEvent.getY());
                                 }
 
+                                //Calculate distance between current postion and touch-down position
                                 double diffX = motionEvent.getX() - downX;
                                 double diffY = motionEvent.getY() - downY;
 
@@ -325,22 +324,25 @@ public class AliveActivity extends AppCompatActivity {
                                 }
 
                                 //only react if either blind mode is enabled or popUp threshold is exceeded
-                                if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) || (Parameter.enableBlindMode && testID != 1)) //testID!=1 because in this test, the Blind-Mode always needs to be disabled
+                                //testID!=1 because in this test, the Blind-Mode always needs to be disabled
+                                if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) || (Parameter.enableBlindMode && testID != 1))
                                 {
+                                    //if finger in Cancel-Area
                                     if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
                                         tV_PopUp.setText("Cancel");
                                         selectedOption = -1; //Cancel
-                                    } else {
-                                        currentAlpha = calcAngle(diffX, diffY);
+                                    }
+                                    else {
+                                        double currentAlpha = calcAngle(diffX, diffY);
                                         selectedOption = AngleToDirection(currentAlpha, Parameter.number_of_Items_Alive, iconID);
 
-                                        if (testID == 1)
+                                        if (testID == 1)//randomize mapping of items and position for novice user test
                                             selectedOption = itemMap[selectedOption];
 
                                         tV_PopUp.setText(Parameter.Items[selectedOption]);
                                     }
 
-                                    /// Add visited options
+                                    /// Log all visited items
                                     if((logMovement_VisitedItems.isEmpty()||logMovement_VisitedItems.get(logMovement_VisitedItems.size()-1)!=selectedOption)){
                                         logMovement_VisitedItems.add(selectedOption);
                                     }
@@ -350,8 +352,8 @@ public class AliveActivity extends AppCompatActivity {
                                 }
 
                                 tV_PopUp.animate()  //used for moving PopUp
-                                        .x(motionEvent.getRawX() + dX - 40)
-                                        .y(motionEvent.getRawY() + dY - 30)
+                                        .x(motionEvent.getRawX() + dX - Parameter.popUp_distance_toTouchPoint_X)
+                                        .y(motionEvent.getRawY() + dY - Parameter.popUp_distance_toTouchPoint_Y)
                                         .setDuration(0)
                                         .start();
                             }
@@ -362,8 +364,9 @@ public class AliveActivity extends AppCompatActivity {
                             longClick = false;
                             touched = false;
 
-                            if (selectedOption != -2) { //needed to disable blind-mode
+                            if (selectedOption != -2) { //needed to disable blind-mode //if blind mode is disabled, on a short-swipe nothing happens
 
+                                //Get respective String representing the selected Option
                                 String selection;
                                 if (selectedOption == -1)
                                     selection = "Cancel";
@@ -379,13 +382,14 @@ public class AliveActivity extends AppCompatActivity {
                                     case 1://Test1A novice users
                                     case 3://Test2A expert users
                                     case 5://Test3A learning
-
                                         actionUpTestMode(motionEvent,selectedOption,downX,downY,logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y, logMovement_VisitedItems);
                                         break;
                                 }
                             }
 
                             //Move Icon back to original position
+                        //Again, this code belongs to the feature "moving icon if its position is close to the edge"
+                        //This feature is implemented but not used in the current version
                             new Thread() {
                                 public void run() {
 
@@ -402,9 +406,8 @@ public class AliveActivity extends AppCompatActivity {
                                     }
                                 }
                             }.start();
-                            //Log.d("GESTURE","Action was UP");
+                        ////////////////////////////////////////////////////////////////////////////////////////////////
                             return true;
-
 
                         default:
                             return true;
@@ -424,7 +427,6 @@ public class AliveActivity extends AppCompatActivity {
                         }
 
                         if(longClick){
-                            //Log.d("GESTURE", "LongClick Detected");
                             vibrate(Parameter.LongClick_Vibration_time);
                             dragMode=true;
                         }
@@ -449,6 +451,26 @@ public class AliveActivity extends AppCompatActivity {
         return gestureService;
     }
 
+    //This method shows the result of the selection on the screen for a certain time
+    private void actionUpInstructionMode(){
+        Thread thread = new Thread(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(Parameter.nextActivity_Delay);
+                    tV_Selection.setVisibility(View.INVISIBLE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
+    //This Methode handles the selection of an Item in test-mode
+    //It changes the visibility of the activities elements,
+    //messures the time and passes the logged parameters to the onAnswer method.
     private void actionUpTestMode(MotionEvent motionEvent, int selectedOption,
                                   double downX, double downY,
                                   ArrayList<Long> logMovement_Timestamp,
@@ -484,27 +506,16 @@ public class AliveActivity extends AppCompatActivity {
                             logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y, logMovement_VisitedItems);
     }
 
-    private void actionUpInstructionMode(){
-        Thread thread = new Thread(){
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(Parameter.nextActivity_Delay);
-                    tV_Selection.setVisibility(View.INVISIBLE);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-    }
 
+    //This method lets the phone vibrate as feedback on a long click
+    //it is only needed for unused feature "Move icon from edge"
     public void vibrate(int time){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(time);
     }
 
+    //This method is called after each selection during the test. It gives visual and audio feedback
+    //depending on the correctness of your answer
     public static void feedbackOnAnswer(boolean answer) {
         if(answer){
             soundPool.play(sound_success, 1, 1, 0, 0, 1);
@@ -513,7 +524,9 @@ public class AliveActivity extends AppCompatActivity {
         else {
             soundPool.play(sound_error, 1, 1, 0, 0, 1);
             tV_fullscreenContent.setBackgroundResource(android.R.color.holo_red_light);
-        }   }
+        }
+    }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -121,11 +121,11 @@
         android:layout_height="80dp"
         android:layout_gravity="center|center"
         android:background="@drawable/calculator"
-        android:onClick="onClickBt_Icon"
         app:layout_constraintBottom_toBottomOf="@+id/fullscreen_content"
         app:layout_constraintEnd_toEndOf="@+id/fullscreen_content"
         app:layout_constraintStart_toStartOf="@+id/fullscreen_content"
         app:layout_constraintTop_toTopOf="parent" />
+        <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
     <TextView
         android:id="@+id/tV_PopUp"
@@ -169,13 +169,13 @@
         android:layout_height="80dp"
         android:layout_gravity="center|center"
         android:background="@drawable/calender"
-        android:onClick="onClickBt_Icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6" />
+        <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
     <Button
         android:id="@+id/bt_Icon3"
@@ -183,7 +183,6 @@
         android:layout_height="80dp"
         android:layout_gravity="center|center"
         android:background="@drawable/aau_icon"
-        android:onClick="onClickBt_Icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
@@ -207,9 +206,9 @@
         android:layout_height="80dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/calculator"
-        android:onClick="onClickBt_Icon"
         app:layout_constraintBottom_toTopOf="@+id/bt_Icon3"
         app:layout_constraintStart_toStartOf="@+id/bt_Icon3" />
+    <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
     <TextView
         android:id="@+id/tV_label1"
@@ -237,9 +236,9 @@
         android:layout_height="80dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/camera"
-        android:onClick="onClickBt_Icon"
         app:layout_constraintBottom_toTopOf="@+id/bt_Icon4"
         app:layout_constraintEnd_toEndOf="@+id/bt_Icon4" />
+    <!--Icon made by Pixel perfect from www.flaticon.com"-->
 
     <TextView
         android:id="@+id/tV_label4"

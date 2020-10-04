@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.R;
-import com.example.iconfunctiontest.Services.Parameter;
 
+//This Activity is used as "Pause-Screen" and as "finish-Screen"
 public class InfoActivity extends AppCompatActivity {
 
     private Bundle bundle;
@@ -28,14 +27,14 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();//needed to get parameter from that activity which called this one
 
-        tV_heading = (TextView) findViewById(R.id.tV_heading);
+        tV_heading = findViewById(R.id.tV_heading);
         tV_heading.setText("Break"); //Default
 
         bT_Continue=findViewById(R.id.bt_Continue);
 
-        tV_explanation =(TextView) findViewById(R.id.tV_explanation);
+        tV_explanation = findViewById(R.id.tV_explanation);
         tV_explanation.setText("Now do a break as long as you want. Press  the button to continue"); //Default
 
         if(bundle!=null){
