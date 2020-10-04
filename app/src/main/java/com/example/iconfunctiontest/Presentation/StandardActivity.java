@@ -375,12 +375,12 @@ public class StandardActivity extends AppCompatActivity {
                 L_PopUp0.setVisibility(View.INVISIBLE);
                 bt_Icon0.setVisibility(View.INVISIBLE);
                 tV_label0.setVisibility(View.INVISIBLE);
-                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
+                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,null,null,null);
                 break;
             case 6://Test3B
                 tV_Target_Heading.setVisibility(View.INVISIBLE);
                 cL_Icons.setVisibility(View.INVISIBLE);
-                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE);
+                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,null,null,null);
                 break;
         }
 

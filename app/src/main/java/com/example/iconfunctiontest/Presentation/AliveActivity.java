@@ -229,6 +229,7 @@ public class AliveActivity extends AppCompatActivity {
             bt_Icon0.setVisibility(View.VISIBLE);
             tV_label0.setVisibility(View.VISIBLE);
         }
+
         else{ //Test3B - using 4 Icons
             bt_Icon1.setVisibility(View.VISIBLE);
             bt_Icon2.setVisibility(View.VISIBLE);
@@ -258,6 +259,10 @@ public class AliveActivity extends AppCompatActivity {
             boolean touched=false;
             int selectedOption=-2;
 
+            ArrayList<Long> logMovement_Timestamp = new ArrayList<Long>();
+            ArrayList<Float> logMovement_Coordinate_X= new ArrayList<>();
+            ArrayList<Float> logMovement_Coordinate_Y = new ArrayList<>();
+
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
             @Override
             public boolean onTouch(final View view, final MotionEvent motionEvent) {
@@ -265,8 +270,12 @@ public class AliveActivity extends AppCompatActivity {
                     int action = motionEvent.getAction();
                     double currentAlpha = 0;
 
+                    System.out.println("Timestamp bevore move:"+logMovement_Timestamp.toString());
+
                     switch (action) {
                         case (MotionEvent.ACTION_DOWN):
+
+
                             touched = true;
 
                             if (originalX == 0.0f && originalY == 0.0f) { //set reference for moving back to origin position
@@ -299,25 +308,37 @@ public class AliveActivity extends AppCompatActivity {
                                         .y(motionEvent.getRawY() + dY)
                                         .setDuration(0)
                                         .start();
-                            } else {
+                            }
+                            else {
+
+                                //Log every touchpoint
+                                //if(testID>0) {//Do not log in instruction-Mode
+                                    logMovement_Timestamp.add(System.currentTimeMillis());
+                                    logMovement_Coordinate_X.add(motionEvent.getX());
+                                    logMovement_Coordinate_Y.add(motionEvent.getY());
+
+                                System.out.println("Timestamps:"+logMovement_Timestamp.toString());
+                                System.out.println("X: "+logMovement_Coordinate_X.toString());
+                                System.out.println("Y: "+logMovement_Coordinate_Y.toString());
+                                //}
+
                                 double diffX = motionEvent.getX() - downX;
                                 double diffY = motionEvent.getY() - downY;
 
                                 currentAlpha = calcAngle(diffX, diffY);
 
-                                DecimalFormat df = new DecimalFormat("#");
-
+                                //Show hint
                                 if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
                                     tV_PopUp.setVisibility(View.VISIBLE);
                                 }
 
-                                if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) || (Parameter.enableBlindMode && testID != 1)) //testID!=1 because in this test, the Blind-Mode allways needs to be disabled
+                                //only react if either blind mode is enabled or popUp threshold is exceeded
+                                if ((abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) || (Parameter.enableBlindMode && testID != 1)) //testID!=1 because in this test, the Blind-Mode always needs to be disabled
                                 {
                                     if (abs(diffX) > Parameter.cancel_threshold || abs(diffY) > Parameter.cancel_threshold) {
                                         tV_PopUp.setText("Cancel");
                                         selectedOption = -1; //Cancel
                                     } else {
-
                                         selectedOption = AngleToDirection(currentAlpha, Parameter.number_of_Items_Alive, iconID);
 
                                         if (testID == 1)
@@ -352,47 +373,16 @@ public class AliveActivity extends AppCompatActivity {
 
                                 switch (testID) {
                                     case 0:
-                                        Thread thread = new Thread(){
-                                            @RequiresApi(api = Build.VERSION_CODES.N)
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    Thread.sleep(Parameter.nextActivity_Delay);
-                                                    tV_Selection.setVisibility(View.INVISIBLE);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        };
-                                        thread.start();
-
+                                        actionUpInstructionMode();
                                         break;
                                     case 1://Test1A novice users
                                     case 3://Test2A expert users
                                     case 5://Test3A learning
-                                        long time_wait = timePressDown - timeStart;
-                                        long time_move = System.currentTimeMillis() - timePressDown;
+                                     //   System.out.println("Timestamps:"+logMovement_Timestamp.toString());
+                                     //   System.out.println("X: "+logMovement_Coordinate_X.toString());
+                                     //   System.out.println("Y: "+logMovement_Coordinate_Y.toString());
 
-                                        double upX = motionEvent.getX();
-                                        double upY = motionEvent.getY();
-
-                                        tV_Target.setVisibility(View.INVISIBLE);
-                                        tV_Target_Heading.setVisibility(View.INVISIBLE);
-
-                                        bt_Icon0.setVisibility(View.INVISIBLE);
-                                        tV_label0.setVisibility(View.INVISIBLE);
-
-                                        bt_Icon1.setVisibility(View.INVISIBLE);
-                                        bt_Icon2.setVisibility(View.INVISIBLE);
-                                        bt_Icon3.setVisibility(View.INVISIBLE);
-                                        bt_Icon4.setVisibility(View.INVISIBLE);
-
-                                        tV_label1.setVisibility(View.INVISIBLE);
-                                        tV_label2.setVisibility(View.INVISIBLE);
-                                        tV_label3.setVisibility(View.INVISIBLE);
-                                        tV_label4.setVisibility(View.INVISIBLE);
-
-                                        testService.onAnswer(selectedOption, AliveActivity.this, time_wait, time_move, downX, downY, upX, upY);
+                                        actionUpTestMode(motionEvent,selectedOption,downX,downY,logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y);
                                         break;
                                 }
                             }
@@ -461,6 +451,51 @@ public class AliveActivity extends AppCompatActivity {
         return gestureService;
     }
 
+    private void actionUpTestMode(MotionEvent motionEvent, int selectedOption, double downX, double downY, ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y){
+        long time_wait = timePressDown - timeStart;
+        long time_move = System.currentTimeMillis() - timePressDown;
+
+        double upX = motionEvent.getX();
+        double upY = motionEvent.getY();
+
+        tV_Target.setVisibility(View.INVISIBLE);
+        tV_Target_Heading.setVisibility(View.INVISIBLE);
+
+        bt_Icon0.setVisibility(View.INVISIBLE);
+        tV_label0.setVisibility(View.INVISIBLE);
+
+        bt_Icon1.setVisibility(View.INVISIBLE);
+        bt_Icon2.setVisibility(View.INVISIBLE);
+        bt_Icon3.setVisibility(View.INVISIBLE);
+        bt_Icon4.setVisibility(View.INVISIBLE);
+
+        tV_label1.setVisibility(View.INVISIBLE);
+        tV_label2.setVisibility(View.INVISIBLE);
+        tV_label3.setVisibility(View.INVISIBLE);
+        tV_label4.setVisibility(View.INVISIBLE);
+
+        testService.onAnswer(selectedOption, AliveActivity.this,
+                            time_wait, time_move,
+                            downX, downY, upX, upY,
+                            logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y);
+    }
+
+    private void actionUpInstructionMode(){
+        Thread thread = new Thread(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(Parameter.nextActivity_Delay);
+                    tV_Selection.setVisibility(View.INVISIBLE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
     public void vibrate(int time){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(time);
@@ -481,14 +516,5 @@ public class AliveActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
-    /*
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        soundPool.release();
-        soundPool=null;
-    }
-
-     */
 
 }

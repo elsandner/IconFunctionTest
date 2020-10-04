@@ -15,6 +15,8 @@ import com.example.iconfunctiontest.Presentation.InfoActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
 import com.opencsv.CSVWriter;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.jar.JarOutputStream;
+
+import static java.lang.Math.abs;
 
 public class TestService {
 
@@ -32,7 +37,6 @@ public class TestService {
     ArrayList<Trial> trials;
     private Class nextClass;
     private int testID;
-
 
     // static variable single_instance of type Singleton
     private static TestService testService = null;
@@ -101,7 +105,11 @@ public class TestService {
     }
 
     //wird ausgeführt, wenn die Testperson die Aufgabe ausgeführt hat (lift off)
-    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity, long time_wait, long time_move, double downX, double downY, double upX, double upY){
+    public void onAnswer(int selectedOption, final AppCompatActivity callingActivity,
+                         long time_wait, long time_move,
+                         double downX, double downY,
+                         double upX, double upY,
+                         ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y){
 
         trials.get(currentTrial).setTime_wait(time_wait);
         trials.get(currentTrial).setTime_execute(time_move);
@@ -110,6 +118,10 @@ public class TestService {
         trials.get(currentTrial).setDownY(downY);
         trials.get(currentTrial).setUpX(upX);
         trials.get(currentTrial).setUpY(upY);
+
+        trials.get(currentTrial).setLogMovement_Timestamp(logMovement_Timestamp);
+        trials.get(currentTrial).setLogMovement_Coordinate_X(logMovement_Coordinate_X);
+        trials.get(currentTrial).setLogMovement_Coordinate_Y(logMovement_Coordinate_Y);
 
         if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
             callFeedbackOnAnswer(testID, true);
@@ -146,14 +158,12 @@ public class TestService {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(Parameter.nextActivity_Delay); //to wait till toast finishes
                     final Intent i;
-
                     if(finish){
+                        createCSV_Main(callingActivity);
                         i = new Intent(callingActivity, InfoActivity.class);
                         i.putExtra("HEADING", "Finish");
                         i.putExtra("EXPLANATION", "Test is done. Thank you very much!");
-                        createCSV(callingActivity);
                     }
 
                     else if(trials.get(currentTrial-1).isDoBreak()){ // -1 because it allready got increased
@@ -173,6 +183,8 @@ public class TestService {
                         i.putExtra("TARGET", trials.get(currentTrial).getTarget());
                         i.putExtra("testID", testID);
                     }
+
+                    Thread.sleep(Parameter.nextActivity_Delay); //To see feedback
 
                     callingActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -224,11 +236,11 @@ public class TestService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void createCSV(final AppCompatActivity callingActivity){
+    private void createCSV_Main(final AppCompatActivity callingActivity){
 
-        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Selected Item", "Answer", "Prepare Time", "Execution Time"};
-        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Selected Item", "Answer", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance [mm]"};
-        String key,userID, iconType,testType, trialID, blockID,repetition, targetItem, selectedItem, answer, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance;
+        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
+        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Mode"};
+        String key,userID, iconType,testType, trialID, blockID,repetition, targetItem, targetIndex, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, Mode;
 
         userID=Parameter.getUserID();
         String time = "DATE_TIME";
@@ -238,11 +250,21 @@ public class TestService {
             formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_hh:mm");
             time=formatter.format(localDateTime);
         }
-        String FILENAME="/logfile_Test"+testID+"_ID"+Parameter.getUserID()+"_"+time+".csv";
-        String csv = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME);
+        String FILENAME_Main="/MAIN_Test"+testID+"_ID"+Parameter.getUserID()+"_"+time+".csv";
+        String PATH_Main = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME_Main);
+
+        //Write coordinate log file and get travelDistances
+        ArrayList<Double> travelDistances = new ArrayList<>();
+        if(testID%2==1)
+            travelDistances=createCSV_Coordinate(callingActivity, time);
 
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter(csv),';');//CSVWriter is deprecated but works fine for our purpose
+            CSVWriter writer = new CSVWriter(new FileWriter(PATH_Main),
+                    Parameter.seperatorCSV,
+                    CSVWriter.DEFAULT_QUOTE_CHARACTER,
+                    CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                    CSVWriter.DEFAULT_LINE_END
+            );
 
             List<String[]> data = new ArrayList<>();
 
@@ -265,17 +287,23 @@ public class TestService {
                 blockID=Integer.toString(cT.getBlockID());
                 repetition=countRepetitions((n-1));
                 targetItem = Parameter.Items[cT.getTarget()];
+                targetIndex=Integer.toString(cT.getTarget());
 
-                if(cT.getAnswer()==-1)
-                    selectedItem="Cancel";
-                else
+                if(cT.getAnswer()==-1) {
+                    selectedItem = "Cancel";
+                    selectedIndex = "-1";
+                }
+                else {
                     selectedItem = Parameter.Items[cT.getAnswer()];
+                    selectedIndex = Integer.toString(cT.getAnswer());
+                }
 
                 if(targetItem.equals(selectedItem))
                     answer="correct";
                 else
                     answer="wrong";
 
+                usedFinger=Parameter.usedFinger;
                 prepareTime = Long.toString(cT.getTime_wait());
                 executeTime = Long.toString(cT.getTime_execute());
 
@@ -284,25 +312,26 @@ public class TestService {
                     downY=Double.toString(cT.getDownX());
                     upX=Double.toString(cT.getUpX());
                     upY=Double.toString(cT.getUpY());
-                    swipeDistance=convertPixelToMilimeters(cT.getSwipeDistance(),callingActivity);
 
-                    System.out.println("ADD DATA ALIVE ICON");
-                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance});
+                    if(Parameter.DistanceInMilimeter) {
+                        swipeDistance = convertPixelToMilimeters(cT.getSwipeDistance(), callingActivity);
+                        travelDistance = convertPixelToMilimeters(travelDistances.get(n - 1), callingActivity);
+                    }else{
+                        swipeDistance = Double.toString(cT.getSwipeDistance());
+                        travelDistance = Double.toString(travelDistances.get(n - 1));
+                    }
+
+                    if(cT.getSwipeDistance()<Parameter.popUp_threshold)
+                        Mode="Blind Mode";
+                    else
+                        Mode="Visual Mode";
+
+                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,Mode});
                 }
                 else
-                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,selectedItem,answer,prepareTime,executeTime});
+                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
 
             }
-
-            /*
-            System.out.println("SIZE OF ARRAY LIST: "+data.size());
-            for(int i =0; i<data.size();i++){
-                System.out.println(data.get(i).toString());
-            }
-
-             */
-
-
             writer.writeAll(data); // data is adding to csv
             writer.close();
 
@@ -311,6 +340,63 @@ public class TestService {
         }
 
         System.out.println("executed write csv from TestService");
+    }
+
+    //This Method creates the second CSV File which contains the coordinates during the finger-movement. It returns an ArrayList
+    //which contains the travelDistance of each trial. So this value also can be written into the main logfile
+    private ArrayList<Double> createCSV_Coordinate(final AppCompatActivity callingActivity,String time) {
+        ArrayList<Double> travelDistances=new ArrayList<>();
+        String FILENAME_Coordinate="/COORDINATES_Test"+testID+"_ID"+Parameter.getUserID()+"_"+time+".csv";
+        String PATH_Coordinate = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME_Coordinate);
+
+        String[] heading={"Key","Travel Distance","Time Stamp", "X-Coordinate", "Y-Coordinate"};
+
+        try {
+            CSVWriter writer = new CSVWriter(new FileWriter(PATH_Coordinate),
+                    Parameter.seperatorCSV,
+                    CSVWriter.DEFAULT_QUOTE_CHARACTER,
+                    CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                    CSVWriter.DEFAULT_LINE_END
+            );
+
+            List<String[]> data = new ArrayList<>();
+            data.add(heading);
+
+
+            int n=0;
+            for(Trial cT: trials) {//cT...current Trial
+                n++;
+                int record_length = 2
+                                    + cT.getLogMovement_Timestamp().size()
+                                    + cT.getLogMovement_Coordinate_X().size()
+                                    + cT.getLogMovement_Coordinate_Y().size();
+
+                System.out.println("RECORD LENGTH: "+record_length+"!!!!!!!!!!!!!!!");
+
+                String [] record = new String[record_length];
+                record[0]=Integer.toString(n);
+
+                double travelDistance = calculateTravelDistance(cT);
+                record[1]=Double.toString(travelDistance);
+                travelDistances.add(travelDistance);
+
+                //loop all entries of logMovement arraylists and add them to record String
+                int record_index=2;
+                for(int i=0;i<cT.getLogMovement_Timestamp().size();i++){//i is index of LogMovement Array Lists
+                    record[record_index]=Long.toString(cT.getLogMovement_Timestamp().get(i));
+                    record[record_index+1]=Double.toString(cT.getLogMovement_Coordinate_X().get(i));
+                    record[record_index+2]=Double.toString(cT.getLogMovement_Coordinate_X().get(i));
+                    record_index+=3;
+                }
+                data.add(record);
+            }
+            writer.writeAll(data); // data is adding to csv
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return travelDistances;
     }
 
     private String countRepetitions(int refIndex){
@@ -347,6 +433,18 @@ public class TestService {
             case 6: return "Learning Performance";
         }
         return "invalid input";
+    }
+
+    private double calculateTravelDistance(Trial trial){
+
+         double travelDistance=0;
+         for(int i=1;i<trial.getLogMovement_Coordinate_X().size();i++){
+             double diffX = abs(trial.getLogMovement_Coordinate_X().get(i)-trial.getLogMovement_Coordinate_X().get(i-1));
+             double diffY = abs(trial.getLogMovement_Coordinate_Y().get(i)-trial.getLogMovement_Coordinate_Y().get(i-1));
+             travelDistance+=Math.sqrt(diffX*diffX+diffY*diffY);
+         }
+
+         return travelDistance;
     }
 
 }

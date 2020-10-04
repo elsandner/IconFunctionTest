@@ -74,4 +74,9 @@ public class Parameter {
     public static void setUserID(String userID) {
         Parameter.userID = userID;
     }
+
+    //Logging
+    public static char seperatorCSV =',';
+    public static String usedFinger="thump";
+    public static Boolean DistanceInMilimeter=false;    //Depending on this value the swipe-distance and the travel-distance in main-logfile are written in mm or in pixel
 }
