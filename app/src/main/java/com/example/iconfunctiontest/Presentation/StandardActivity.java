@@ -23,7 +23,6 @@ import com.example.iconfunctiontest.Services.TestService;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class StandardActivity extends AppCompatActivity {
     private View mContentView;
 
@@ -375,16 +374,20 @@ public class StandardActivity extends AppCompatActivity {
                 L_PopUp0.setVisibility(View.INVISIBLE);
                 bt_Icon0.setVisibility(View.INVISIBLE);
                 tV_label0.setVisibility(View.INVISIBLE);
-                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,null,null,null);
+                testService.onAnswer(selectedOption, StandardActivity.this,
+                        time_wait, time_move,
+                        Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,
+                        null,null,null,null);
                 break;
             case 6://Test3B
                 tV_Target_Heading.setVisibility(View.INVISIBLE);
                 cL_Icons.setVisibility(View.INVISIBLE);
-                testService.onAnswer(selectedOption, StandardActivity.this, time_wait, time_move, Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,null,null,null);
+                testService.onAnswer(selectedOption, StandardActivity.this,
+                        time_wait, time_move,
+                        Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE,
+                        null,null,null, null);
                 break;
         }
-
-
 
     }
 

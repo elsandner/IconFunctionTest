@@ -262,6 +262,7 @@ public class AliveActivity extends AppCompatActivity {
             ArrayList<Long> logMovement_Timestamp = new ArrayList<Long>();
             ArrayList<Float> logMovement_Coordinate_X= new ArrayList<>();
             ArrayList<Float> logMovement_Coordinate_Y = new ArrayList<>();
+            ArrayList<Integer>logMovement_VisitedItems = new ArrayList<>();
 
             @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
             @Override
@@ -270,11 +271,8 @@ public class AliveActivity extends AppCompatActivity {
                     int action = motionEvent.getAction();
                     double currentAlpha = 0;
 
-                    System.out.println("Timestamp bevore move:"+logMovement_Timestamp.toString());
-
                     switch (action) {
                         case (MotionEvent.ACTION_DOWN):
-
 
                             touched = true;
 
@@ -312,20 +310,14 @@ public class AliveActivity extends AppCompatActivity {
                             else {
 
                                 //Log every touchpoint
-                                //if(testID>0) {//Do not log in instruction-Mode
+                                if(testID>0) {//Do not log in instruction-Mode
                                     logMovement_Timestamp.add(System.currentTimeMillis());
                                     logMovement_Coordinate_X.add(motionEvent.getX());
                                     logMovement_Coordinate_Y.add(motionEvent.getY());
-
-                                System.out.println("Timestamps:"+logMovement_Timestamp.toString());
-                                System.out.println("X: "+logMovement_Coordinate_X.toString());
-                                System.out.println("Y: "+logMovement_Coordinate_Y.toString());
-                                //}
+                                }
 
                                 double diffX = motionEvent.getX() - downX;
                                 double diffY = motionEvent.getY() - downY;
-
-                                currentAlpha = calcAngle(diffX, diffY);
 
                                 //Show hint
                                 if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
@@ -339,6 +331,7 @@ public class AliveActivity extends AppCompatActivity {
                                         tV_PopUp.setText("Cancel");
                                         selectedOption = -1; //Cancel
                                     } else {
+                                        currentAlpha = calcAngle(diffX, diffY);
                                         selectedOption = AngleToDirection(currentAlpha, Parameter.number_of_Items_Alive, iconID);
 
                                         if (testID == 1)
@@ -346,6 +339,14 @@ public class AliveActivity extends AppCompatActivity {
 
                                         tV_PopUp.setText(Parameter.Items[selectedOption]);
                                     }
+
+                                    /// Add visited options
+                                    if((logMovement_VisitedItems.isEmpty()||logMovement_VisitedItems.get(logMovement_VisitedItems.size()-1)!=selectedOption)){
+                                        logMovement_VisitedItems.add(selectedOption);
+                                    }
+
+                                    ///
+
                                 }
 
                                 tV_PopUp.animate()  //used for moving PopUp
@@ -378,11 +379,8 @@ public class AliveActivity extends AppCompatActivity {
                                     case 1://Test1A novice users
                                     case 3://Test2A expert users
                                     case 5://Test3A learning
-                                     //   System.out.println("Timestamps:"+logMovement_Timestamp.toString());
-                                     //   System.out.println("X: "+logMovement_Coordinate_X.toString());
-                                     //   System.out.println("Y: "+logMovement_Coordinate_Y.toString());
 
-                                        actionUpTestMode(motionEvent,selectedOption,downX,downY,logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y);
+                                        actionUpTestMode(motionEvent,selectedOption,downX,downY,logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y, logMovement_VisitedItems);
                                         break;
                                 }
                             }
@@ -451,7 +449,13 @@ public class AliveActivity extends AppCompatActivity {
         return gestureService;
     }
 
-    private void actionUpTestMode(MotionEvent motionEvent, int selectedOption, double downX, double downY, ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y){
+    private void actionUpTestMode(MotionEvent motionEvent, int selectedOption,
+                                  double downX, double downY,
+                                  ArrayList<Long> logMovement_Timestamp,
+                                  ArrayList<Float>logMovement_Coordinate_X,
+                                  ArrayList<Float> logMovement_Coordinate_Y,
+                                  ArrayList<Integer> logMovement_VisitedItems){
+
         long time_wait = timePressDown - timeStart;
         long time_move = System.currentTimeMillis() - timePressDown;
 
@@ -477,7 +481,7 @@ public class AliveActivity extends AppCompatActivity {
         testService.onAnswer(selectedOption, AliveActivity.this,
                             time_wait, time_move,
                             downX, downY, upX, upY,
-                            logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y);
+                            logMovement_Timestamp,logMovement_Coordinate_X,logMovement_Coordinate_Y, logMovement_VisitedItems);
     }
 
     private void actionUpInstructionMode(){

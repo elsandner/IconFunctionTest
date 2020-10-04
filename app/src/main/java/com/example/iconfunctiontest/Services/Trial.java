@@ -18,6 +18,8 @@ public class Trial {
     private ArrayList<Long> logMovement_Timestamp;
     private ArrayList<Float>logMovement_Coordinate_X;
     private ArrayList<Float> logMovement_Coordinate_Y;
+    private ArrayList<Integer> logMovement_VisitedItems;
+
 
     public Trial (int trialID, int blockID, int target){
         this.trialID=trialID;
@@ -34,6 +36,7 @@ public class Trial {
         newTrial.setLogMovement_Timestamp(refTrial.getLogMovement_Timestamp());
         newTrial.setLogMovement_Coordinate_X(refTrial.getLogMovement_Coordinate_X());
         newTrial.setLogMovement_Coordinate_Y(refTrial.getLogMovement_Coordinate_Y());
+        newTrial.setLogMovement_VisitedItems(refTrial.getLogMovement_VisitedItems());
         return newTrial;
     }
 
@@ -134,6 +137,12 @@ public class Trial {
     }
     public void setLogMovement_Coordinate_Y(ArrayList<Float> logMovement_Coordinate_Y) {
         this.logMovement_Coordinate_Y = logMovement_Coordinate_Y;
+    }
+    public ArrayList<Integer> getLogMovement_VisitedItems() {
+        return logMovement_VisitedItems;
+    }
+    public void setLogMovement_VisitedItems(ArrayList<Integer> logMovement_VisitedItems) {
+        this.logMovement_VisitedItems = logMovement_VisitedItems;
     }
 
     public double getSwipeDistance() {

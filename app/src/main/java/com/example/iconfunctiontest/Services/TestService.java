@@ -109,7 +109,7 @@ public class TestService {
                          long time_wait, long time_move,
                          double downX, double downY,
                          double upX, double upY,
-                         ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y){
+                         ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y, ArrayList<Integer> logMovement_Visiteditems){
 
         trials.get(currentTrial).setTime_wait(time_wait);
         trials.get(currentTrial).setTime_execute(time_move);
@@ -122,6 +122,8 @@ public class TestService {
         trials.get(currentTrial).setLogMovement_Timestamp(logMovement_Timestamp);
         trials.get(currentTrial).setLogMovement_Coordinate_X(logMovement_Coordinate_X);
         trials.get(currentTrial).setLogMovement_Coordinate_Y(logMovement_Coordinate_Y);
+        trials.get(currentTrial).setLogMovement_VisitedItems(logMovement_Visiteditems);
+
 
         if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
             callFeedbackOnAnswer(testID, true);
@@ -239,8 +241,8 @@ public class TestService {
     private void createCSV_Main(final AppCompatActivity callingActivity){
 
         String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
-        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Mode"};
-        String key,userID, iconType,testType, trialID, blockID,repetition, targetItem, targetIndex, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, Mode;
+        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Visited Items", "Nr of Visits","Mode"};
+        String key,userID, iconType,testType, trialID, blockID,repetition, targetItem, targetIndex, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, VisitedItems,NrVisits, Mode;
 
         userID=Parameter.getUserID();
         String time = "DATE_TIME";
@@ -321,12 +323,23 @@ public class TestService {
                         travelDistance = Double.toString(travelDistances.get(n - 1));
                     }
 
+                    //
+                    //define vistedItems
+                    VisitedItems="";
+                    for(int i=0;i<cT.getLogMovement_VisitedItems().size();i++){
+                        VisitedItems+=cT.getLogMovement_VisitedItems().get(i);
+                    }
+                    NrVisits=Integer.toString(cT.getLogMovement_VisitedItems().size());
+
+
+                    //
+
                     if(cT.getSwipeDistance()<Parameter.popUp_threshold)
                         Mode="Blind Mode";
                     else
                         Mode="Visual Mode";
 
-                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,Mode});
+                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
                 }
                 else
                     data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
