@@ -48,3 +48,17 @@ dependencies {
     implementation 'com.opencsv:opencsv:4.6'
 
 }
+
+
+//following code is for fixing an error which appears since updating Android Studio:
+configurations {
+    all {
+        exclude module: 'httpclient'
+    }
+}
+
+android {
+    lintOptions {
+        abortOnError false
+    }
+}

@@ -3,7 +3,7 @@ package com.example.iconfunctiontest.Services;
 public class Parameter {
     //General
 
-    private static int DEFAULT=2;//Value used for number_of_Items_Alive,number_of_Items_Standard, number_of_trials,
+    private static int DEFAULT=8;//Value used for number_of_Items_Alive,number_of_Items_Standard, number_of_trials,
 
     public static boolean hide_Target_In_Test=false; //in a test-trial first the designated target and the continue button are shown.
                                                     // when pressing continue the UI changes and depending on this value the participant
@@ -13,36 +13,41 @@ public class Parameter {
     public static int LongClick_Vibration_time = 5; //in miliseconds    //to switch vibration of -> set to 0
 
     public static String[] Items = {
-            "Red A",
-            "Red B",
-            "Red C",
-            "Red D",   //Nr 4
-            "Blue A",
-            "Blue B",
-            "Blue C",
-            "Blue D",
-            "Yellow A",
-            "Yellow B",
-            "Yellow C",
-            "Yellow D",
-            "Green A",
-            "Green B",
-            "Green C",
-            "Green D",
-            "Item M",
-            "Item N",
-            "Item O",
-            "Item P",
-            "Item Q",
-            "Item R",
-            "Item S",
-            "Item T",
-            "Item U",
-            "Item V",
-            "Item W",
-            "Item X",
-            "Item Y",
-            "Item Z"
+            "Plus",
+            "Minus",
+            "Multiplication",
+            "Division",   //Nr 4
+            "Copy last result",
+            "Diagram",
+            "Advanced",
+            "Calculator Settings",
+
+            "Video",
+            "Selfie",
+            "Panorama",
+            "Gallery",
+            "SLO-MO",
+            "Timer",
+            "Picture",
+            "Camera Settings",
+
+            "My classes",
+            "My exams",
+            "My lessons",
+            "Confirmations",
+            "Registration",
+            "My Account",
+            "Exam Book",
+            "AAU Settings",
+
+            "Today",
+            "Add appointment",
+            "Add task",
+            "Add reminder",
+            "This week",
+            "This month",
+            "next appointment",
+            "CalenderSettings"
     };
 
 //Alive Icon
