@@ -534,4 +534,5 @@ public class AliveActivity extends AppCompatActivity {
     }
 
 
+
 }

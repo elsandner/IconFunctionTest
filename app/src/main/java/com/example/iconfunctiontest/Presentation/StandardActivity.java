@@ -107,6 +107,7 @@ public class StandardActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AudioAttributes audioAttributes = new AudioAttributes.Builder().build();
 
+
             soundPool = new SoundPool
                     .Builder()
                     .setMaxStreams(5)

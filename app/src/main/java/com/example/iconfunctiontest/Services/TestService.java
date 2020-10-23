@@ -1,5 +1,6 @@
 package com.example.iconfunctiontest.Services;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
+import com.example.iconfunctiontest.Presentation.MainActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
 import com.opencsv.CSVWriter;
 
@@ -243,7 +245,6 @@ public class TestService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-
     //This Method Manages the logging of the main file
     //it gets the data from all trial Objects of the test and writes it into a CSV file
     //each entry contains information of one trial
@@ -265,6 +266,8 @@ public class TestService {
         String FILENAME_Main="/MAIN_Test"+testID+"_ID"+Parameter.getUserID()+"_"+time+".csv";
         String PATH_Main = (Environment.getExternalStorageDirectory().getAbsolutePath() +FILENAME_Main);
 
+        System.out.println("PATH_Main: "+PATH_Main+" !!!");
+
         //Write coordinate log file and get travelDistances
         ArrayList<Double> travelDistances = new ArrayList<>();
         if(testID%2==1)
@@ -278,86 +281,88 @@ public class TestService {
                     CSVWriter.DEFAULT_LINE_END
             );
 
-            List<String[]> data = new ArrayList<>();
+                                            List<String[]> data = new ArrayList<>();
 
-            if(testID%2==0)    //Test ID is Even --> 2,4,6 =Standard Icon
-                data.add(headingStandard);
-            else
-                data.add(headingAlive);
+                                            if(testID%2==0)    //Test ID is Even --> 2,4,6 =Standard Icon
+                                                data.add(headingStandard);
+                                            else
+                                                data.add(headingAlive);
 
-            int n=0;
-            for(Trial cT: trials){//cT...current Trial
-                n++;
-                key=Integer.toString(n);
+                                            int n=0;
+                                            for(Trial cT: trials){//cT...current Trial
+                                                n++;
+                                                key=Integer.toString(n);
 
-                iconType="Alive";
-                if(testID%2==0)   //Test ID is Even --> 2,4,6 =Standard Icon
-                    iconType="Standard";
+                                                iconType="Alive";
+                                                if(testID%2==0)   //Test ID is Even --> 2,4,6 =Standard Icon
+                                                    iconType="Standard";
 
-                testType=getTestType(testID);
-                trialID=Integer.toString(cT.getTrialID());
-                blockID=Integer.toString(cT.getBlockID());
-                repetition=countRepetitions((n-1));
-                targetItem = Parameter.Items[cT.getTarget()];
-                targetIndex=Integer.toString(cT.getTarget());
+                                                testType=getTestType(testID);
+                                                trialID=Integer.toString(cT.getTrialID());
+                                                blockID=Integer.toString(cT.getBlockID());
+                                                repetition=countRepetitions((n-1));
+                                                targetItem = Parameter.Items[cT.getTarget()];
+                                                targetIndex=Integer.toString(cT.getTarget());
 
-                if(cT.getAnswer()==-1) {
-                    selectedItem = "Cancel";
-                    selectedIndex = "-1";
-                }
-                else {
-                    selectedItem = Parameter.Items[cT.getAnswer()];
-                    selectedIndex = Integer.toString(cT.getAnswer());
-                }
+                                                if(cT.getAnswer()==-1) {
+                                                    selectedItem = "Cancel";
+                                                    selectedIndex = "-1";
+                                                }
 
-                if(targetItem.equals(selectedItem))
-                    answer="correct";
-                else
-                    answer="wrong";
+                                                else {
+                                                    selectedItem = Parameter.Items[cT.getAnswer()];
+                                                    selectedIndex = Integer.toString(cT.getAnswer());
+                                                }
 
-                usedFinger=Parameter.usedFinger;
-                prepareTime = Long.toString(cT.getTime_wait());
-                executeTime = Long.toString(cT.getTime_execute());
+                                                if(targetItem.equals(selectedItem))
+                                                    answer="correct";
+                                                else
+                                                    answer="wrong";
 
-                if(testID%2==1){ //Only for Alive Icon
-                    downX=Double.toString(cT.getDownX());
-                    downY=Double.toString(cT.getDownX());
-                    upX=Double.toString(cT.getUpX());
-                    upY=Double.toString(cT.getUpY());
+                                                usedFinger=Parameter.usedFinger;
+                                                prepareTime = Long.toString(cT.getTime_wait());
+                                                executeTime = Long.toString(cT.getTime_execute());
 
-                    if(Parameter.DistanceInMilimeter) {
-                        swipeDistance = convertPixelToMilimeters(cT.getSwipeDistance(), callingActivity);
-                        travelDistance = convertPixelToMilimeters(travelDistances.get(n - 1), callingActivity);
-                    }else{
-                        swipeDistance = Double.toString(cT.getSwipeDistance());
-                        travelDistance = Double.toString(travelDistances.get(n - 1));
-                    }
+                                                if(testID%2==1){ //Only for Alive Icon
+                                                    downX=Double.toString(cT.getDownX());
+                                                    downY=Double.toString(cT.getDownX());
+                                                    upX=Double.toString(cT.getUpX());
+                                                    upY=Double.toString(cT.getUpY());
 
-                    //define vistedItems
-                    VisitedItems="";
-                    for(int i=0;i<cT.getLogMovement_VisitedItems().size();i++){
-                        VisitedItems+=cT.getLogMovement_VisitedItems().get(i);
-                    }
-                    NrVisits=Integer.toString(cT.getLogMovement_VisitedItems().size());
+                                                    if(Parameter.DistanceInMilimeter) {
+                                                        swipeDistance = convertPixelToMilimeters(cT.getSwipeDistance(), callingActivity);
+                                                        travelDistance = convertPixelToMilimeters(travelDistances.get(n - 1), callingActivity);
+                                                    }else{
+                                                        swipeDistance = Double.toString(cT.getSwipeDistance());
+                                                        travelDistance = Double.toString(travelDistances.get(n - 1));
+                                                    }
 
-                    if(cT.getSwipeDistance()<Parameter.popUp_threshold)
-                        Mode="Blind Mode";
-                    else
-                        Mode="Visual Mode";
+                                                    //define vistedItems
+                                                    VisitedItems="";
+                                                    for(int i=0;i<cT.getLogMovement_VisitedItems().size();i++){
+                                                        VisitedItems+=cT.getLogMovement_VisitedItems().get(i);
+                                                    }
+                                                    NrVisits=Integer.toString(cT.getLogMovement_VisitedItems().size());
 
-                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
-                }
-                else
-                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
-            }
+                                                    if(cT.getSwipeDistance()<Parameter.popUp_threshold)
+                                                        Mode="Blind Mode";
+                                                    else
+                                                        Mode="Visual Mode";
+
+                                                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
+                                                }
+                                                else
+                                                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
+                                            }
+
+            System.out.println("WRITE MAIN XML !!!");
             writer.writeAll(data); // data is adding to csv
             writer.close();
 
         } catch (IOException e) {
+            System.out.println("IO EXCEPTION in WRITE MAIN XML !!!");
             e.printStackTrace();
         }
-
-        System.out.println("executed write csv from TestService");
     }
 
     //This Method creates the second CSV File which contains the coordinates during the finger-movement. It returns an ArrayList
@@ -408,9 +413,12 @@ public class TestService {
                 }
                 data.add(record);
             }
+
+            System.out.println("WRITE COORDINATE XML !!!");
             writer.writeAll(data); // data is adding to csv
             writer.close();
         } catch (IOException e) {
+            System.out.println("IO EXCEPTION in WRITE MAIN XML !!!");
             e.printStackTrace();
         }
 
