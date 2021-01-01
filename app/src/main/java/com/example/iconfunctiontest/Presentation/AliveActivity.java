@@ -69,8 +69,7 @@ public class AliveActivity extends AppCompatActivity {
         bt_Icon4.setOnTouchListener(getGestureService(4));
 
         testService = TestService.getInstance();
-
-        itemMap= testService.shuffleIntArray(Parameter.number_of_Items_Alive);
+        itemMap = testService.shufflePosition(Parameter.number_of_Items_Alive);
     }
 
 /////OnCreate sub-methodes///////
@@ -212,7 +211,7 @@ public class AliveActivity extends AppCompatActivity {
         fL_radial_segment_container.addView(radialSegment_First);
 
     }
-////////////////////////////////
+/////////////////////////////////
 
     //This Method changes the visibility of grafic-elements when clicking the continue button
     public void onClick_Continue(View view) {
@@ -229,7 +228,7 @@ public class AliveActivity extends AppCompatActivity {
             tV_label0.setVisibility(View.VISIBLE);
         }
 
-        else{ //Test3B - using 4 Icons
+        else{ //Test3A - using 4 Icons
             bt_Icon1.setVisibility(View.VISIBLE);
             bt_Icon2.setVisibility(View.VISIBLE);
             bt_Icon3.setVisibility(View.VISIBLE);
@@ -258,6 +257,7 @@ public class AliveActivity extends AppCompatActivity {
             boolean dragMode=false;
             boolean touched=false;
             int selectedOption=-2;
+
 
             ArrayList<Long> logMovement_Timestamp = new ArrayList<Long>();
             ArrayList<Float> logMovement_Coordinate_X= new ArrayList<>();
@@ -338,6 +338,7 @@ public class AliveActivity extends AppCompatActivity {
 
                                         if (testID == 1)//randomize mapping of items and position for novice user test
                                             selectedOption = itemMap[selectedOption];
+
 
                                         tV_PopUp.setText(Parameter.Items[selectedOption]);
                                     }
@@ -532,6 +533,7 @@ public class AliveActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
     }
+
 
 
 

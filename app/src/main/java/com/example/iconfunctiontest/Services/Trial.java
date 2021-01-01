@@ -1,7 +1,5 @@
 package com.example.iconfunctiontest.Services;
 
-import android.util.DisplayMetrics;
-
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
@@ -12,6 +10,9 @@ import static java.lang.Math.sqrt;
 public class Trial {
     private int trialID, blockID;
     private int target, answer; //Stored as Index of Parameter.Item Array
+
+    private int targetPosition, selectedPosition; //Stored as Index
+
     private boolean doBreak; //is true if after this element a break should follow
     private long time_wait, time_execute; //messured Time between pull-down and lift-off
     private double downX, downY, upX, upY; //only needed for Alive-Icon
@@ -23,10 +24,12 @@ public class Trial {
     private ArrayList<Integer> logMovement_VisitedItems;
 
 
-    public Trial (int trialID, int blockID, int target){
+    public Trial (int trialID, int blockID, int target ){
         this.trialID=trialID;
         this.blockID=blockID;
         this.target=target;
+
+
         doBreak=false;
     }
 
@@ -70,10 +73,22 @@ public class Trial {
     public int getAnswer() {
         return answer;
     }
-
     public boolean setAnswer(int answer) {
         this.answer = answer;
         return answer == target;
+    }
+
+    public int getTargetPosition() {
+        return targetPosition;
+    }
+    public void setTargetPosition(int targetPosition) {
+        this.targetPosition = targetPosition;
+    }
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+    public void setSelectedPosition(int selectedPosition) {
+        this.selectedPosition = selectedPosition;
     }
 
     public boolean isDoBreak() {

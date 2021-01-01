@@ -1,6 +1,5 @@
 package com.example.iconfunctiontest.Services;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
@@ -13,22 +12,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.iconfunctiontest.Presentation.AliveActivity;
 import com.example.iconfunctiontest.Presentation.InfoActivity;
-import com.example.iconfunctiontest.Presentation.MainActivity;
 import com.example.iconfunctiontest.Presentation.StandardActivity;
 import com.opencsv.CSVWriter;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.jar.JarOutputStream;
 
 import static java.lang.Math.abs;
 
@@ -36,9 +30,10 @@ public class TestService {
 
     private int highestBlockID;
     private int currentTrial;
-    ArrayList<Trial> trials;
+    private ArrayList<Trial> trials;        //why not privat?
     private Class nextClass;
     private int testID;
+    private int[] positionMapping;
 
     // static variable single_instance of type Singleton
     private static TestService testService = null;
@@ -55,7 +50,7 @@ public class TestService {
         return testService;
     }
 
-    //This method is called when the test beginns, depending on parameters and test type it creates all needed trials for the test and opens the Alive or Standard Activity
+    //This method is called when the test starts, depending on parameters and test type it creates all needed trials for the test and opens the Alive or Standard Activity
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
         this.nextClass=nextClass;
         this.testID=testID;
@@ -119,6 +114,24 @@ public class TestService {
                          double upX, double upY,
                          ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y, ArrayList<Integer> logMovement_Visiteditems){
 
+
+
+
+        //SET POSITION FOR LOGGGING
+        if(testID==1 || testID==2){ //Nocive User
+            if(selectedOption<0)
+                trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
+            else
+                trials.get(currentTrial).setSelectedPosition(positionMapping[selectedOption]);
+            trials.get(currentTrial).setTargetPosition(positionMapping[trials.get(currentTrial).getTarget()]);//Target Position
+        }else { //Expert User
+            if(selectedOption<0)
+                trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
+            else
+                trials.get(currentTrial).setSelectedPosition(selectedOption);
+            trials.get(currentTrial).setTargetPosition(trials.get(currentTrial).getTarget());
+        }
+
         trials.get(currentTrial).setTime_wait(time_wait);
         trials.get(currentTrial).setTime_execute(time_move);
 
@@ -131,7 +144,6 @@ public class TestService {
         trials.get(currentTrial).setLogMovement_Coordinate_X(logMovement_Coordinate_X);
         trials.get(currentTrial).setLogMovement_Coordinate_Y(logMovement_Coordinate_Y);
         trials.get(currentTrial).setLogMovement_VisitedItems(logMovement_Visiteditems);
-
 
         if (trials.get(currentTrial).setAnswer(selectedOption)){//answer was correct
             callFeedbackOnAnswer(testID, true);
@@ -251,9 +263,9 @@ public class TestService {
     //This CSV file into the root folder of the phones file system
     private void createCSV_Main(final AppCompatActivity callingActivity){
 
-        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
-        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Item", "Target Index", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Visited Items", "Nr of Visits","Mode"};
-        String key,userID, iconType,testType, trialID, blockID,repetition, targetItem, targetIndex, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, VisitedItems,NrVisits, Mode;
+        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Position", "Target Item", "Target Index","Selected Position", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
+        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Position", "Target Item", "Target Index","Selected Position", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Visited Items", "Nr of Visits","Mode"};
+        String key,userID, iconType,testType, trialID, blockID,repetition, targetPosition, targetItem, targetIndex,selectedPosition, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, VisitedItems,NrVisits, Mode;
 
         userID=Parameter.getUserID();
         String time = "DATE_TIME";
@@ -281,79 +293,85 @@ public class TestService {
                     CSVWriter.DEFAULT_LINE_END
             );
 
-                                            List<String[]> data = new ArrayList<>();
+                List<String[]> data = new ArrayList<>();
 
-                                            if(testID%2==0)    //Test ID is Even --> 2,4,6 =Standard Icon
-                                                data.add(headingStandard);
-                                            else
-                                                data.add(headingAlive);
+                if(testID%2==0)    //Test ID is Even --> 2,4,6 =Standard Icon
+                    data.add(headingStandard);
+                else
+                    data.add(headingAlive);
 
-                                            int n=0;
-                                            for(Trial cT: trials){//cT...current Trial
-                                                n++;
-                                                key=Integer.toString(n);
+                int n=0;
+                for(Trial cT: trials){//cT...current Trial
+                    n++;
+                    key=Integer.toString(n);
 
-                                                iconType="Alive";
-                                                if(testID%2==0)   //Test ID is Even --> 2,4,6 =Standard Icon
-                                                    iconType="Standard";
+                    iconType="Alive";
+                    if(testID%2==0)   //Test ID is Even --> 2,4,6 =Standard Icon
+                        iconType="Standard";
 
-                                                testType=getTestType(testID);
-                                                trialID=Integer.toString(cT.getTrialID());
-                                                blockID=Integer.toString(cT.getBlockID());
-                                                repetition=countRepetitions((n-1));
-                                                targetItem = Parameter.Items[cT.getTarget()];
-                                                targetIndex=Integer.toString(cT.getTarget());
+                    testType=getTestType(testID);
+                    trialID=Integer.toString(cT.getTrialID());
+                    blockID=Integer.toString(cT.getBlockID());
+                    repetition=countRepetitions((n-1));
 
-                                                if(cT.getAnswer()==-1) {
-                                                    selectedItem = "Cancel";
-                                                    selectedIndex = "-1";
-                                                }
 
-                                                else {
-                                                    selectedItem = Parameter.Items[cT.getAnswer()];
-                                                    selectedIndex = Integer.toString(cT.getAnswer());
-                                                }
+                    targetPosition=Integer.toString(cT.getTargetPosition());
+                    selectedPosition=Integer.toString(cT.getSelectedPosition()); //TODO: add second Pos in trial class
 
-                                                if(targetItem.equals(selectedItem))
-                                                    answer="correct";
-                                                else
-                                                    answer="wrong";
 
-                                                usedFinger=Parameter.usedFinger;
-                                                prepareTime = Long.toString(cT.getTime_wait());
-                                                executeTime = Long.toString(cT.getTime_execute());
+                    targetItem = Parameter.Items[cT.getTarget()];
+                    targetIndex=Integer.toString(cT.getTarget());
 
-                                                if(testID%2==1){ //Only for Alive Icon
-                                                    downX=Double.toString(cT.getDownX());
-                                                    downY=Double.toString(cT.getDownX());
-                                                    upX=Double.toString(cT.getUpX());
-                                                    upY=Double.toString(cT.getUpY());
+                    if(cT.getAnswer()==-1) {
+                        selectedItem = "Cancel";
+                        selectedIndex = "-1";
+                    }
 
-                                                    if(Parameter.DistanceInMilimeter) {
-                                                        swipeDistance = convertPixelToMilimeters(cT.getSwipeDistance(), callingActivity);
-                                                        travelDistance = convertPixelToMilimeters(travelDistances.get(n - 1), callingActivity);
-                                                    }else{
-                                                        swipeDistance = Double.toString(cT.getSwipeDistance());
-                                                        travelDistance = Double.toString(travelDistances.get(n - 1));
-                                                    }
+                    else {
+                        selectedItem = Parameter.Items[cT.getAnswer()];
+                        selectedIndex = Integer.toString(cT.getAnswer());
+                    }
 
-                                                    //define vistedItems
-                                                    VisitedItems="";
-                                                    for(int i=0;i<cT.getLogMovement_VisitedItems().size();i++){
-                                                        VisitedItems+=cT.getLogMovement_VisitedItems().get(i);
-                                                    }
-                                                    NrVisits=Integer.toString(cT.getLogMovement_VisitedItems().size());
+                    if(targetItem.equals(selectedItem))
+                        answer="correct";
+                    else
+                        answer="wrong";
 
-                                                    if(cT.getSwipeDistance()<Parameter.popUp_threshold)
-                                                        Mode="Blind Mode";
-                                                    else
-                                                        Mode="Visual Mode";
+                    usedFinger=Parameter.usedFinger;
+                    prepareTime = Long.toString(cT.getTime_wait());
+                    executeTime = Long.toString(cT.getTime_execute());
 
-                                                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
-                                                }
-                                                else
-                                                    data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetItem,targetIndex,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
-                                            }
+                    if(testID%2==1){ //Only for Alive Icon
+                        downX=Double.toString(cT.getDownX());
+                        downY=Double.toString(cT.getDownX());
+                        upX=Double.toString(cT.getUpX());
+                        upY=Double.toString(cT.getUpY());
+
+                        if(Parameter.DistanceInMilimeter) {
+                            swipeDistance = convertPixelToMilimeters(cT.getSwipeDistance(), callingActivity);
+                            travelDistance = convertPixelToMilimeters(travelDistances.get(n - 1), callingActivity);
+                        }else{
+                            swipeDistance = Double.toString(cT.getSwipeDistance());
+                            travelDistance = Double.toString(travelDistances.get(n - 1));
+                        }
+
+                        //define vistedItems
+                        VisitedItems="";
+                        for(int i=0;i<cT.getLogMovement_VisitedItems().size();i++){
+                            VisitedItems+=cT.getLogMovement_VisitedItems().get(i);
+                        }
+                        NrVisits=Integer.toString(cT.getLogMovement_VisitedItems().size());
+
+                        if(cT.getSwipeDistance()<Parameter.popUp_threshold)
+                            Mode="Blind Mode";
+                        else
+                            Mode="Visual Mode";
+
+                        data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetPosition,targetItem,targetIndex,selectedPosition,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
+                    }
+                    else
+                        data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetPosition,targetItem,targetIndex,selectedPosition,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
+                }
 
             System.out.println("WRITE MAIN XML !!!");
             writer.writeAll(data); // data is adding to csv
@@ -448,7 +466,7 @@ public class TestService {
     private String convertPixelToMilimeters(double pixelValue, final AppCompatActivity callingActivity){
         final DisplayMetrics dm = callingActivity.getResources().getDisplayMetrics();
         double mmValue= pixelValue / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
-        return Double.toString(mmValue);
+        return Double.toString(Math.round(mmValue));
     }
 
     //returns a String for the log-file depending on the testID
@@ -474,6 +492,40 @@ public class TestService {
          }
 
          return travelDistance;
+    }
+
+
+    //This method returns a array to get the position depending on the index
+    //and stores a local array which contains the reverse array, so an array which can be used redo the mapping
+    public int[] shufflePosition(int size){
+
+        int[] array = new int[size];
+        int[] getOriginal = new int[size];
+
+        for(int i=0; i<array.length;i++){
+            array[i]=i;
+            getOriginal[i]=i;
+        }
+
+        //Randomize the order of the Targets
+        Random rand = new Random();
+        for(int i=0; i<array.length;i++){
+            int randomIndex = rand.nextInt(array.length);
+            int temp = array[randomIndex];
+            array[randomIndex] = array[i];
+            array[i] = temp;
+        }
+
+        for(int i=0; i<array.length;i++){
+            getOriginal[array[i]]=i;
+        }
+        this.positionMapping=getOriginal;
+
+        //Log that shit
+        System.out.println("LOG:\tArray randomize: "+Arrays.toString(array));
+        System.out.println("LOG:\tArray redo!:  "+Arrays.toString(getOriginal));
+
+        return array;
     }
 
 }
