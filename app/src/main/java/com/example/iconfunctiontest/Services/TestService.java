@@ -118,17 +118,26 @@ public class TestService {
 
 
         //SET POSITION FOR LOGGGING
-        if(testID==1 || testID==2){ //Nocive User
-            if(selectedOption<0)
+        if(testID==1) { //Nocive User + Alive Icon
+            if (selectedOption < 0)
                 trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
             else
                 trials.get(currentTrial).setSelectedPosition(positionMapping[selectedOption]);
             trials.get(currentTrial).setTargetPosition(positionMapping[trials.get(currentTrial).getTarget()]);//Target Position
-        }else { //Expert User
+        }
+        else if(testID==2) {
+            if(selectedOption<0)
+                trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
+            else
+                trials.get(currentTrial).setSelectedPosition(-2);
+            trials.get(currentTrial).setTargetPosition(-2);
+        }
+        else { //Expert User
             if(selectedOption<0)
                 trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
             else
                 trials.get(currentTrial).setSelectedPosition(selectedOption);
+
             trials.get(currentTrial).setTargetPosition(trials.get(currentTrial).getTarget());
         }
 
@@ -316,7 +325,7 @@ public class TestService {
 
 
                     targetPosition=Integer.toString(cT.getTargetPosition());
-                    selectedPosition=Integer.toString(cT.getSelectedPosition()); //TODO: add second Pos in trial class
+                    selectedPosition=Integer.toString(cT.getSelectedPosition());
 
 
                     targetItem = Parameter.Items[cT.getTarget()];
