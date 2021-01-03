@@ -143,18 +143,21 @@ public class Trial {
     public void setLogMovement_Timestamp(ArrayList<Long> logMovement_Timestamp) {
         this.logMovement_Timestamp = logMovement_Timestamp;
     }
+
     public ArrayList<Float> getLogMovement_Coordinate_X() {
         return logMovement_Coordinate_X;
     }
     public void setLogMovement_Coordinate_X(ArrayList<Float> logMovement_Coordinate_X) {
         this.logMovement_Coordinate_X = logMovement_Coordinate_X;
     }
+
     public ArrayList<Float> getLogMovement_Coordinate_Y() {
         return logMovement_Coordinate_Y;
     }
     public void setLogMovement_Coordinate_Y(ArrayList<Float> logMovement_Coordinate_Y) {
         this.logMovement_Coordinate_Y = logMovement_Coordinate_Y;
     }
+
     public ArrayList<Integer> getLogMovement_VisitedItems() {
         return logMovement_VisitedItems;
     }

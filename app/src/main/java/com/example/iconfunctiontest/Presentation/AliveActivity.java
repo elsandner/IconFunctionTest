@@ -282,8 +282,8 @@ public class AliveActivity extends AppCompatActivity {
                             dX = originalX - motionEvent.getRawX();//used for moving icon
                             dY = originalY - motionEvent.getRawY();//used for moving icon
 
-                            downX = motionEvent.getX();
-                            downY = motionEvent.getY();
+                            downX = motionEvent.getRawX();
+                            downY = motionEvent.getRawY();
 
                             //detect long click
                             longClick = true;
@@ -309,14 +309,15 @@ public class AliveActivity extends AppCompatActivity {
 
                                 //Log every touchpoint
                                 if(testID>0) {//Do not log in instruction-Mode
-                                    logMovement_Timestamp.add(System.currentTimeMillis());
-                                    logMovement_Coordinate_X.add(motionEvent.getX());
-                                    logMovement_Coordinate_Y.add(motionEvent.getY());
+                                    logMovement_Timestamp.add(System.currentTimeMillis()-timePressDown);
+
+                                    logMovement_Coordinate_X.add(motionEvent.getRawX());
+                                    logMovement_Coordinate_Y.add(motionEvent.getRawY());
                                 }
 
                                 //Calculate distance between current postion and touch-down position
-                                double diffX = motionEvent.getX() - downX;
-                                double diffY = motionEvent.getY() - downY;
+                                double diffX = motionEvent.getRawX() - downX;
+                                double diffY = motionEvent.getRawY() - downY;
 
                                 //Show hint
                                 if (abs(diffX) > Parameter.popUp_threshold || abs(diffY) > Parameter.popUp_threshold) {
@@ -482,8 +483,8 @@ public class AliveActivity extends AppCompatActivity {
         long time_wait = timePressDown - timeStart;
         long time_move = System.currentTimeMillis() - timePressDown;
 
-        double upX = motionEvent.getX();
-        double upY = motionEvent.getY();
+        double upX = motionEvent.getRawX();
+        double upY = motionEvent.getRawY();
 
         tV_Target.setVisibility(View.INVISIBLE);
         tV_Target_Heading.setVisibility(View.INVISIBLE);

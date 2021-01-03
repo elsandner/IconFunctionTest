@@ -2,7 +2,7 @@ package com.example.iconfunctiontest.Services;
 
 public class Parameter {
     //General
-    private static int DEFAULT=2;//Value used for number_of_Items_Alive, number_of_Items_Standard, number_of_trials,
+    private static int DEFAULT=4;//Value used for number_of_Items_Alive, number_of_Items_Standard, number_of_trials,
 
     public static boolean hide_Target_In_Test=false; //in a test-trial first the designated target and the continue button are shown.
                                                     // when pressing continue the UI changes and depending on this value the participant

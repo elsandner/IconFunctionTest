@@ -20,6 +20,8 @@ import com.example.iconfunctiontest.R;
 import com.example.iconfunctiontest.Services.Parameter;
 import com.example.iconfunctiontest.Services.TestService;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -58,13 +60,15 @@ public class StandardActivity extends AppCompatActivity {
 
         //Dynamically Add Items to Pop-Up Menu
         ArrayList<TextView> buffer=new ArrayList<TextView>();
+        TextView[] textViewBuffer= new TextView[Parameter.number_of_Items_Standard];
 
         int number_of_Items=Parameter.number_of_Items_Standard;
 
         if(testID==6)//in this test four icons are on the screen
             number_of_Items=4*number_of_Items;
 
-        //create UI Elements programmatically (number is variable and depends on parameter)
+
+
         for (int i = 0; i < number_of_Items; i++) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(2, 5, 2, 5);
@@ -73,25 +77,31 @@ public class StandardActivity extends AppCompatActivity {
             currentTV.setLayoutParams(params);
             currentTV.setText(Parameter.Items[i]);
 
-            final int finalIndex = i;
+            final int selectedOption = i;
             currentTV.setOnClickListener(new TextView.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickItem(finalIndex, view);
+                    clickItem(selectedOption, view);
                 }
             });
-            buffer.add(currentTV);
+            textViewBuffer[i]=currentTV;
         }
 
-        if(testID!=6) { //Test1B, Test2B (1 Icon)
-            if (testID == 2)
-                Collections.shuffle(buffer); //randomize the order of the elements in the popUp Menu for novice user test
+        if(testID==2){
+            int[] posMapping = testService.shufflePosition(Parameter.number_of_Items_Standard);
 
-            for(TextView TV : buffer)
-                L_PopUp0.addView(TV);//Add created textViews to popUp
+            TextView[] memoryArray = new TextView[Parameter.number_of_Items_Standard];
 
+            for(int i =0; i<textViewBuffer.length;i++){
+                L_PopUp0.addView(textViewBuffer[posMapping[i]]);
+            }
         }
-        else{   //Test3B (4 Icons)
+        else if(testID==4){
+            for(int i =0; i<textViewBuffer.length;i++){
+                L_PopUp0.addView(textViewBuffer[i]);
+            }
+        }
+        else if(testID==6){
             for(int i=0; i<Parameter.number_of_Items_Standard;i++){
                 L_PopUp1.addView(buffer.get(i));
                 L_PopUp2.addView(buffer.get(i+Parameter.number_of_Items_Standard));

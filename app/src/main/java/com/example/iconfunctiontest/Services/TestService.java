@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -118,20 +119,14 @@ public class TestService {
 
 
         //SET POSITION FOR LOGGGING
-        if(testID==1) { //Nocive User + Alive Icon
+        if(testID==1 || testID==2) { //Nocive User + Alive Icon
             if (selectedOption < 0)
                 trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
             else
                 trials.get(currentTrial).setSelectedPosition(positionMapping[selectedOption]);
             trials.get(currentTrial).setTargetPosition(positionMapping[trials.get(currentTrial).getTarget()]);//Target Position
         }
-        else if(testID==2) {
-            if(selectedOption<0)
-                trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
-            else
-                trials.get(currentTrial).setSelectedPosition(-2);
-            trials.get(currentTrial).setTargetPosition(-2);
-        }
+
         else { //Expert User
             if(selectedOption<0)
                 trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
@@ -352,7 +347,7 @@ public class TestService {
 
                     if(testID%2==1){ //Only for Alive Icon
                         downX=Double.toString(cT.getDownX());
-                        downY=Double.toString(cT.getDownX());
+                        downY=Double.toString(cT.getDownY());
                         upX=Double.toString(cT.getUpX());
                         upY=Double.toString(cT.getUpY());
 
@@ -383,7 +378,7 @@ public class TestService {
                 }
 
             System.out.println("WRITE MAIN XML !!!");
-            writer.writeAll(data); // data is adding to csv
+            writer.writeAll(data);
             writer.close();
 
         } catch (IOException e) {
@@ -413,18 +408,17 @@ public class TestService {
             data.add(heading);
 
 
-            int n=0;
+            int key=0;
             for(Trial cT: trials) {//cT...current Trial
-                n++;
+                key++;
                 int record_length = 2
                                     + cT.getLogMovement_Timestamp().size()
                                     + cT.getLogMovement_Coordinate_X().size()
                                     + cT.getLogMovement_Coordinate_Y().size();
 
-                System.out.println("RECORD LENGTH: "+record_length+"!!!!!!!!!!!!!!!");
 
                 String [] record = new String[record_length];
-                record[0]=Integer.toString(n);
+                record[0]=Integer.toString(key);
 
                 double travelDistance = calculateTravelDistance(cT);
                 record[1]=Double.toString(travelDistance);
@@ -435,7 +429,7 @@ public class TestService {
                 for(int i=0;i<cT.getLogMovement_Timestamp().size();i++){//i is index of LogMovement Array Lists
                     record[record_index]=Long.toString(cT.getLogMovement_Timestamp().get(i));
                     record[record_index+1]=Double.toString(cT.getLogMovement_Coordinate_X().get(i));
-                    record[record_index+2]=Double.toString(cT.getLogMovement_Coordinate_X().get(i));
+                    record[record_index+2]=Double.toString(cT.getLogMovement_Coordinate_Y().get(i));
                     record_index+=3;
                 }
                 data.add(record);
@@ -508,33 +502,33 @@ public class TestService {
     //and stores a local array which contains the reverse array, so an array which can be used redo the mapping
     public int[] shufflePosition(int size){
 
-        int[] array = new int[size];
+        int[] retArray = new int[size];
         int[] getOriginal = new int[size];
 
-        for(int i=0; i<array.length;i++){
-            array[i]=i;
+        for(int i=0; i<retArray.length;i++){
+            retArray[i]=i;
             getOriginal[i]=i;
         }
 
         //Randomize the order of the Targets
         Random rand = new Random();
-        for(int i=0; i<array.length;i++){
-            int randomIndex = rand.nextInt(array.length);
-            int temp = array[randomIndex];
-            array[randomIndex] = array[i];
-            array[i] = temp;
+        for(int i=0; i<retArray.length;i++){
+            int randomIndex = rand.nextInt(retArray.length);
+            int temp = retArray[randomIndex];
+            retArray[randomIndex] = retArray[i];
+            retArray[i] = temp;
         }
 
-        for(int i=0; i<array.length;i++){
-            getOriginal[array[i]]=i;
+        for(int i=0; i<retArray.length;i++){
+            getOriginal[retArray[i]]=i;
         }
         this.positionMapping=getOriginal;
 
         //Log that shit
-        System.out.println("LOG:\tArray randomize: "+Arrays.toString(array));
+        System.out.println("LOG:\tArray randomize: "+Arrays.toString(retArray));
         System.out.println("LOG:\tArray redo!:  "+Arrays.toString(getOriginal));
 
-        return array;
+        return retArray;
     }
 
 }
