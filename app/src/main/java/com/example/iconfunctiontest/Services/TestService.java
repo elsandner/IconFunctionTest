@@ -267,9 +267,9 @@ public class TestService {
     //This CSV file into the root folder of the phones file system
     private void createCSV_Main(final AppCompatActivity callingActivity){
 
-        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Position", "Target Item", "Target Index","Selected Position", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
-        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Repetition","Target Position", "Target Item", "Target Index","Selected Position", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Visited Items", "Nr of Visits","Mode"};
-        String key,userID, iconType,testType, trialID, blockID,repetition, targetPosition, targetItem, targetIndex,selectedPosition, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, VisitedItems,NrVisits, Mode;
+        String [] headingStandard=  {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Trial Position","Repetition","Target Position", "Target Item", "Target Index","Selected Position", "Selected Item", "Selected Index", "Answer", "Used Finger", "Prepare Time", "Execution Time"};
+        String[] headingAlive=      {"Key","User ID", "Icon Type","Test Type","Trial ID", "Block ID","Trial Position","Repetition","Target Position", "Target Item", "Target Index","Selected Position", "Selected Item", "Selected Index", "Answer","Used Finger", "Prepare Time", "Execution Time", "Touch Down X", "Touch Down Y", "Lift Off X", "Lift Off Y", "Swipe Distance","Travel Distance","Visited Items", "Nr of Visits","Mode"};
+        String key,userID, iconType,testType, trialID, blockID, trialPosition, repetition, targetPosition, targetItem, targetIndex,selectedPosition, selectedItem, selectedIndex, answer, usedFinger, prepareTime, executeTime, downX,downY,upX,upY,swipeDistance,travelDistance, VisitedItems,NrVisits, Mode;
 
         userID=Parameter.getUserID();
         String time = "DATE_TIME";
@@ -305,6 +305,10 @@ public class TestService {
                     data.add(headingAlive);
 
                 int n=0;
+
+                int countBlock=0;
+                int trialPos=-1;
+
                 for(Trial cT: trials){//cT...current Trial
                     n++;
                     key=Integer.toString(n);
@@ -316,8 +320,15 @@ public class TestService {
                     testType=getTestType(testID);
                     trialID=Integer.toString(cT.getTrialID());
                     blockID=Integer.toString(cT.getBlockID());
-                    repetition=countRepetitions((n-1));
 
+                    trialPos++;
+                    if(cT.getBlockID()!=countBlock){
+                        countBlock=cT.getBlockID();
+                        trialPos=0;
+                    }
+                    trialPosition=Integer.toString(trialPos);
+
+                    repetition=countRepetitions((n-1));
 
                     targetPosition=Integer.toString(cT.getTargetPosition());
                     selectedPosition=Integer.toString(cT.getSelectedPosition());
@@ -371,10 +382,10 @@ public class TestService {
                         else
                             Mode="Visual Mode";
 
-                        data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetPosition,targetItem,targetIndex,selectedPosition,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
+                        data.add(new String[]{key,userID,iconType,testType,trialID,blockID,trialPosition,repetition,targetPosition,targetItem,targetIndex,selectedPosition,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime    ,downX,downY,upX,upY,swipeDistance,travelDistance,VisitedItems, NrVisits, Mode});
                     }
                     else
-                        data.add(new String[]{key,userID,iconType,testType,trialID,blockID,repetition,targetPosition,targetItem,targetIndex,selectedPosition,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
+                        data.add(new String[]{key,userID,iconType,testType,trialID,blockID,trialPosition,repetition,targetPosition,targetItem,targetIndex,selectedPosition,selectedItem,selectedIndex,answer,usedFinger,prepareTime,executeTime});
                 }
 
             System.out.println("WRITE MAIN XML !!!");
@@ -523,10 +534,6 @@ public class TestService {
             getOriginal[retArray[i]]=i;
         }
         this.positionMapping=getOriginal;
-
-        //Log that shit
-        System.out.println("LOG:\tArray randomize: "+Arrays.toString(retArray));
-        System.out.println("LOG:\tArray redo!:  "+Arrays.toString(getOriginal));
 
         return retArray;
     }

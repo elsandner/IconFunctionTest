@@ -59,15 +59,14 @@ public class StandardActivity extends AppCompatActivity {
         testService = TestService.getInstance();
 
         //Dynamically Add Items to Pop-Up Menu
-        ArrayList<TextView> buffer=new ArrayList<TextView>();
-        TextView[] textViewBuffer= new TextView[Parameter.number_of_Items_Standard];
+       // ArrayList<TextView> buffer=new ArrayList<TextView>();
 
         int number_of_Items=Parameter.number_of_Items_Standard;
 
         if(testID==6)//in this test four icons are on the screen
             number_of_Items=4*number_of_Items;
 
-
+        TextView[] textViewBuffer= new TextView[number_of_Items];
 
         for (int i = 0; i < number_of_Items; i++) {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -90,23 +89,28 @@ public class StandardActivity extends AppCompatActivity {
         if(testID==2){
             int[] posMapping = testService.shufflePosition(Parameter.number_of_Items_Standard);
 
-            TextView[] memoryArray = new TextView[Parameter.number_of_Items_Standard];
+            //TextView[] memoryArray = new TextView[Parameter.number_of_Items_Standard];
 
             for(int i =0; i<textViewBuffer.length;i++){
                 L_PopUp0.addView(textViewBuffer[posMapping[i]]);
             }
         }
-        else if(testID==4){
+        else if(testID==4 || testID== 0){
             for(int i =0; i<textViewBuffer.length;i++){
                 L_PopUp0.addView(textViewBuffer[i]);
             }
         }
         else if(testID==6){
             for(int i=0; i<Parameter.number_of_Items_Standard;i++){
-                L_PopUp1.addView(buffer.get(i));
-                L_PopUp2.addView(buffer.get(i+Parameter.number_of_Items_Standard));
-                L_PopUp3.addView(buffer.get(i+Parameter.number_of_Items_Standard*2));
-                L_PopUp4.addView(buffer.get(i+Parameter.number_of_Items_Standard*3));
+                L_PopUp1.addView(textViewBuffer[i]);
+                L_PopUp2.addView(textViewBuffer[i+Parameter.number_of_Items_Standard]);
+                L_PopUp3.addView(textViewBuffer[i+Parameter.number_of_Items_Standard*2]);
+                L_PopUp4.addView(textViewBuffer[i+Parameter.number_of_Items_Standard*3]);
+
+                //L_PopUp1.addView(buffer.get(i));
+                //L_PopUp2.addView(buffer.get(i+Parameter.number_of_Items_Standard));
+                //L_PopUp3.addView(buffer.get(i+Parameter.number_of_Items_Standard*2));
+                //L_PopUp4.addView(buffer.get(i+Parameter.number_of_Items_Standard*3));
             }
         }
 

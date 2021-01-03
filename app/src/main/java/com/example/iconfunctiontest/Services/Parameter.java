@@ -1,5 +1,11 @@
 package com.example.iconfunctiontest.Services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import java.util.Collections;
+import java.util.List;
+
 public class Parameter {
     //General
     private static int DEFAULT=4;//Value used for number_of_Items_Alive, number_of_Items_Standard, number_of_trials,
@@ -11,7 +17,9 @@ public class Parameter {
     public static boolean show_radialSegments=true; //in instruction Mode of Alive Icon
     public static int LongClick_Vibration_time = 5; //in miliseconds    //to switch vibration of -> set to 0
 
-    public static String[] Items = {
+    public static boolean shuffleItemsBeforeTest=true;  //defines if Items will be shuffled before each test or if they will be in the original order
+
+    public static String[] Items = { //This array needs to include at least (4 * number_of_items) elements!v
             "Plus",
             "Minus",
             "Multiplication",
@@ -65,7 +73,6 @@ public class Parameter {
     public static int popUp_distance_toTouchPoint_X=40;
     public static int popUp_distance_toTouchPoint_Y=30;
 
-
 //Standard Icon
     public static int number_of_Items_Standard = DEFAULT;
 
@@ -73,7 +80,7 @@ public class Parameter {
     //2A...Subtest using alive-icon
     //2B...Subtest using standard-icon
     public static int number_of_trials =DEFAULT; //Default: same number as Icons
-    public static int number_of_blocks =2;
+    public static int number_of_blocks =4;
     public static int nextActivity_Delay = 1000; //Default=2000 because this is the time, the Toast is on the screen
                                                   //in miliseconds
 
@@ -91,4 +98,33 @@ public class Parameter {
     public static void setUserID(String userID) {
         Parameter.userID = userID;
     }
+
+
+    public static void shuffleItems (boolean iconTypeAlive){
+
+        if(shuffleItemsBeforeTest) {
+            int numItems = number_of_Items_Standard;
+            if (iconTypeAlive)
+                numItems = number_of_Items_Alive;
+
+            List<String> itemList1 = Arrays.asList(Arrays.copyOfRange(Items, 0, numItems));
+            List<String> itemList2 = Arrays.asList(Arrays.copyOfRange(Items, numItems, 2 * numItems));
+            List<String> itemList3 = Arrays.asList(Arrays.copyOfRange(Items, (2 * numItems), 3 * numItems));
+            List<String> itemList4 = Arrays.asList(Arrays.copyOfRange(Items, (3 * numItems), 4 * numItems));
+
+            Collections.shuffle(itemList1);
+            Collections.shuffle(itemList2);
+            Collections.shuffle(itemList3);
+            Collections.shuffle(itemList4);
+
+            List<String> itemList = new ArrayList<String>();
+            itemList.addAll(itemList1);
+            itemList.addAll(itemList2);
+            itemList.addAll(itemList3);
+            itemList.addAll(itemList4);
+
+            Items = itemList.toArray(new String[itemList.size()]);
+        }
+    }
+
 }
