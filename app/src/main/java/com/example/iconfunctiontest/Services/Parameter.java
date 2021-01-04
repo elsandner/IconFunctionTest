@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Parameter {
     //General
-    private static int DEFAULT=4;//Value used for number_of_Items_Alive, number_of_Items_Standard, number_of_trials,
+    private static int DEFAULT=2;//Value used for number_of_Items_Alive, number_of_Items_Standard, number_of_trials,
 
     public static boolean hide_Target_In_Test=false; //in a test-trial first the designated target and the continue button are shown.
                                                     // when pressing continue the UI changes and depending on this value the participant
@@ -80,7 +80,7 @@ public class Parameter {
     //2A...Subtest using alive-icon
     //2B...Subtest using standard-icon
     public static int number_of_trials =DEFAULT; //Default: same number as Icons
-    public static int number_of_blocks =4;
+    public static int number_of_blocks =2;
     public static int nextActivity_Delay = 1000; //Default=2000 because this is the time, the Toast is on the screen
                                                   //in miliseconds
 

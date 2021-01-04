@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.random;
 
 public class TestService {
 
@@ -41,7 +42,7 @@ public class TestService {
 
     //empty private constructor (Singleton Pattern)
     private TestService(){
-
+       // trials=new ArrayList<>(); //There is a NullPointerException where I can not trace back, i hope to get more detailed infos out of this
     }
 
     //get Singleton instance
@@ -52,6 +53,7 @@ public class TestService {
     }
 
     //This method is called when the test starts, depending on parameters and test type it creates all needed trials for the test and opens the Alive or Standard Activity
+    //TODO: hier wird trials befüllt
     public void startTest(int number_of_trials,int number_of_blocks, AppCompatActivity callingActivity, Class nextClass, int testID){
         this.nextClass=nextClass;
         this.testID=testID;
@@ -109,12 +111,13 @@ public class TestService {
     //This method is executed when participant hit his selection
     //It receives all parameters which are tracked and stores them into the trials ArrayList (from where it gets readed for logging)
     //also this method calls the designated feedback method or the designated next activity
+    //todo: hier wird auf trials zugegriffen, und es kommt zu NullPointerException
     public void onAnswer(int selectedOption, final AppCompatActivity callingActivity,
                          long time_wait, long time_move,
                          double downX, double downY,
                          double upX, double upY,
-                         ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y, ArrayList<Integer> logMovement_Visiteditems){
-
+                         ArrayList<Long> logMovement_Timestamp, ArrayList<Float>logMovement_Coordinate_X, ArrayList<Float> logMovement_Coordinate_Y, ArrayList<Integer> logMovement_Visiteditems)
+    {
 
 
 
@@ -131,7 +134,7 @@ public class TestService {
             if(selectedOption<0)
                 trials.get(currentTrial).setSelectedPosition(-1); //-1 = "cancel Position"
             else
-                trials.get(currentTrial).setSelectedPosition(selectedOption);
+                trials.get(currentTrial).setSelectedPosition(selectedOption);       //NullPointerException ????? WARUM???
 
             trials.get(currentTrial).setTargetPosition(trials.get(currentTrial).getTarget());
         }
@@ -232,16 +235,25 @@ public class TestService {
     }
 
     //If participant hits the wrong answer, the trial is added to the end of the current block again
+    //TODO: only add do break if it was set on last block before
     private void addTrialAgain(int currentTrial){
+        //printTrials();
 
-        Trial trial = trials.get(currentTrial);
-        int blockID = trial.getBlockID();
+        //Trial trial = trials.get(currentTrial);
+        int blockID = trials.get(currentTrial).getBlockID();
 
-        if(blockID==highestBlockID){//if Element in last block - add on end of list
+        //if Element in last block - add on end of list
+        //TODO: check if setDoBreaks can be removed
+        if(blockID==highestBlockID){
             Trial newTrial = Trial.clone(trials.get(currentTrial)); //copy by value not reference!!
-            trials.add(newTrial);
-            trials.get(trials.size()-2).setDoBreak(false);
-            trials.get(trials.size()-1).setDoBreak(true);
+            newTrial.setDoBreak(false);
+            trials.get(trials.size()+1).setDoBreak(false);//otherwise this would course an error if newTrial is added at last position
+            //trials.get(trials.size()-1).setDoBreak(false);
+            //int randomPosition = (currentTrial+1) + (int)(Math.random() * (trials.size()-1));   //TODO: ALSO CHANGE THIS HER
+            int randomPosition= (int) ((Math.random()*( (trials.size())-currentTrial) + currentTrial ));
+            trials.add(randomPosition, newTrial);
+            //trials.get(trials.size()-1).setDoBreak(true);
+
         }
         else {
             int i=currentTrial;
@@ -249,16 +261,49 @@ public class TestService {
             while(x) {
                 if (trials.get(i).getBlockID() != blockID) {
                     //Adds Trial to position of first element of following block and shift all following elements to the "right"
+
+                    boolean setBreak=false;
+                    if(trials.get(i-1).isDoBreak()){
+                        setBreak=true;
+                        trials.get(i-1).setDoBreak(false); //set to false to cover the case that the repeating trial is added as the last trial of that block
+                    }
+
                     Trial newTrial = Trial.clone(trials.get(currentTrial)); //copy by value not reference!!
-                    trials.add(i, newTrial);
-                    trials.get(i-1).setDoBreak(false);
-                    trials.get(i).setDoBreak(true);
+                    newTrial.setDoBreak(false);
+
+                    //int randomPosition = (currentTrial) + (int)(Math.random() * (i-1)); //TODO: This method is trash, replace it !
+                    int min=currentTrial+1;
+                    int max=i+1;
+
+                    //int randomPosition= (int) ((Math.random()*( (i+1)-currentTrial) + currentTrial ));    //TODO: When fixed, copy it to line 256
+                    int randomPosition = (int) ((Math.random() * ((max) - min)) + min);
+                    //debugRandomNum(currentTrial, (i));
+                    System.out.println("LOG: added at relative Pos: "+(randomPosition-currentTrial));
+                    trials.add(randomPosition, newTrial);
+
+                    if(setBreak)
+                        trials.get(i).setDoBreak(true);     ////Thats the repeating trial, it is the last one
                     x = false;
+                   //System.out.println("LOG:"+Parameter.Items[newTrial.getTarget()]+"\tcurrentTrial="+currentTrial+"\tmax="+(i-1)+"\trandomPos: "+randomPosition);
                 }
                 i++;
             }
         }
+        printTrials();
+        //System.out.println("LOG: ");
     }
+
+    //TODO: THIS METHOD IS ONLY HERE FOR DEBUGGING:
+    //Ziel ist es, dass alle random numbers ein wert von min bis max annehmen!
+    private void debugRandomNum(int min, int max){
+        System.out.print("LOG:! min: "+min+"\tmax: "+max+"\trandomNums:\t");
+        for(int i=0;i<150;i++){
+            System.out.print((int) ((Math.random() * ((max) - min)) + min)+" ");
+        }
+        System.out.println();
+
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     //This Method Manages the logging of the main file
@@ -536,6 +581,18 @@ public class TestService {
         this.positionMapping=getOriginal;
 
         return retArray;
+    }
+
+
+    private void printTrials(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("LOG:");
+
+        for(Trial trial : trials){
+         sb.append("| blockID: "+trial.getBlockID()+" trialID: "+trial.getTrialID());
+        }
+
+        System.out.println(sb.toString());
     }
 
 }

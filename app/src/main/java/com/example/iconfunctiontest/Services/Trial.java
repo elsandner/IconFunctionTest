@@ -8,6 +8,7 @@ import static java.lang.Math.sqrt;
 //This Class is used to store all needed information for each trial.
 // It contains all logging values and getter /setter methods for those
 public class Trial {
+
     private int trialID, blockID;
     private int target, answer; //Stored as Index of Parameter.Item Array
 
